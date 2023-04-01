@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.gd.navigation.MainScreenView
 import com.example.gd.navigation.SetupNavGraph
 import com.example.gd.ui.theme.GdTheme
 
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GdTheme {
                 val navController = rememberNavController()
+                //MainScreenView()
                 SetupNavGraph(navController = navController)
             }
         }

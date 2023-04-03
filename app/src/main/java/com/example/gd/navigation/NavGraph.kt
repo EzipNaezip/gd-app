@@ -65,8 +65,8 @@ fun BottomNavGraph(navController: NavHostController, startDestination: String) {
 fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomScreen.Main,
-        BottomScreen.My,
         BottomScreen.Community,
+        BottomScreen.My,
         BottomScreen.Setting
     )
 
@@ -113,7 +113,7 @@ fun MainScreenView(startDestination: String) {
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        Box(Modifier.padding(it)){
+        Box(Modifier.padding(it)) {
             BottomNavGraph(navController = navController, startDestination)
         }
     }

@@ -38,13 +38,13 @@ fun SplashScreen(navController: NavHostController) {
                 contentDescription = "logo",
                 modifier = Modifier.padding(vertical = 60.dp)
             )
-
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 30.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
-            ){
+            ) {
                 Text(
                     text = "GD Service",
                     color = Color.Black,

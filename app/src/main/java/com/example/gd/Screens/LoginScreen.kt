@@ -19,7 +19,7 @@ import com.example.gd.ui.theme.suite
 import com.example.splashscreen.navigation.Screen
 
 @Composable
-fun LoginScreen(navController: NavHostController){
+fun LoginScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +71,7 @@ fun LoginScreen(navController: NavHostController){
             fontWeight = FontWeight.Light,
             color = Color.Black,
         )
-        Button(onClick = {navController.navigate(Screen.Once.route)}) {
+        Button(onClick = { navController.navigate(Screen.Once.route) }) {
             Text(text = "로딩창으로 이동", color = Color.Black)
         }
     }

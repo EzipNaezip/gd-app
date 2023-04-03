@@ -34,6 +34,16 @@ EX)
 | ---------------------------------------------------- |
 | Splash Screen 후 Login Page로 넘어가도록 구현<br/>버튼을 누르면 메인페이지로 넘어가도록 설정<br/>OAuth와 같은 기능적인 부분은 추후 구현 예정<br/> <br/> Basic Page Format 완성 <br/>하단바에 4개의 아이콘 사용. 메인, 마이페이지, 커뮤니티, 설정 구현 <br/>임시 포인트 컬러 파란색으로 구현 <br/>각 페이지에 있을 경우 해당 아이콘 포인트 컬러로 나타냄<br/> OnceScreen을 통해 재사용성 증가  |
 
+# 협업 방법  
+main : 버그없는 완성본이 올라가는 branch  
+develop : 실질적인 개발branch  
+<br/>
+develop branch를 기반으로 새 branch를 만들어서 작업.  
+새 branch의 이름은 개발하고자 하는 기능의 이름  
+관련 작업이 끝난 후 오류여부 확인 후 develop branch에 병합.  
+develop branch에서 모든 기능의 연동성 확인 후 main으로 병합  
+
+
 <br/>
 <br/>
 Readme 꾸며줘요 캡틴 킴~

@@ -2,6 +2,7 @@ package com.example.gd.Effects
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -82,18 +83,6 @@ fun ShimmerGridItem(brush: Brush) { // 메인 검색 결과
             .background(brush)
             .padding(vertical = 8.dp, horizontal = 15.dp),
     )
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Icon(
-            imageVector = IconPack.Home,
-            contentDescription = "Bookmark",
-            modifier = Modifier
-                .width(26.dp)
-                .height(26.dp)
-        )
-    }
 }
 
 @Composable

@@ -1,9 +1,13 @@
 package com.example.gd
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +19,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gd.navigation.BottomScreen
 import com.example.gd.navigation.MainScreenView
+import com.example.gd.ui.IconPack
+import com.example.gd.ui.iconpack.Comunity
+import com.example.gd.ui.iconpack.Home
 import com.example.gd.ui.theme.suite
 import com.example.splashscreen.navigation.Screen
 
@@ -25,54 +32,51 @@ fun LoginScreen(navController: NavHostController) {
             .fillMaxSize()
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(60.dp))
         Text(
-            text = "로그인 페이지 구현 예정",
+            text = "Musinsa에서\n원하는 집을 마음껏 상상해봐",
             fontFamily = suite,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 30.sp,
             color = Color.Black,
-            modifier = Modifier.padding(50.dp)
+            modifier = Modifier.padding(vertical = 100.dp)
         )
+        Spacer(modifier = Modifier.height(300.dp))
         Text(
-            text = "ExtraBold / 엑스트라 볼드",
-            fontFamily = suite,
-            fontWeight = FontWeight.ExtraBold,
-            color = Color.Black,
-        )
-        Text(
-            text = "Bold / 볼드",
-            fontFamily = suite,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-        )
-        Text(
-            text = "SemiBold / 세미볼드",
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black,
-        )
-        Text(
-            text = "Normal / 노말",
-            fontFamily = suite,
-            fontWeight = FontWeight.Normal,
-            color = Color.Black,
-        )
-        Text(
-            text = "Medium / 미디움",
-            fontFamily = suite,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-        )
-        Text(
-            text = "Light / 라이트",
+            text = "SNS계정으로 로그인하기",
             fontFamily = suite,
             fontWeight = FontWeight.Light,
             color = Color.Black,
         )
-        Button(onClick = { navController.navigate(Screen.Once.route) }) {
-            Text(text = "로딩창으로 이동", color = Color.Black)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row() {
+            Icon(
+                imageVector = IconPack.Home,
+                contentDescription = "Google Login",
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(Screen.Once.route)
+                        // 구글 OAuth 사용 코드로 변경 예정
+                    }
+                    .width(50.dp)
+                    .height(50.dp)
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+            Icon(
+                imageVector = IconPack.Comunity,
+                contentDescription = "KaKao Login",
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(Screen.Once.route)
+                        // 카카오 OAuth 사용 코드로 변경 예정
+                    }
+                    .width(50.dp)
+                    .height(50.dp)
+            )
         }
     }
 }

@@ -11,5 +11,4 @@ sealed class BottomScreen(
     object My : BottomScreen("마이페이지", IconPack.UserCircle, "my_screen")
     object Community : BottomScreen("커뮤니티", IconPack.Comunity, "community_screen")
     object Setting : BottomScreen("설정", IconPack.Setting, "setting_screen")
-    object Infomation : BottomScreen("정보", IconPack.Setting, "infomation_screen")
 }

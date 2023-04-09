@@ -1,43 +1,37 @@
 package com.example.gd.Screens
 
-import android.widget.Toast
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.example.gd.ui.theme.suite
+import kotlinx.coroutines.launch
 
-@Composable
-fun SettingScreen(navController: NavHostController) {
-    SettingList()
-}
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SettingList(
-    modifier: Modifier = Modifier,
-    names: List<String> = listOf("프로필 수정", "회원 탈퇴", "로그아웃", "정보"),
+fun SettingScreen( //설정 화면
+    navController: NavHostController,
+    names: List<String> = listOf("프로필 수정", "회원 탈퇴", "로그아웃", "정보")
 ) {
-    var settingView by remember { mutableStateOf(true) }
-    var profileView by remember { mutableStateOf(false) }
-    var deleteView by remember { mutableStateOf(false) }
-    var logoutView by remember { mutableStateOf(false) }
-    var infoView by remember { mutableStateOf(false) }
-
-    var showDialog by remember { mutableStateOf(false) }
+    var settingScreen by remember { mutableStateOf("null") }
 
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(Color.White) //투명 상태여서 임시로 하얀 배경 깔아놓음
+        modifier = Modifier.fillMaxHeight()
     ) {
         MaterialTheme { //맨 위의 앱 바
             TopAppBar {
@@ -54,40 +48,20 @@ private fun SettingList(
                     )
                 }
             }
-            Divider()
         }
 
         for (name in names) { //설정 목록 버튼 4개 생성
             Surface(
-                modifier = Modifier
-                    .padding(vertical = 1.dp, horizontal = 5.dp)
-                    .background(MaterialTheme.colors.primary)
+                modifier = Modifier.background(MaterialTheme.colors.primary)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp)
-                ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Button(
                         onClick = {
                             when (name) {
-                                "프로필 수정" -> {
-                                    settingView = false
-                                    profileView = true
-                                }
-                                "회원 탈퇴" -> {
-                                    settingView = false
-                                    deleteView = true
-                                    showDialog = true
-                                }
-                                "로그아웃" -> {
-                                    settingView = false
-                                    logoutView = true
-                                }
-                                "정보" -> {
-                                    settingView = false
-                                    infoView = true
-                                }
+                                "프로필 수정" -> { settingScreen = "프로필 수정" }
+                                "회원 탈퇴" -> { settingScreen = "회원 탈퇴" }
+                                "로그아웃" -> { settingScreen = "로그아웃" }
+                                "정보" -> { settingScreen = "정보" }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
@@ -99,7 +73,9 @@ private fun SettingList(
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 15.sp,
                             color = Color.Black,
-                            modifier = Modifier.padding(vertical = 10.dp)
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .padding(horizontal = 10.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -107,259 +83,420 @@ private fun SettingList(
             }
         }
     }
-    if (profileView) {
-        Profile()
-    } else if (deleteView) {
-        ShowDialog(
-            "회원 탈퇴", "정말 탈퇴하시겠습니까?", "회원 탈퇴가 완료되었습니다."
-        )
-    } else if (logoutView) {
-        LogoutAccount()
-    } else if (infoView) {
-        Info()
+
+    when (settingScreen) {
+        "프로필 수정" -> {
+            ProfileEditScreen()
+        }
+        "회원 탈퇴" -> {
+
+        }
+        "로그아웃" -> {
+            LogoutPopupScreen()
+        }
+        "정보" -> {
+            AppInfoScreen(navController)
+        }
     }
 }
 
-
-
 // *** 상세 페이지 ***
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun Profile() {
-    var settingView by remember { mutableStateOf(false) }
-    var profileView by remember { mutableStateOf(true) }
+fun ProfileEditScreen() { //프로필 수정 창
+    var profileEditScreen by remember { mutableStateOf(true) }
 
-    Column {
-        val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        skipHalfExpanded = true
+    )
+    val roundedCornerRadius = 12.dp
 
-        MaterialTheme { //맨 위의 앱 바
-            TopAppBar {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-                ) {
-                    Button( //뒤로 가기 버튼
-                        onClick = {
-                            settingView = true
-                            profileView = false
-                        },
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        BackScreen()
+    if (profileEditScreen) {
+        ModalBottomSheetLayout(
+            sheetState = modalSheetState,
+            sheetShape = RoundedCornerShape(
+                topStart = roundedCornerRadius,
+                topEnd = roundedCornerRadius),
+            sheetContent = {
+                coroutineScope.launch {
+                    modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    MaterialTheme { //맨 위의 앱 바
+                        TopAppBar {
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                Button( //뒤로 가기 버튼
+                                    onClick = {
+                                        coroutineScope.launch { modalSheetState.hide() }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "<",
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 25.sp,
+                                        color = Color.Black
+                                    )
+                                }
+
+                                Text(
+                                    text = "프로필 수정", //앱 바 제목
+                                    fontFamily = suite,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+
+                                Button( //저장 버튼
+                                    onClick = {
+                                        coroutineScope.launch { modalSheetState.hide() }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "V",
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 25.sp,
+                                        color = Color.Black
+                                    )
+                                }
+                            }
+                        }
                     }
 
-                    Text(
-                        text = "프로필 수정",
-                        fontFamily = suite,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "프로필 수정 페이지",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        Column(
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Button(
+                                onClick = {
+                                    profileEditScreen = false
+                                }
+                            ) {
+                                Text(text = "확인")
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
+            }
+        ) {}
+    }
+} //프로필 수정 페이지
 
-                    Button( //저장 버튼
+@Composable
+fun LogoutPopupScreen() { //로그아웃 팝업창
+    var logoutPopupScreen by remember { mutableStateOf(true) }
+    var logoutConfirmPopup by remember { mutableStateOf(false) }
+
+    if (logoutPopupScreen) {
+        AlertDialog(
+            onDismissRequest = { logoutPopupScreen = false },
+            shape = RoundedCornerShape(12.dp),
+            title = { Text(
+                text = "로그아웃하시겠습니까?",
+                fontFamily = suite,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 17.sp,
+                color = Color.Black
+            ) },
+            text = { Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "해당 계정으로 다시 로그인할 수 있습니다.",
+                fontFamily = suite,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                color = Color.Gray
+            ) },
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    TextButton( //취소 버튼
                         onClick = {
-                            settingView = true
-                            profileView = false
-                            Toast.makeText(
-                                context, "저장되었습니다.", Toast.LENGTH_SHORT
-                            ).show()
+                            logoutPopupScreen = false
                         },
-                        modifier = Modifier.align(Alignment.CenterEnd)
+                        modifier = Modifier
+                            .width(100.dp)
+                            .padding(8.dp)
                     ) {
                         Text(
-                            text = "V",
+                            text = "취소",
                             fontFamily = suite,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 25.sp,
-                            color = Color.Blue
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 13.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    TextButton( //로그아웃 버튼
+                        onClick = {
+                            logoutPopupScreen = false
+                            logoutConfirmPopup = true
+                        },
+                        modifier = Modifier
+                            .width(100.dp)
+                            .padding(8.dp)
+                    ) {
+                        Text(
+                            text = "로그아웃",
+                            fontFamily = suite,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 13.sp,
+                            color = Red
                         )
                     }
                 }
             }
-            Divider()
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 1.dp, horizontal = 5.dp)
-                .background(MaterialTheme.colors.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "프로필 수정 페이지")
-        }
+        )
     }
-    if (settingView) {
-        SettingList()
-    }
-}
 
-@Composable
-private fun LogoutAccount() {
-    var settingView by remember { mutableStateOf(false) }
-    var logoutView by remember { mutableStateOf(true) }
+    if (logoutConfirmPopup) {
+        AlertDialog( //로그아웃 후 팝업창
+            onDismissRequest = { logoutConfirmPopup = false },
+            shape = RoundedCornerShape(12.dp),
+            text = { Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "로그아웃이 완료되었습니다.",
+                fontFamily = suite,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                color = Color.Gray
+            ) },
 
-    Column {
-        MaterialTheme {
-            TopAppBar {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-                ) {
-                    Button( //뒤로 가기 버튼
-                        onClick = {
-                            settingView = true
-                            logoutView = false
-                        },
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        BackScreen()
-                    }
-
-                    Text(
-                        text = "로그아웃",
-                        fontFamily = suite,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            Divider()
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 1.dp, horizontal = 5.dp)
-                .background(MaterialTheme.colors.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "로그아웃 페이지")
-        }
-    }
-    if (settingView) {
-        SettingList()
-    }
-}
-
-@Composable
-private fun Info() {
-    var settingView by remember { mutableStateOf(false) }
-    var infoView by remember { mutableStateOf(true) }
-
-    Column {
-        MaterialTheme {
-            TopAppBar {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-                ) {
-                    Button( //뒤로 가기 버튼
-                        onClick = {
-                            settingView = true
-                            infoView = false
-                        },
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        BackScreen()
-                    }
-
-                    Text(
-                        text = "정보",
-                        fontFamily = suite,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            Divider()
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 1.dp, horizontal = 5.dp)
-                .background(MaterialTheme.colors.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "정보 페이지")
-        }
-    }
-    if (settingView) {
-        SettingList()
-    }
-}
-
-
-@Composable
-fun Divider() { //상단 구분선
-    Divider(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(bottom = 30.dp),
-        color = Color.Black,
-        thickness = 1.dp
-    )
-}
-
-@Composable
-fun BackScreen() { //뒤로 가기 버튼
-    Text( //그림으로 대체 예정
-        text = "<",
-        fontFamily = suite,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 25.sp,
-        color = Color.Black
-    )
-}
-
-@Composable
-fun ShowDialog(title: String, text: String, toast: String) { //회원 탈퇴, 로그아웃 팝업창
-    var settingView by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(true) }
-    val context = LocalContext.current
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = "$title") },
-            text = { Text(text = "$text") },
-            confirmButton = {
+            buttons = {
                 Row {
-                    Button(
+                    TextButton( //확인 버튼
                         onClick = {
-                            Toast.makeText(
-                                context, "$toast", Toast.LENGTH_SHORT
-                            ).show()
-                            showDialog = false
-                            settingView = true
+                            logoutConfirmPopup = false
                         },
                         modifier = Modifier
-                            .width(100.dp)
+                            .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        Text(text = "예")
-                    }
-                    Button(
-                        onClick = {
-                            showDialog = false
-                            settingView = true
-                        },
-                        modifier = Modifier
-                            .width(100.dp)
-                            .padding(8.dp)
-                    ) {
-                        Text(text = "아니요")
+                        Text(
+                            text = "확인",
+                            fontFamily = suite,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 13.sp,
+                            color = Color.Black
+                        )
                     }
                 }
             }
         )
     }
-    if (settingView) {
-        SettingList()
+} //로그아웃 페이지
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun AppInfoScreen(
+    navController: NavHostController,
+    names: List<String> = listOf("오픈 소스 라이브러리", "정보 2", "정보 3")
+) {
+// onClick안에 navControllerClick(navController, BottomScreen.Setting)이거 넣음 됨.
+    var appInfoScreen by remember { mutableStateOf(true) }
+    var infoBottomSheet by remember { mutableStateOf("null") }
+
+    val coroutineScope = rememberCoroutineScope()
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        skipHalfExpanded = true
+    )
+    val roundedCornerRadius = 12.dp
+
+    if (appInfoScreen) {
+        ModalBottomSheetLayout(
+            sheetState = modalSheetState,
+            sheetShape = RoundedCornerShape(
+                topStart = roundedCornerRadius,
+                topEnd = roundedCornerRadius),
+            sheetContent = {
+                coroutineScope.launch {
+                    modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+
+                Column(modifier = Modifier.fillMaxHeight()) {
+                    MaterialTheme { //맨 위의 앱 바
+                        TopAppBar {
+                            Box(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button( //뒤로 가기 버튼
+                                    onClick = {
+                                        coroutineScope.launch { modalSheetState.hide() }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "<",
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 25.sp,
+                                        color = Color.Black
+                                    )
+                                }
+
+                                Text(
+                                    text = "정보",
+                                    fontFamily = suite,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
+                    for (name in names) {
+                        Surface(
+                            modifier = Modifier.background(MaterialTheme.colors.primary)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+                                        when (name) {
+                                            "오픈 소스 라이브러리" -> { infoBottomSheet = "오픈 소스 라이브러리" }
+                                            "정보 2" -> { infoBottomSheet = "정보 2" }
+                                            "정보 3" -> { infoBottomSheet = "정보 3" }
+                                        }
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = name,
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 15.sp,
+                                        color = Color.Black,
+                                        modifier = Modifier
+                                            .padding(vertical = 20.dp)
+                                            .padding(horizontal = 10.dp)
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        ) {}
+    }
+    when (infoBottomSheet) {
+        "오픈 소스 라이브러리" -> {
+            Info_OpenSourceLibrary(navController)
+        }
+        "정보 2" -> {
+
+        }
+        "정보 3" -> {
+
+        }
+    }
+} //앱 정보 페이지
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun Info_OpenSourceLibrary(
+    navController: NavHostController
+) {
+    var appInfoScreen by remember { mutableStateOf(true) }
+
+    val coroutineScope = rememberCoroutineScope()
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        skipHalfExpanded = true
+    )
+    val roundedCornerRadius = 12.dp
+
+    if (appInfoScreen) {
+        ModalBottomSheetLayout(
+            sheetState = modalSheetState,
+            sheetShape = RoundedCornerShape(
+                topStart = roundedCornerRadius,
+                topEnd = roundedCornerRadius),
+            sheetContent = {
+                coroutineScope.launch {
+                    modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+
+                Column {
+                    MaterialTheme { //맨 위의 앱 바
+                        TopAppBar {
+                            Box(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button( //뒤로 가기 버튼
+                                    onClick = {
+                                        coroutineScope.launch { modalSheetState.hide() }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "<",
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 25.sp,
+                                        color = Color.Black
+                                    )
+                                }
+
+                                Text(
+                                    text = "오픈 소스 라이브러리",
+                                    fontFamily = suite,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut mauris quis nisi blandit varius eu in neque. Nam vel ex et dolor vehicula bibendum sed eu urna. Sed condimentum augue nec orci blandit, eu egestas quam gravida. Nullam bibendum orci id ligula bibendum dictum. Suspendisse ac tellus neque. Pellentesque feugiat magna vitae hendrerit feugiat. Fusce vehicula elit ut elit egestas, sit amet dapibus sapien maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean id orci ut purus rutrum pretium eu ut lacus. Praesent bibendum quam quis blandit luctus. Donec id risus sit amet dolor lobortis laoreet.",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+            }
+        ) {}
     }
 }

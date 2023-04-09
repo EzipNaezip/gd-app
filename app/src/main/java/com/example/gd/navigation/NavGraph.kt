@@ -58,6 +58,9 @@ fun BottomNavGraph(navController: NavHostController, startDestination: String) {
         composable(route = BottomScreen.Community.screenRoute) {
             ComunityScreen(navController = navController)
         }
+        composable(route = BottomScreen.Infomation.screenRoute) {
+            ComunityScreen(navController = navController)
+        }
     }
 }
 
@@ -94,16 +97,20 @@ fun BottomNavigation(navController: NavHostController) {
                 selected = currentRoute == item.screenRoute,
                 alwaysShowLabel = false,
                 onClick = {
-                    navController.navigate(item.screenRoute) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navControllerClick(navController, item)
                 }
             )
         }
+    }
+}
+
+fun navControllerClick(navController: NavHostController, item: BottomScreen){
+    navController.navigate(item.screenRoute) {
+        navController.graph.startDestinationRoute?.let {
+            popUpTo(it) { saveState = true }
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 

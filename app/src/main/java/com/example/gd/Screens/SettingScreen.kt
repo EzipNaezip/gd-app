@@ -3,18 +3,35 @@ package com.example.gd.Screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gd.R
+import com.example.gd.ui.theme.Black
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
@@ -27,9 +44,7 @@ fun SettingScreen( //설정 화면
     navController: NavHostController,
     names: List<String> = listOf("프로필 수정", "회원 탈퇴", "로그아웃", "정보")
 ) {
-    Column(
-        modifier = Modifier.fillMaxHeight()
-    ) {
+    Column(modifier = Modifier.fillMaxHeight()) {
         MaterialTheme { //맨 위의 앱 바
             TopAppBar {
                 Row(
@@ -55,18 +70,10 @@ fun SettingScreen( //설정 화면
                     Button(
                         onClick = {
                             when (name) {
-                                "프로필 수정" -> {
-                                    settingScreen = "프로필 수정"
-                                }
-                                "회원 탈퇴" -> {
-                                    settingScreen = "회원 탈퇴"
-                                }
-                                "로그아웃" -> {
-                                    settingScreen = "로그아웃"
-                                }
-                                "정보" -> {
-                                    settingScreen = "정보"
-                                }
+                                "프로필 수정" -> { settingScreen = "프로필 수정" }
+                                "회원 탈퇴" -> { settingScreen = "회원 탈퇴" }
+                                "로그아웃" -> { settingScreen = "로그아웃" }
+                                "정보" -> { settingScreen = "정보" }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
@@ -88,14 +95,12 @@ fun SettingScreen( //설정 화면
             }
         }
     }
-    println(settingScreen)
     when (settingScreen) {
         "프로필 수정" -> {
             ProfileEditScreen(
                 sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
-                    confirmStateChange = { false }, // 드래그 방지
-                    skipHalfExpanded = true
+                    confirmStateChange = { false } // 드래그 방지
                 )
             )
         }
@@ -112,13 +117,12 @@ fun SettingScreen( //설정 화면
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileEditScreen(sheetState: ModalBottomSheetState) {
     val coroutineScope = rememberCoroutineScope()
-
     val roundedCornerRadius = 12.dp
-    val modifier = Modifier.fillMaxSize()
+    var hasRightButton = true //오른쪽 버튼이 있는지 여부
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -130,34 +134,145 @@ fun ProfileEditScreen(sheetState: ModalBottomSheetState) {
             coroutineScope.launch {
                 sheetState.animateTo(ModalBottomSheetValue.Expanded)
             }
-            Column(
-                modifier = modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                            settingScreen = "default"
+            Column(modifier = Modifier.fillMaxHeight()) {
+                MaterialTheme { //맨 위의 앱 바
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button( // 뒤로 가기 버튼
+                            onClick = {
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    settingScreen = "default"
+                                }
+                            },
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            elevation = ButtonDefaults.elevation(
+                                defaultElevation = 0.dp,
+                                pressedElevation = 0.dp
+                        ),
+                        ) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
                         }
 
+                        Text(
+                            text = "프로필 편집",
+                            fontFamily = suite,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center,
+                            color = Color.Black,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+
+                        if (hasRightButton) {
+                            Button(
+                                onClick = { /* 오른쪽 버튼 클릭 시 실행될 코드 */ },
+                                modifier = Modifier.align(Alignment.CenterEnd)
+                            ) {
+                                Text("저장")
+                            }
+                        }
                     }
+                }
+
+                Column( //페이지 내용
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp)
                 ) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.LightGray, CircleShape)
+                        )
+                    }
+                    Button(
+                        onClick = { /* 사진 변경 기능 실행 */ },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 4.dp),
+                        elevation = ButtonDefaults.elevation(
+                            defaultElevation = 0.dp,
+                            pressedElevation = 0.dp
+                        ),
+                        colors = ButtonDefaults.buttonColors(
+                            //버튼을 눌렀을 때 나오는 색 효과 제거
+                        )
+                    ) {
+                        Text(
+                            text = "프로필 사진 변경",
+                            fontFamily = suite,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 15.sp,
+                            color = Color.Blue
+                        )
+                    }
+
+                    var name by remember { mutableStateOf("") }
+
+                    Text(
+                        text = "이름",
+                        fontFamily = suite,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 15.sp,
+                        color = Color.Gray
+                    )
+
+                    val keyboardController = LocalSoftwareKeyboardController.current
+
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .background(White)
+                            .padding(0.dp)
+                            .onKeyEvent { keyEvent ->
+                                if (keyEvent.key == Key.Enter) {
+                                    keyboardController?.hide() // 키보드 숨기기
+                                    true
+                                } else { false }
+                            },
+                        textStyle = TextStyle(
+                            fontFamily = suite,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 15.sp
+                        ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Black,
+                            disabledTextColor = Black,
+                            backgroundColor = Transparent,
+                            focusedIndicatorColor = DarkGray,
+                            unfocusedIndicatorColor = DarkGray,
+                            disabledIndicatorColor = DarkGray
+                        ),
+                        singleLine = true,
                     )
                 }
             }
-        },
-    ) {
-    }
+        }
+    ) {}
 }
 
 // 무조건 버튼 눌러야 꺼지게 -> 전체화면 -> 밑에서 위로 올라오는 애니메이션 추가(필수)
 // 전체화면이 아니라면? -> 굳이 해당 버튼을 다시 누를 일이 없는 버튼임. 일단 3초 뒤에 내려가도록 설정
-
 
 
 @Composable

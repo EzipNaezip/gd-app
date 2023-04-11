@@ -40,6 +40,7 @@ fun SetupNavGraph(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomNavGraph(navController: NavHostController, startDestination: String) {
     NavHost(

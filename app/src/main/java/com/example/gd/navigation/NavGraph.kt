@@ -58,6 +58,9 @@ fun BottomNavGraph(navController: NavHostController, startDestination: String) {
         composable(route = BottomScreen.Community.screenRoute) {
             ComunityScreen(navController = navController)
         }
+        composable(route = BottomScreen.Detail.screenRoute) {
+            DetailScreen(navController = navController)
+        }
     }
 }
 

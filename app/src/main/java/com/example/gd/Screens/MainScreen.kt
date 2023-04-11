@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.gd.Effects.LoadingShimmerEffect
+import com.example.gd.Effects.SearchBar
+import com.example.gd.Effects.SearchResult
 import com.example.gd.R
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.Home
@@ -50,116 +52,53 @@ fun MainScreen(navController: NavHostController) {
     val testImage: List<Int> =
         listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo)
 
-    Box(
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.primary)
+            .border(0.dp, Color.Transparent),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .border(0.dp, Color.Transparent),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+        //Spacer(modifier = Modifier.padding(8.dp))
+        Card(
+            modifier = Modifier.border(0.dp, Color.Transparent),
+            elevation = 0.dp
         ) {
-            Spacer(modifier = Modifier.padding(8.dp))
-            Card(
-                modifier = Modifier.border(0.dp, Color.Transparent),
-                elevation = 0.dp
-            ) {
-                if (searchState) {
-                    Image( //로고
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "logo",
-                        modifier = Modifier.padding(vertical = 200.dp),
-                        alpha = 0.2f
-                    )
-                }
-
-                SearchBar( // 검색창
-                    onSearch = {
-                        searchState = false
-                        // 검색어로 검색한 결과 나타내는 코드 예정 => Api 호출
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            // api를 통해서 아래에 넣을 값을 가져온 후 아래 코드 실행
-            // api를 통해서 가져오는 동안 로딩창 실행
-
-            // searchState가 false가 되면 로딩창 실행.
-            // 로딩창 하는동안 api를 통해 값 가져옴
-            // 값을 받으면 실행
-
-            if (!searchState) {
-                LoadingShimmerEffect()
-
-                if (false){ // API사용해서 값 가져오면 실행.
-                    SearchResult(testImage)
-                }
-            }
-
-        }
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier) {
-    var searchText by remember { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    TextField(
-        value = searchText,
-        onValueChange = { searchText = it },
-        placeholder = { Text("검색어를 입력하세요") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(90.dp)
-            .padding(16.dp)
-            .background(Color.White),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                if (searchText.isNotEmpty()) {
-                    onSearch(searchText)
-                }
-                focusManager.clearFocus()
-                keyboardController?.hide()
-            }),
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.Gray,
-            disabledTextColor = Color.Transparent,
-            backgroundColor = Color.LightGray,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        ),
-        leadingIcon = {
-            Box(
-                modifier = Modifier.size(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            }
-        },
-        trailingIcon = {
-            Icon(Icons.Default.Clear,
-                contentDescription = "clear text",
-                modifier = Modifier
-                    .clickable {
-                        searchText = ""
-                    }
+            SearchBar( // 검색창
+                onSearch = {
+                    searchState = false
+                    // 검색어로 검색한 결과 나타내는 코드 예정 => Api 호출
+                },
+                modifier = Modifier.fillMaxWidth()
             )
+
+            if (searchState) {
+                Image( //로고
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "logo",
+                    modifier = Modifier.padding(vertical = 200.dp),
+                    alpha = 0.2f
+                )
+            }
         }
-    )
+
+        // api를 통해서 아래에 넣을 값을 가져온 후 아래 코드 실행
+        // api를 통해서 가져오는 동안 로딩창 실행
+
+        // searchState가 false가 되면 로딩창 실행.
+        // 로딩창 하는동안 api를 통해 값 가져옴
+        // 값을 받으면 실행
+
+        if (!searchState) {
+            LoadingShimmerEffect()
+
+            if (false) { // API사용해서 값 가져오면 실행.
+                SearchResult(testImage)
+            }
+        }
+
+    }
 }
 
 @Composable
@@ -181,64 +120,6 @@ fun ImageScreen(@DrawableRes imageId: Int) {
                     painter = painterResource(id = imageId),
                     contentDescription = "Expanded Image",
                     modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SearchResult(testImage: List<Int>){
-    Column() {
-        LazyVerticalGrid(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(testImage) { photo ->
-                ImageScreen(photo)
-            }
-        }
-
-        // 검색결과가 너무 길어질 경우 Surface로 구분할수도
-        Text(
-            text = "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 \n\n" +
-                    "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 \n" +
-                    "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 ",
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-            color = Color.Black,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp
-        )
-
-        Text(
-            text = "#Tag1 #Tag2 #Tag3",
-            modifier = Modifier.padding(vertical = 15.dp, horizontal = 15.dp),
-            color = Color.Black,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp
-        )
-
-        // 북마크 버튼 사용. 저장되지 않으면 비어있는 북마크, 저장된 정보면 채워진 북마크 모양.
-        // 누를때마다 state 변경. 빔 -> 참 /  참 -> 빔
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            Button(
-                elevation = ButtonDefaults.elevation(0.dp),
-                shape = CircleShape,
-                onClick = { /*TODO*/ }, // 스낵바 구현
-            ) {
-                Icon(
-                    imageVector = IconPack.Home,
-                    contentDescription = "Bookmark",
-                    modifier = Modifier
-                        .width(26.dp)
-                        .height(26.dp)
                 )
             }
         }

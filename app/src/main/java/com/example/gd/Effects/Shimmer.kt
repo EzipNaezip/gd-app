@@ -24,9 +24,6 @@ import com.example.gd.ui.iconpack.Home
 
 @Composable
 fun LoadingShimmerEffect() {
-
-    //These colors will be used on the brush. The lightest color should be in the middle
-
     val gradient = listOf(
         Color.LightGray.copy(alpha = 0.9f), //darker grey (90% opacity)
         Color.LightGray.copy(alpha = 0.3f), //lighter grey (30% opacity)
@@ -58,8 +55,8 @@ fun LoadingShimmerEffect() {
 
 @Composable
 fun ShimmerGridItem(brush: Brush) { // 메인 검색 결과
-    val testImage: List<Int> =
-        listOf(1,2,3,4)
+    val testImage: List<Int> = listOf(1,2,3,4)
+
     LazyVerticalGrid(
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
         columns = GridCells.Fixed(2),

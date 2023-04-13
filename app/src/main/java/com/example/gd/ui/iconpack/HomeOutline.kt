@@ -11,13 +11,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.example.gd.ui.IconPack
 
-public val IconPack.Home: ImageVector
+public val IconPack.HomeOutline: ImageVector
     get() {
-        if (_home != null) {
-            return _home!!
+        if (_homeOutline != null) {
+            return _homeOutline!!
         }
-        _home = Builder(name = "Home", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
-                viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
+        _homeOutline = Builder(name = "HomeOutline", defaultWidth = 24.0.dp, defaultHeight =
+                24.0.dp, viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
             path(fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF000000)),
                     strokeLineWidth = 1.5f, strokeLineCap = Round, strokeLineJoin =
                     StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = NonZero) {
@@ -42,7 +42,7 @@ public val IconPack.Home: ImageVector
             }
         }
         .build()
-        return _home!!
+        return _homeOutline!!
     }
 
-private var _home: ImageVector? = null
+private var _homeOutline: ImageVector? = null

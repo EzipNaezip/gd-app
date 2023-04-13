@@ -1,6 +1,5 @@
 package com.example.gd.Effects
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.example.gd.ui.theme.CustomGray
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -33,7 +31,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
         TextField(
             value = searchText,
             onValueChange = { searchText = it },
-            placeholder = { Text(color = Color.LightGray, text = "검색어를 입력하세요") },
+            placeholder = { Text(color = MaterialTheme.colors.secondaryVariant, text = "검색어를 입력하세요") },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(62.dp)
@@ -51,7 +49,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.Black,
                 disabledTextColor = Color.Black,
-                backgroundColor = MaterialTheme.colors.primaryVariant,
+                backgroundColor = MaterialTheme.colors.onSecondary,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent

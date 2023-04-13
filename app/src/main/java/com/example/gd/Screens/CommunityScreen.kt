@@ -1,9 +1,5 @@
 package com.example.gd.Screens
 
-import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -29,9 +24,8 @@ import com.example.gd.Effects.SearchBar
 import com.example.gd.R
 import com.example.gd.navigation.BottomScreen
 import com.example.gd.ui.IconPack
-import com.example.gd.ui.iconpack.Comunity
+import com.example.gd.ui.iconpack.FavoriteOutline
 import com.example.gd.ui.theme.suite
-import com.example.splashscreen.navigation.Screen
 
 @Composable
 fun ComunityScreen(navController: NavHostController) {
@@ -40,6 +34,7 @@ fun ComunityScreen(navController: NavHostController) {
     val scrollState = rememberLazyGridState()
 
     var buttons by remember { mutableStateOf(listOf("좋아요 순", "최신순", "추천순")) }
+    var selectedButtonIndex by remember { mutableStateOf(0) }
 
     // 검색창 + 검색 옵션
     Column(
@@ -61,22 +56,14 @@ fun ComunityScreen(navController: NavHostController) {
                 OutlinedButton(
                     modifier = Modifier.size(width = 85.dp, height = 35.dp),
                     onClick = {
+                        selectedButtonIndex = index
                         when(label){ // 버튼 클릭시 기능 실행
                             "좋아요 순" -> println("좋아요순 버튼 클릭")
                             "최신순" -> println("최신순 버튼 클릭")
                             "추천순" -> println("추천순 버튼 클릭")
                         }
-                        buttons = buttons.toMutableList().apply {
-                            removeAt(index)
-                            add(0, label)
-                            buttons.forEachIndexed { index, label ->
-                                buttons = buttons.toMutableList().apply {
-                                    //if (index == 0) Color.Blue else Color.White
-                                }
-                            }
-                        }
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = if (index == 0) MaterialTheme.colors.onPrimary else Color.White),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = if (selectedButtonIndex == index) MaterialTheme.colors.primaryVariant else Color.White),
                     shape = RoundedCornerShape(30),
                     content = {
                         Text(
@@ -84,7 +71,7 @@ fun ComunityScreen(navController: NavHostController) {
                             fontFamily = suite,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,
-                            color = if (index == 0) Color.White else Color.Black
+                            color = if (selectedButtonIndex == index) Color.White else Color.Black
                         )
                     }
                 )
@@ -135,7 +122,7 @@ fun productFrame(product: Product, navController: NavHostController) {
                     .clip(RoundedCornerShape(8.dp))
             )
             Icon(
-                imageVector = IconPack.Comunity,
+                imageVector = IconPack.FavoriteOutline,
                 contentDescription = "Favorite",
                 modifier = Modifier
                     .clickable {

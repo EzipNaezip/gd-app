@@ -63,9 +63,9 @@ fun MainScreen(navController: NavHostController) {
         // 값을 받으면 실행
 
         if (!searchState) {
-            LoadingShimmerEffect()
+            //LoadingShimmerEffect()
 
-            if (false) { // API사용해서 값 가져오면 실행.
+            if (!false) { // API사용해서 값 가져오면 실행.
                 SearchResult(testImage)
             }
         }

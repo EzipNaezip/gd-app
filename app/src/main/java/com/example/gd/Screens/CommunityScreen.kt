@@ -15,15 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gd.Effects.SearchBar
+import com.example.gd.Effects.productFrame
 import com.example.gd.R
 import com.example.gd.navigation.BottomScreen
 import com.example.gd.ui.IconPack
+import com.example.gd.ui.iconpack.BookmarkOutline
 import com.example.gd.ui.iconpack.FavoriteOutline
 import com.example.gd.ui.theme.suite
 
@@ -85,8 +88,8 @@ fun ComunityScreen(navController: NavHostController) {
         LazyVerticalGrid(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
             columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            //verticalArrangement = Arrangement.spacedBy(8.dp),
+            //horizontalArrangement = Arrangement.spacedBy(8.dp),
             state = scrollState
         ) {
             items(productList) { product ->
@@ -99,58 +102,12 @@ fun ComunityScreen(navController: NavHostController) {
     }
 }
 
-@Composable
-fun productFrame(product: Product, navController: NavHostController) {
-    // 네모 박스 안에 사진이 상단으로, 하단엔 상세 설명 정도?
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .border(0.dp, Color.Transparent)
-            .clickable {
-                PRODUCT = product
-                navController.navigate(BottomScreen.Detail.screenRoute)
-            },
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Box() {
-            Image(
-                painter = painterResource(id = product.imageId[0]),
-                contentDescription = "Image",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Icon(
-                imageVector = IconPack.FavoriteOutline,
-                contentDescription = "Favorite",
-                modifier = Modifier
-                    .clickable {
-                        // Favorite 추가 기능
-                        // Bottom Sheet or SnackBar를 사용해서 추가됐다는 것 표시
-                    }
-                    .width(30.dp)
-                    .height(30.dp)
-                    .align(Alignment.BottomEnd)
-            )
-        }
-        Text(
-            text = product.info,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-            color = Color.Black,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp
-        )
-    }
-}
-
 fun addProduct(productList: ArrayList<Product>) {
     // api로 값을 받아와서 원래 배열에 추가.
     repeat(20) {
         val temp = Product(
             "User Name $it",
-            "안녕하세요 이것은 테스트 문구입니다.",
+            "안녕하세요",
             R.drawable.logo,
             listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo),
         )

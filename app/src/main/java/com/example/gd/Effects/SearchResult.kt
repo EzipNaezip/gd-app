@@ -95,28 +95,42 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
                         .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    if (gridUI) { // 검색 결과
-                        Icon(
-                            imageVector = IconPack.BookmarkOutline,
-                            contentDescription = "Bookmark",
-                            modifier = Modifier
-                                .width(26.dp)
-                                .height(26.dp)
-                                .clickable {
-                                    // 북마크 추가 기능
-                                }
-                        )
-                    } else { // 커뮤니티 상세정보
-                        Icon(
-                            imageVector = IconPack.FavoriteOutline,
-                            contentDescription = "Favorite",
-                            modifier = Modifier
-                                .width(26.dp)
-                                .height(26.dp)
-                                .clickable {
-                                    // favorite 추가 기
-                                }
-                        )
+                    Row() {
+                        if (gridUI) { // 검색 결과 => save 버튼
+                            Icon(
+                                imageVector = IconPack.Share, // save버튼으로 수정 필요
+                                contentDescription = "Save",
+                                modifier = Modifier
+                                    .width(26.dp)
+                                    .height(26.dp)
+                                    .clickable {
+                                        // 북마크 추가 기능
+                                    }
+                            )
+                        }else{
+                            if (true) { // 갤러리 -> 북마크 버튼 없음
+                                Icon(
+                                    imageVector = IconPack.BookmarkOutline,
+                                    contentDescription = "Bookmark",
+                                    modifier = Modifier
+                                        .width(26.dp)
+                                        .height(26.dp)
+                                        .clickable {
+                                            // 북마크 추가 기능
+                                        }
+                                )
+                            }
+                            Icon( // 모든 검색 결과에는 좋아요 기능이 필요함.
+                                imageVector = IconPack.FavoriteOutline,
+                                contentDescription = "Favorite",
+                                modifier = Modifier
+                                    .width(26.dp)
+                                    .height(26.dp)
+                                    .clickable {
+                                        // favorite 추가 기
+                                    }
+                            )
+                        }
                     }
                 }
             }

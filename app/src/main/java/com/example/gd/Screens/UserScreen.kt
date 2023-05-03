@@ -22,11 +22,12 @@ import androidx.navigation.NavHostController
 import com.example.gd.Effects.productFrame
 import com.example.gd.R
 import com.example.gd.ui.IconPack
+import com.example.gd.ui.iconpack.Left
 import com.example.gd.ui.iconpack.Right
 import com.example.gd.ui.theme.suite
 
 @Composable
-fun MyScreen(navController: NavHostController) {
+fun UserScreen(navController: NavHostController) {
     val USER: Info
     val productList = arrayListOf<Product>()
 
@@ -36,12 +37,22 @@ fun MyScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Icon(
+            imageVector = IconPack.Left,
+            contentDescription = "Back",
+            modifier = Modifier
+                .clickable {
+                    navController.popBackStack()
+                }
+                .width(30.dp)
+                .height(30.dp)
+        )
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
             // 프로필 사진
             Image(
-                painter = painterResource(id = USER.profilePicture),
+                painter = painterResource(id = PRODUCT.profilePicture),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(80.dp)
@@ -53,7 +64,7 @@ fun MyScreen(navController: NavHostController) {
             Column(modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)) {
                 // user name
                 Text(
-                    text = USER.name,
+                    text = PRODUCT.name,
                     fontFamily = suite,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
@@ -95,27 +106,20 @@ fun MyScreen(navController: NavHostController) {
                     )
                 }
             }
-            if (true) {
-                // 프로필 수정 버튼
-                Box(modifier = Modifier.fillMaxWidth(), Alignment.BottomEnd) {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = "프로필 수정")
-                    }
-                }
-            }else{
+
                 // Follow & Unfollow Button
                 Box(modifier = Modifier.fillMaxWidth(), Alignment.BottomEnd) {
                     Button(onClick = { /*TODO*/ }) {
                         Text(text = "Follow")
                     }
                 }
-            }
+
         }
         // 가로선
 
         // Readme
         Text(
-            text = "${USER.readme}",
+            text = "${PRODUCT.info}",
             fontFamily = suite,
             fontWeight = FontWeight.SemiBold,
             fontSize = 15.sp,
@@ -133,62 +137,5 @@ fun MyScreen(navController: NavHostController) {
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)
-    }
-}
-
-class Info(
-    val name: String, val readme: String, val ID: String,
-    var follower: Int, var following: Int,
-    @DrawableRes val profilePicture: Int,
-)
-
-@Composable
-fun widthDivide(){
-    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-    Divider(
-        color = MaterialTheme.colors.secondaryVariant,
-        modifier = Modifier
-            .height(1.dp)
-            .fillMaxWidth()
-    )
-    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-}
-
-@Composable
-fun listView(name: String, productList: ArrayList<Product>, navController: NavHostController, isMine: Boolean = true){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .height(250.dp)
-        .padding(horizontal = 10.dp)
-    ) {
-        Row {
-            Text(
-                text = "$name",
-                fontFamily = suite,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onPrimary
-            )
-
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                Icon(
-                    imageVector = IconPack.Right,
-                    contentDescription = "View All",
-                    modifier = Modifier
-                        .clickable {
-                            // 전체보기 페이지로 이동
-                        }
-                        .width(25.dp)
-                        .height(25.dp)
-                )
-            }
-        }
-        addProduct(productList)
-
-        LazyRow{
-            items(productList){item ->
-                productFrame(item, navController, isMine)
-            }
-        }
     }
 }

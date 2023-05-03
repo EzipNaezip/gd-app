@@ -7,19 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.splashscreen.navigation.Screen
 
 @Composable
@@ -27,7 +21,7 @@ fun SplashScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.primary) // 로딩창 배경생
+            .background(MaterialTheme.colors.background) // 로딩창 배경생
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

@@ -11,29 +11,23 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.example.gd.ui.IconPack
 
-public val IconPack.User: ImageVector
+public val IconPack.Left: ImageVector
     get() {
-        if (_user != null) {
-            return _user!!
+        if (_left != null) {
+            return _left!!
         }
-        _user = Builder(name = "User", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
+        _left = Builder(name = "Left", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
                 viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
             path(fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF000000)),
                     strokeLineWidth = 1.5f, strokeLineCap = Round, strokeLineJoin =
                     StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = NonZero) {
-                moveTo(15.75f, 6.0f)
-                arcToRelative(3.75f, 3.75f, 0.0f, true, true, -7.5f, 0.0f)
-                arcToRelative(3.75f, 3.75f, 0.0f, false, true, 7.5f, 0.0f)
-                close()
-                moveTo(4.501f, 20.118f)
-                arcToRelative(7.5f, 7.5f, 0.0f, false, true, 14.998f, 0.0f)
-                arcTo(17.933f, 17.933f, 0.0f, false, true, 12.0f, 21.75f)
-                curveToRelative(-2.676f, 0.0f, -5.216f, -0.584f, -7.499f, -1.632f)
-                close()
+                moveTo(15.75f, 19.5f)
+                lineTo(8.25f, 12.0f)
+                lineToRelative(7.5f, -7.5f)
             }
         }
         .build()
-        return _user!!
+        return _left!!
     }
 
-private var _user: ImageVector? = null
+private var _left: ImageVector? = null

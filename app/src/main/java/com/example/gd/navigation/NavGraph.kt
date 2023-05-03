@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -16,10 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
-import com.example.gd.ui.theme.Gray
 import com.example.splashscreen.navigation.Screen
 
 @Composable
@@ -40,7 +39,6 @@ fun SetupNavGraph(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomNavGraph(navController: NavHostController, startDestination: String) {
     NavHost(
@@ -50,17 +48,20 @@ fun BottomNavGraph(navController: NavHostController, startDestination: String) {
         composable(route = BottomScreen.Main.screenRoute) {
             MainScreen(navController = navController)
         }
+        composable(route = BottomScreen.Community.screenRoute) {
+            ComunityScreen(navController = navController)
+        }
         composable(route = BottomScreen.My.screenRoute) {
             MyScreen(navController = navController)
         }
         composable(route = BottomScreen.Setting.screenRoute) {
             SettingScreen(navController = navController)
         }
-        composable(route = BottomScreen.Community.screenRoute) {
-            ComunityScreen(navController = navController)
-        }
         composable(route = BottomScreen.Detail.screenRoute) {
             DetailScreen(navController = navController)
+        }
+        composable(route = BottomScreen.User.screenRoute) {
+            UserScreen(navController = navController)
         }
     }
 }
@@ -74,10 +75,7 @@ fun BottomNavigation(navController: NavHostController) {
         BottomScreen.Setting
     )
 
-    BottomNavigation(
-        backgroundColor = Color.White,
-        contentColor = Color(0xFF3F414E)
-    ) {
+    BottomNavigation{
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -85,16 +83,16 @@ fun BottomNavigation(navController: NavHostController) {
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        imageVector = if (currentRoute == item.screenRoute) item.iconSolid else item.iconOutline,
                         contentDescription = item.title,
                         modifier = Modifier
                             .width(26.dp)
                             .height(26.dp)
                     )
                 },
-                label = { Text(item.title, fontSize = 9.sp) },
-                selectedContentColor = MaterialTheme.colors.onPrimary,
-                unselectedContentColor = Gray,
+                label = { Text(item.title, fontSize = 11.sp) },
+                selectedContentColor = MaterialTheme.colors.primaryVariant,
+                unselectedContentColor = MaterialTheme.colors.secondary,
                 selected = currentRoute == item.screenRoute,
                 alwaysShowLabel = false,
                 onClick = {

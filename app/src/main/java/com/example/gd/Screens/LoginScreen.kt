@@ -1,29 +1,35 @@
 package com.example.gd
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.gd.navigation.BottomScreen
-import com.example.gd.navigation.MainScreenView
 import com.example.gd.ui.IconPack
-import com.example.gd.ui.iconpack.Comunity
-import com.example.gd.ui.iconpack.Home
+import com.example.gd.ui.iconpack.GoogleLogin
+import com.example.gd.ui.iconpack.KakaoLogin
 import com.example.gd.ui.theme.suite
 import com.example.splashscreen.navigation.Screen
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -36,7 +42,7 @@ fun LoginScreen(navController: NavHostController) {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         Text(
-            text = "Musinsa에서\n원하는 집을 마음껏 상상해봐",
+            text = "MUSINSA에서\n원하는 집을 마음껏 상상해봐",
             fontFamily = suite,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 30.sp,
@@ -54,28 +60,27 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Row() {
-            Icon(
-                imageVector = IconPack.Home,
+            Image(
+                imageVector = IconPack.GoogleLogin,
                 contentDescription = "Google Login",
                 modifier = Modifier
                     .clickable {
                         navController.navigate(Screen.Once.route)
                         // 구글 OAuth 사용 코드로 변경 예정
                     }
-                    .width(50.dp)
-                    .height(50.dp)
+                    .size(50.dp)
+                    .border(1.dp, Color.LightGray)
             )
             Spacer(modifier = Modifier.width(20.dp))
-            Icon(
-                imageVector = IconPack.Comunity,
-                contentDescription = "KaKao Login",
+            Image(
+                imageVector = IconPack.KakaoLogin,
+                contentDescription = "Kakao Login",
                 modifier = Modifier
                     .clickable {
                         navController.navigate(Screen.Once.route)
-                        // 카카오 OAuth 사용 코드로 변경 예정
+                        // 구글 OAuth 사용 코드로 변경 예정
                     }
-                    .width(50.dp)
-                    .height(50.dp)
+                    .size(50.dp)
             )
         }
     }

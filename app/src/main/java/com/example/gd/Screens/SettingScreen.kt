@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,7 +21,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -36,7 +36,6 @@ import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
 var settingScreen by mutableStateOf("default")
-var settingInfoScreen by mutableStateOf("default")
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
@@ -58,6 +57,30 @@ fun SettingScreen(navController: NavHostController) {
                 )
             )
         }
+        "이용약관" -> {
+            TermsConditionsScreen(
+                sheetState = rememberModalBottomSheetState(
+                    initialValue = ModalBottomSheetValue.Hidden,
+                    confirmStateChange = { false } // 드래그 방지
+                )
+            )
+        }
+        "개인정보 처리방침" -> {
+            PrivacyPolicyScreen(
+                sheetState = rememberModalBottomSheetState(
+                    initialValue = ModalBottomSheetValue.Hidden,
+                    confirmStateChange = { false } // 드래그 방지
+                )
+            )
+        }
+        "오픈 소스 라이브러리" -> {
+            OpenSourceLibraryScreen(
+                sheetState = rememberModalBottomSheetState(
+                    initialValue = ModalBottomSheetValue.Hidden,
+                    confirmStateChange = { false } // 드래그 방지
+                )
+            )
+        }
         "회원 탈퇴" -> {
             WithdrawalScreen(
                 sheetState = rememberModalBottomSheetState(
@@ -69,30 +92,13 @@ fun SettingScreen(navController: NavHostController) {
         "로그아웃" -> {
             LogoutPopupScreen()
         }
-        "정보" -> {
-            AppInfoScreen(
-                sheetState = rememberModalBottomSheetState(
-                    initialValue = ModalBottomSheetValue.Hidden,
-                    confirmStateChange = { false } // 드래그 방지 //
-                )
-            )
-        }
     }
 }
 
 @Composable
 fun SettingScreenContent(
     names: List<String> =
-        listOf("프로필 수정", "회원 탈퇴", "로그아웃", "정보"),
-    imageVector: List<ImageVector> =
-        listOf(
-            Icons.Filled.ArrowBack,
-            Icons.Filled.ArrowBack,
-            Icons.Filled.ArrowBack,
-            Icons.Filled.ArrowBack
-        ),
-    contentDescription: List<String> =
-        listOf("프로필 수정", "회원 탈퇴", "로그아웃", "정보")
+        listOf("프로필 수정", "오픈 소스 라이브러리", "이용약관", "개인정보 처리방침", "회원 탈퇴", "로그아웃"),
 ){
     Column(
         modifier = Modifier
@@ -108,31 +114,32 @@ fun SettingScreenContent(
                         onClick = {
                             when (names[i]) {
                                 "프로필 수정" -> { settingScreen = "프로필 수정" }
+                                "오픈 소스 라이브러리" -> { settingScreen = "오픈 소스 라이브러리" }
+                                "이용약관" -> { settingScreen = "이용약관" }
+                                "개인정보 처리방침" -> { settingScreen = "개인정보 처리방침" }
                                 "회원 탈퇴" -> { settingScreen = "회원 탈퇴" }
                                 "로그아웃" -> { settingScreen = "로그아웃" }
-                                "정보" -> { settingScreen = "정보" }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(
-                            imageVector = imageVector[i],
-                            contentDescription = contentDescription[i],
-                            tint = colors.onPrimary
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = names[i],
                             fontFamily = suite,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 15.sp,
-                            color = colors.onPrimary,
+                            color = if (names[i] == "로그아웃") Red else colors.onPrimary,
                             modifier = Modifier
                                 .padding(vertical = 20.dp)
-                                .padding(horizontal = 10.dp)
+                                .padding(horizontal = 8.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }
+                    Divider(
+                        color = colors.secondaryVariant,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
@@ -155,34 +162,49 @@ fun TopAppBarScreenFormat(
                 contentColor = colors.onPrimary,
                 backgroundColor = colors.primary,
                 title = {
-                    Text(
-                        text = titleText,
-                        fontFamily = suite,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center
-                    )
-                },
-                navigationIcon = {
-                    if (IsLeftButton) {
-                        IconButton(onClick = { leftButtonClick() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back Button",
-                                tint = colors.onPrimary
-                            )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (IsLeftButton) {
+                            IconButton(
+                                onClick = { leftButtonClick() }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back Button",
+                                    tint = colors.onPrimary
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { }, enabled = false) {}
                         }
-                    }
-                },
-                elevation = 8.dp,
-                actions = {
-                    if (IsRightButton) {
-                        IconButton(onClick = { rightButtonClick() }) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "Save Button",
-                                tint = colors.primaryVariant
-                            )
+                        Text(
+                            text = titleText,
+                            fontFamily = suite,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (IsRightButton) {
+                            IconButton(
+                                onClick = { rightButtonClick() },
+                                modifier = Modifier.padding(end = 14.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = "Save Button",
+                                    tint = colors.primaryVariant
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = { },
+                                modifier = Modifier.padding(end = 14.dp),
+                                enabled = false
+                            ) {}
                         }
                     }
                 }
@@ -220,7 +242,9 @@ fun TextFieldFormat(fieldTitle: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged {
-                    if (!it.isFocused) { keyboardController?.hide() }
+                    if (!it.isFocused) {
+                        keyboardController?.hide()
+                    }
                 },
             textStyle = TextStyle(
                 fontFamily = suite,
@@ -425,148 +449,18 @@ fun ProfileEditContent() {
             TextFieldFormat("사용자 아이디") //인스타의 @sample_test
             TextFieldFormat("소개")
             TextFieldFormat("링크")
-            // + 나이, 성별
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun LogoutPopupScreen() { //로그아웃 팝업창
-    var logoutConfirmPopup by remember { mutableStateOf(true) }
-    var logoutCompletePopup by remember { mutableStateOf(false) }
-
-    if (logoutConfirmPopup) {
-        ConfirmDismissPopupFormat(
-            titleText = "로그아웃",
-            dialogText = "해당 계정으로 다시 로그인할 수 있습니다.\n로그아웃하시겠습니까?",
-            buttonText = "로그아웃",
-            buttonColor = Red,
-            runButtonClick = {
-                logoutConfirmPopup = false
-                logoutCompletePopup = true
-                // *** 로그아웃 후 메인 화면으로 이동 코드 작성 ***
-            },
-            dismissButtonClick = {
-                logoutConfirmPopup = false
-                settingScreen = "default"
-            },
-            ifDoubleButton = true
-        )
-    }
-    if (logoutCompletePopup) {
-        ConfirmDismissPopupFormat(
-            titleText = "로그아웃 완료",
-            dialogText = "로그아웃이 완료되었습니다.",
-            buttonText = "확인",
-            buttonColor = colors.onPrimary,
-            runButtonClick = {
-                logoutCompletePopup = false
-                settingScreen = "default"
-            },
-            dismissButtonClick = {},
-            ifDoubleButton = false
-        )
-    }
-} //로그아웃 페이지
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AppInfoScreen(
-    sheetState: ModalBottomSheetState,
-    names: List<String> = listOf("오픈 소스 라이브러리", "정보 2", "정보 3")
-) {
-// onClick안에 navControllerClick(navController, BottomScreen.Setting)이거 넣음 됨.
-    var appInfoScreen by remember { mutableStateOf(true) }
+fun OpenSourceLibraryScreen(sheetState: ModalBottomSheetState) {
+    var openSourceLibraryScreen by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
-    if (appInfoScreen) {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetContent = {
-                coroutineScope.launch {
-                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
-                }
-                TopAppBarScreenFormat(
-                    titleText = "정보",
-                    IsLeftButton = true,
-                    IsRightButton = false,
-                    leftButtonClick = {
-                        coroutineScope.launch {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                settingScreen = "default"
-                            }
-                        }
-                    },
-                    rightButtonClick = { },
-                    content = {
-                        Column(modifier = Modifier.fillMaxSize()) {
-                            for (name in names) {
-                                Button(
-                                    onClick = {
-                                        when (name) {
-                                            "오픈 소스 라이브러리" -> {
-                                                settingInfoScreen = "오픈 소스 라이브러리"
-                                            }
-                                            "정보 2" -> {
-                                                settingInfoScreen = "정보 2"
-                                            }
-                                            "정보 3" -> {
-                                                settingInfoScreen = "정보 3"
-                                            }
-                                        }
-                                    },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Text(
-                                        text = name,
-                                        fontFamily = suite,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 15.sp,
-                                        color = colors.onPrimary,
-                                        modifier = Modifier
-                                            .padding(vertical = 20.dp)
-                                            .padding(horizontal = 10.dp)
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
-                            }
-                        }
-                    }
-                )
-            }
-        ) {}
-    }
-    when (settingInfoScreen) {
-        "오픈 소스 라이브러리" -> {
-            Info_OpenSourceLibrary(
-                sheetState = rememberModalBottomSheetState(
-                    initialValue = ModalBottomSheetValue.Hidden,
-                    confirmStateChange = { false } // 드래그 방지 //
-                )
-            )
-        }
-        "정보 2" -> {
-
-        }
-        "정보 3" -> {
-
-        }
-    }
-} //앱 정보 페이지
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun Info_OpenSourceLibrary(sheetState: ModalBottomSheetState) {
-    var appInfoScreen by remember { mutableStateOf(true) }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    if (appInfoScreen) {
+    if (openSourceLibraryScreen) {
         ModalBottomSheetLayout(
             sheetState = sheetState,
             sheetContent = {
@@ -595,7 +489,99 @@ private fun Info_OpenSourceLibrary(sheetState: ModalBottomSheetState) {
                     leftButtonClick = {
                         coroutineScope.launch {
                             sheetState.hide()
-                            settingInfoScreen = "default"
+                            settingScreen = "default"
+                        }
+                    },
+                    rightButtonClick = { }
+                )
+            }
+        ) {}
+    }
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun TermsConditionsScreen(sheetState: ModalBottomSheetState) {
+    var termsConditionsScreen by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+
+    if (termsConditionsScreen) {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetContent = {
+                coroutineScope.launch {
+                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+                TopAppBarScreenFormat(
+                    titleText = "이용약관",
+                    IsLeftButton = true,
+                    IsRightButton = false,
+                    content = {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(24.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Text(
+                                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut mauris quis nisi blandit varius eu in neque. Nam vel ex et dolor vehicula bibendum sed eu urna. Sed condimentum augue nec orci blandit, eu egestas quam gravida. Nullam bibendum orci id ligula bibendum dictum. Suspendisse ac tellus neque. Pellentesque feugiat magna vitae hendrerit feugiat. Fusce vehicula elit ut elit egestas, sit amet dapibus sapien maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean id orci ut purus rutrum pretium eu ut lacus. Praesent bibendum quam quis blandit luctus. Donec id risus sit amet dolor lobortis laoreet.",
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    },
+                    leftButtonClick = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            settingScreen = "default"
+                        }
+                    },
+                    rightButtonClick = { }
+                )
+            }
+        ) {}
+    }
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PrivacyPolicyScreen(sheetState: ModalBottomSheetState) {
+    var privacyPolicyScreen by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+
+    if (privacyPolicyScreen) {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetContent = {
+                coroutineScope.launch {
+                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+                TopAppBarScreenFormat(
+                    titleText = "개인정보 처리방침",
+                    IsLeftButton = true,
+                    IsRightButton = false,
+                    content = {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(24.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Text(
+                                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut mauris quis nisi blandit varius eu in neque. Nam vel ex et dolor vehicula bibendum sed eu urna. Sed condimentum augue nec orci blandit, eu egestas quam gravida. Nullam bibendum orci id ligula bibendum dictum. Suspendisse ac tellus neque. Pellentesque feugiat magna vitae hendrerit feugiat. Fusce vehicula elit ut elit egestas, sit amet dapibus sapien maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean id orci ut purus rutrum pretium eu ut lacus. Praesent bibendum quam quis blandit luctus. Donec id risus sit amet dolor lobortis laoreet.",
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    },
+                    leftButtonClick = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            settingScreen = "default"
                         }
                     },
                     rightButtonClick = { }
@@ -625,7 +611,7 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                 leftButtonClick = {
                     coroutineScope.launch {
                         sheetState.hide()
-                        settingInfoScreen = "default"
+                        settingScreen = "default"
                     }
                 },
                 rightButtonClick = { },
@@ -719,4 +705,43 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
             }
         }
     ) {}
+}
+
+@Composable
+fun LogoutPopupScreen() { //로그아웃 팝업창
+    var logoutConfirmPopup by remember { mutableStateOf(true) }
+    var logoutCompletePopup by remember { mutableStateOf(false) }
+
+    if (logoutConfirmPopup) {
+        ConfirmDismissPopupFormat(
+            titleText = "로그아웃",
+            dialogText = "해당 계정으로 다시 로그인할 수 있습니다.\n로그아웃하시겠습니까?",
+            buttonText = "로그아웃",
+            buttonColor = Red,
+            runButtonClick = {
+                logoutConfirmPopup = false
+                logoutCompletePopup = true
+                // *** 로그아웃 후 메인 화면으로 이동 코드 작성 ***
+            },
+            dismissButtonClick = {
+                logoutConfirmPopup = false
+                settingScreen = "default"
+            },
+            ifDoubleButton = true
+        )
+    }
+    if (logoutCompletePopup) {
+        ConfirmDismissPopupFormat(
+            titleText = "로그아웃 완료",
+            dialogText = "로그아웃이 완료되었습니다.",
+            buttonText = "확인",
+            buttonColor = colors.onPrimary,
+            runButtonClick = {
+                logoutCompletePopup = false
+                settingScreen = "default"
+            },
+            dismissButtonClick = {},
+            ifDoubleButton = false
+        )
+    }
 }

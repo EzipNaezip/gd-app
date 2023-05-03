@@ -15,10 +15,12 @@ import com.example.gd.Effects.LoadingShimmerEffect
 import com.example.gd.Effects.SearchBar
 import com.example.gd.Effects.SearchResult
 import com.example.gd.R
+import kotlinx.coroutines.delay
 
 @Composable
 fun MainScreen(navController: NavHostController) {
     var searchState by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(true) }
 
     // 테스트용 이미지. 추후 변경 예정. listOf()로 만들고, Api 호출전에 다시 초기화 하고, 값을 하나씩 넣는 방법 사용
     val testImage: List<Int> =
@@ -40,6 +42,7 @@ fun MainScreen(navController: NavHostController) {
             SearchBar( // 검색창
                 onSearch = {
                     searchState = false
+                    isLoading = true
                     // 검색어로 검색한 결과 나타내는 코드 예정 => Api 호출
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -63,9 +66,15 @@ fun MainScreen(navController: NavHostController) {
         // 값을 받으면 실행
 
         if (!searchState) {
-            //LoadingShimmerEffect()
-
-            if (!false) { // API사용해서 값 가져오면 실행.
+            LaunchedEffect(isLoading) {
+                if (isLoading) {
+                    delay(1500)
+                    isLoading = false
+                }
+            }
+            if (isLoading){
+                LoadingShimmerEffect()
+            }else { // API사용해서 값 가져오면 실행.
                 SearchResult(testImage)
             }
         }

@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
@@ -38,7 +39,6 @@ fun SetupNavGraph(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomNavGraph(navController: NavHostController, startDestination: String) {
     NavHost(
@@ -48,17 +48,20 @@ fun BottomNavGraph(navController: NavHostController, startDestination: String) {
         composable(route = BottomScreen.Main.screenRoute) {
             MainScreen(navController = navController)
         }
+        composable(route = BottomScreen.Community.screenRoute) {
+            ComunityScreen(navController = navController)
+        }
         composable(route = BottomScreen.My.screenRoute) {
             MyScreen(navController = navController)
         }
         composable(route = BottomScreen.Setting.screenRoute) {
             SettingScreen(navController = navController)
         }
-        composable(route = BottomScreen.Community.screenRoute) {
-            ComunityScreen(navController = navController)
-        }
         composable(route = BottomScreen.Detail.screenRoute) {
             DetailScreen(navController = navController)
+        }
+        composable(route = BottomScreen.User.screenRoute) {
+            UserScreen(navController = navController)
         }
     }
 }

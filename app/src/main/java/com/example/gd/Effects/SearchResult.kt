@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.window.Dialog
+import com.example.gd.Screens.PRODUCT
 import com.example.gd.ui.iconpack.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -30,6 +31,7 @@ import com.google.accompanist.pager.rememberPagerState
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
+    // gridUI -> 새로 생성한 게시물인지 확인하는 용도
     val indexIcons: List<ImageVector> = listOf(
         IconPack.SquareSolid,
         IconPack.SquareSolid,
@@ -76,6 +78,22 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
                 contentAlignment = Alignment.Center
             ) {
                 if (!gridUI) {
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.BottomStart
+                    ) {
+                        Text(
+                            text = PRODUCT.date.slice(0..10),
+                            modifier = Modifier.padding(0.dp),
+                            color = MaterialTheme.colors.onPrimary,
+                            fontFamily = suite,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 15.sp
+                        )
+                    }
+
                     // 아이콘 4개. 현재 페이지만 포인트 색으로 색이 바뀜. 그 외는 회색으로. 선택안된 아이콘처럼
                     Row() {
                         indexIcons.forEachIndexed { index, icon ->
@@ -107,7 +125,7 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
                                         // 북마크 추가 기능
                                     }
                             )
-                        }else{
+                        } else {
                             if (true) { // 갤러리 -> 북마크 버튼 없음
                                 Icon(
                                     imageVector = IconPack.BookmarkOutline,
@@ -148,15 +166,9 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
             fontWeight = FontWeight.SemiBold,
             fontSize = 15.sp
         )
+        
+        TagList(tags = PRODUCT.tags)
 
-        Text(
-            text = "#Tag1 #Tag2 #Tag3",
-            modifier = Modifier.padding(vertical = 15.dp, horizontal = 15.dp),
-            color = Color.Black,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp
-        )
     }
 }
 
@@ -181,6 +193,31 @@ fun ImageScreen(@DrawableRes imageId: Int) {
                     contentDescription = "Expanded Image",
                     modifier = Modifier.fillMaxWidth()
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun TagList(tags: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+    Row {
+        for (i in tags.indices) {
+            if (!expanded && i == 5) {
+                Row(Modifier.clickable { expanded = true }) {
+                    Text("더보기")
+                }
+                break
+            }
+            Row {
+                Text(tags[i])
+            }
+        }
+        if (expanded) {
+            for (i in 5 until tags.size) {
+                Row {
+                    Text(tags[i])
+                }
             }
         }
     }

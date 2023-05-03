@@ -40,8 +40,7 @@ fun productFrame(product: Product, navController: NavHostController, isMine: Boo
                 painter = painterResource(id = product.imageId[0]),
                 contentDescription = "Image",
                 modifier = Modifier
-                    //.fillMaxSize()
-                    .size(200.dp)
+                    .size(180.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
             if (isMine) {

@@ -42,7 +42,7 @@ fun LoginScreen(navController: NavHostController) {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         Text(
-            text = "MUSINSA에서\n원하는 집을 마음껏 상상해봐",
+            text = "내일의 집에서\n원하는 집을 마음껏 상상해봐",
             fontFamily = suite,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 30.sp,

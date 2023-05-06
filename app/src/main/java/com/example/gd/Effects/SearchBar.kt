@@ -1,5 +1,7 @@
 package com.example.gd.Effects
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,11 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gd.ui.theme.White
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -27,7 +32,6 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column() {
-        Spacer(modifier = Modifier.height(15.dp))
         TextField(
             value = searchText,
             onValueChange = { searchText = it },
@@ -54,6 +58,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
+            /*
             leadingIcon = {
                 Box(
                     modifier = Modifier.size(24.dp),
@@ -66,7 +71,19 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                     )
                 }
             },
+
+             */
             trailingIcon = {
+                TextButton(
+                    onClick = { /* Perform search action */ },
+
+                ) {
+                    Text(
+                        text = "생성",
+                        color = Color.Black
+                    )
+                }
+/*
                 Icon(
                     Icons.Default.Clear,
                     contentDescription = "clear text",
@@ -75,7 +92,61 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                             searchText = ""
                         }
                 )
+
+ */
             }
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchBarPreview(){
+    var searchState by remember {
+        mutableStateOf(true)
+    }
+    SearchBar(
+        onSearch = {searchState = false},
+        modifier = Modifier.border(0.dp, Color.Transparent),
+        )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchBarPreview2(){
+
+    SearchBar2()
+}
+
+@Composable
+fun SearchBar2() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color.White)
+            .shadow(4.dp, RoundedCornerShape(28.dp))
+            .padding(horizontal = 16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(end = 48.dp)
+        ) {
+            // Add your search bar content here
+        }
+        Divider(
+            color = Color.Gray,
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(1.dp)
+                .padding(start = 8.dp, end = 48.dp)
+        )
+        TextButton(
+            onClick = { /* Perform search action */ },
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            Text("Search")
+        }
     }
 }

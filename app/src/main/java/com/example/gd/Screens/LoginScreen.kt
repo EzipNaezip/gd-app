@@ -59,13 +59,13 @@ fun LoginScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row() {
+        Row {
             Image(
                 imageVector = IconPack.GoogleLogin,
                 contentDescription = "Google Login",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(Screen.Once.route)
+                        navController.navigate(Screen.EnterMember.route)
                         // 구글 OAuth 사용 코드로 변경 예정
                     }
                     .size(50.dp)
@@ -77,7 +77,7 @@ fun LoginScreen(navController: NavHostController) {
                 contentDescription = "Kakao Login",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(Screen.Once.route)
+                        navController.navigate(Screen.EnterMember.route)
                         // 구글 OAuth 사용 코드로 변경 예정
                     }
                     .size(50.dp)

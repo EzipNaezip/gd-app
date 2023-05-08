@@ -4,33 +4,22 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gd.Effects.ConfirmDismissPopupFormat
+import com.example.gd.Effects.TextFieldFormat
+import com.example.gd.Effects.TopAppBarScreenFormat
 import com.example.gd.R
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
@@ -144,197 +133,6 @@ fun SettingScreenContent(
             }
         }
     }
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-fun TopAppBarScreenFormat(
-    titleText: String,
-    IsLeftButton: Boolean,
-    IsRightButton: Boolean,
-    content: @Composable () -> Unit,
-    leftButtonClick: () -> Unit,
-    rightButtonClick: () -> Unit
-) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                contentColor = colors.onPrimary,
-                backgroundColor = colors.primary,
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        if (IsLeftButton) {
-                            IconButton(
-                                onClick = { leftButtonClick() }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowBack,
-                                    contentDescription = "Back Button",
-                                    tint = colors.onPrimary
-                                )
-                            }
-                        } else {
-                            IconButton(onClick = { }, enabled = false) {}
-                        }
-                        Text(
-                            text = titleText,
-                            fontFamily = suite,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.weight(1f)
-                        )
-                        if (IsRightButton) {
-                            IconButton(
-                                onClick = { rightButtonClick() },
-                                modifier = Modifier.padding(end = 14.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Check,
-                                    contentDescription = "Save Button",
-                                    tint = colors.primaryVariant
-                                )
-                            }
-                        } else {
-                            IconButton(
-                                onClick = { },
-                                modifier = Modifier.padding(end = 14.dp),
-                                enabled = false
-                            ) {}
-                        }
-                    }
-                }
-            )
-        }
-    ) {
-        content()
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun TextFieldFormat(fieldTitle: String) {
-    var userValue by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    Column(modifier = Modifier.padding(8.dp)) {
-        Text(
-            text = fieldTitle,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp,
-            color = colors.secondary
-        )
-        TextField(
-            value = userValue,
-            onValueChange = { newText -> userValue = newText },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {keyboardController?.hide()}
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged {
-                    if (!it.isFocused) {
-                        keyboardController?.hide()
-                    }
-                },
-            textStyle = TextStyle(
-                fontFamily = suite,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
-                color = colors.onPrimary,
-                textAlign = TextAlign.Start
-            ),
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = colors.primary,
-                focusedIndicatorColor = Transparent,
-                unfocusedIndicatorColor = Transparent
-            )
-        )
-        Divider(
-            color = colors.secondary,
-            thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun ConfirmDismissPopupFormat(
-    titleText: String,
-    dialogText: String,
-    buttonText: String,
-    buttonColor: Color,
-    runButtonClick: () -> Unit,
-    dismissButtonClick: () -> Unit,
-    ifDoubleButton: Boolean
-) {
-    AlertDialog(
-        onDismissRequest = { },
-        shape = RoundedCornerShape(12.dp),
-        title = {
-            Text(
-                text = titleText,
-                fontFamily = suite,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 17.sp,
-                color = colors.onPrimary
-            )
-        },
-        text = {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = dialogText,
-                fontFamily = suite,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                color = colors.secondary
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = { runButtonClick() },
-                modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp)
-            ) {
-                Text(
-                    text = buttonText,
-                    fontFamily = suite,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 13.sp,
-                    color = buttonColor
-                )
-            }
-        },
-        dismissButton = {
-            if (ifDoubleButton) {
-                TextButton(
-                    onClick = { dismissButtonClick() },
-                    modifier = Modifier
-                        .width(100.dp)
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = "취소",
-                        fontFamily = suite,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 13.sp,
-                        color = colors.onPrimary
-                    )
-                }
-            }
-        }
-    )
 }
 
 @SuppressLint("CoroutineCreationDuringComposition")

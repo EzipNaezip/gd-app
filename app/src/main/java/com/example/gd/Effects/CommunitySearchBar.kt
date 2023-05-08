@@ -26,7 +26,7 @@ import com.example.gd.ui.theme.White
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
+fun CommunitySearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
     var searchText by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -38,7 +38,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
             placeholder = {
                 Text(
                     color = MaterialTheme.colors.secondaryVariant,
-                    text = "원하시는 스타일을 입력해주세요"
+                    text = "검색"
                 )
             },
             shape = RoundedCornerShape(8.dp),
@@ -68,6 +68,18 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
+            leadingIcon = {
+                Box(
+                    modifier = Modifier.size(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                }
+            },
             trailingIcon = {
                 Row {
                     if (searchText != "") {
@@ -79,19 +91,6 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                                     searchText = ""
                                 }
                                 .padding(vertical = 15.dp)
-                        )
-                    }
-                    Divider(color = Color.Black, modifier = Modifier
-                        .fillMaxHeight()
-                        .width(1.dp))
-
-                    TextButton(
-                        onClick = { /* Perform search action */ },
-
-                        ) {
-                        Text(
-                            text = "생성",
-                            color = Color.Black
                         )
                     }
                 }

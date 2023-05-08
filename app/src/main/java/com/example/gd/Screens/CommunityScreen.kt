@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gd.Effects.CommunitySearchBar
 import com.example.gd.Effects.SearchBar
 import com.example.gd.Effects.productFrame
 import com.example.gd.R
@@ -55,7 +56,7 @@ fun ComunityScreen(navController: NavHostController) {
                 .border(0.dp, Color.Transparent),
             verticalArrangement = Arrangement.Top
         ) {
-            SearchBar(onSearch = { searchState = false })
+            CommunitySearchBar(onSearch = { searchState = false })
             // 디자인 다듬기
             // 버튼들을 배열을 사용해서 나타냄. 버튼에 넣는 값들을 배열에 있는 것으로 클래스로 구분해서 사용. ex) Main Screen에서 결과값 사진 or Navgraph
             Row(

@@ -1,12 +1,9 @@
 package com.example.gd.Screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -19,11 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.gd.Effects.productFrame
 import com.example.gd.R
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.Left
-import com.example.gd.ui.iconpack.Right
 import com.example.gd.ui.theme.suite
 
 @Composable
@@ -127,13 +122,13 @@ fun UserScreen(navController: NavHostController) {
             modifier = Modifier.padding(horizontal = 10.dp)
         )
 
-        widthDivide()
+        WidthDivide()
 
-        listView("갤러리", productList, navController, false)
+        ListView("갤러리", productList, navController, false)
 
-        widthDivide()
+        WidthDivide()
 
-        listView("북마크", productList, navController)
+        ListView("북마크", productList, navController)
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)

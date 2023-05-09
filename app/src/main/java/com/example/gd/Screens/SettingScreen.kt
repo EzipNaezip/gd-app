@@ -3,24 +3,17 @@ package com.example.gd.Screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Red
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gd.Effects.ConfirmDismissPopupFormat
-import com.example.gd.Effects.TextFieldFormat
 import com.example.gd.Effects.TopAppBarScreenFormat
-import com.example.gd.R
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
@@ -38,8 +31,8 @@ fun SettingScreen(navController: NavHostController) {
             leftButtonClick = {}, rightButtonClick = {}
         )
     when (settingScreen) {
-        "프로필 수정" -> {
-            ProfileEditScreen(
+        "오픈 소스 라이브러리" -> {
+            OpenSourceLibraryScreen(
                 sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
                     confirmStateChange = { false } // 드래그 방지
@@ -56,14 +49,6 @@ fun SettingScreen(navController: NavHostController) {
         }
         "개인정보 처리방침" -> {
             PrivacyPolicyScreen(
-                sheetState = rememberModalBottomSheetState(
-                    initialValue = ModalBottomSheetValue.Hidden,
-                    confirmStateChange = { false } // 드래그 방지
-                )
-            )
-        }
-        "오픈 소스 라이브러리" -> {
-            OpenSourceLibraryScreen(
                 sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
                     confirmStateChange = { false } // 드래그 방지
@@ -87,14 +72,14 @@ fun SettingScreen(navController: NavHostController) {
 @Composable
 fun SettingScreenContent(
     names: List<String> =
-        listOf("프로필 수정", "오픈 소스 라이브러리", "이용약관", "개인정보 처리방침", "회원 탈퇴", "로그아웃"),
+        listOf("오픈 소스 라이브러리", "이용약관", "개인정보 처리방침", "회원 탈퇴", "로그아웃"),
 ){
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 8.dp)
     ) {
-        for (i in names.indices) { //설정 목록 버튼 4개 생성
+        for (i in names.indices) { //설정 목록 버튼 생성
             Surface(
                 modifier = Modifier.background(colors.primary)
             ) {
@@ -102,7 +87,6 @@ fun SettingScreenContent(
                     Button(
                         onClick = {
                             when (names[i]) {
-                                "프로필 수정" -> { settingScreen = "프로필 수정" }
                                 "오픈 소스 라이브러리" -> { settingScreen = "오픈 소스 라이브러리" }
                                 "이용약관" -> { settingScreen = "이용약관" }
                                 "개인정보 처리방침" -> { settingScreen = "개인정보 처리방침" }
@@ -131,122 +115,6 @@ fun SettingScreenContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@SuppressLint("CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun ProfileEditScreen(sheetState: ModalBottomSheetState) {
-    val coroutineScope = rememberCoroutineScope()
-    var popup by remember { mutableStateOf(false) }
-
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            coroutineScope.launch {
-                sheetState.animateTo(ModalBottomSheetValue.Expanded)
-            }
-            TopAppBarScreenFormat(
-                titleText = "프로필 수정",
-                IsLeftButton = true,
-                IsRightButton = true,
-                content = { ProfileEditContent() },
-                leftButtonClick = {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                        settingScreen = "default"
-                    }
-                },
-                rightButtonClick = { popup = true }
-            )
-            if (popup) {
-                var profileEditConfirmPopup by remember { mutableStateOf(true) }
-                var profileEditCompletePopup by remember { mutableStateOf(false) }
-
-                if (profileEditConfirmPopup) {
-                    ConfirmDismissPopupFormat(
-                        titleText = "변경 사항 저장",
-                        dialogText = "프로필 변경 사항을 저장하시겠습니까?",
-                        buttonText = "저장",
-                        buttonColor = colors.primaryVariant,
-                        runButtonClick = {
-                            profileEditConfirmPopup = false
-                            profileEditCompletePopup = true
-                            // *** 프로필 저장 기능 코드 작성 ***
-                        },
-                        dismissButtonClick = {
-                            profileEditConfirmPopup = false
-                            settingScreen = "default"
-                        },
-                        ifDoubleButton = true
-                    )
-                }
-                if (profileEditCompletePopup) {
-                    ConfirmDismissPopupFormat(
-                        titleText = "변경 사항 저장",
-                        dialogText = "프로필 변경 사항이 저장되었습니다.",
-                        buttonText = "확인",
-                        buttonColor = colors.onPrimary,
-                        runButtonClick = {
-                            profileEditCompletePopup = false
-                            settingScreen = "default"
-                        },
-                        dismissButtonClick = {},
-                        ifDoubleButton = false
-                    )
-                }
-            }
-        }
-    ) {}
-}
-
-@Composable
-fun ProfileEditContent() {
-    Column( //페이지 내용
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, colors.secondaryVariant, CircleShape)
-            )
-        }
-        Button(
-            onClick = { /* 사진 변경 기능 실행 */ },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 4.dp),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.dp,
-                pressedElevation = 0.dp
-            ),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Transparent)
-        ) {
-            Text(
-                text = "프로필 사진 변경",
-                fontFamily = suite,
-                fontWeight = FontWeight.Normal,
-                fontSize = 15.sp,
-                color = colors.primaryVariant
-            )
-        }
-        Column {
-            TextFieldFormat("이름")
-            TextFieldFormat("사용자 아이디") //인스타의 @sample_test
-            TextFieldFormat("소개")
-            TextFieldFormat("링크")
         }
     }
 }
@@ -442,7 +310,6 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                             Button(
                                 onClick = {
                                     coroutineScope.launch {
-                                        //sheetState.hide()
                                         popup = true
                                     }
                                 },

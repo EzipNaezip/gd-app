@@ -15,11 +15,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
-import com.example.splashscreen.navigation.Screen
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

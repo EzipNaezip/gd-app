@@ -15,22 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.gd.Effects.ProfileTextScreen
-import com.example.gd.Effects.TextFieldFormat
-import com.example.gd.Effects.productFrame
+import coil.compose.rememberAsyncImagePainter
+import com.example.gd.Effects.*
 import com.example.gd.R
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.Right
 import com.example.gd.ui.theme.suite
-import com.example.gd.navigation.Screen
 import kotlinx.coroutines.launch
-
-var profileEditScreen by mutableStateOf("default")
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class)
@@ -41,7 +38,7 @@ fun MyScreen(navController: NavHostController) {
 
     USER = Info(
         "박동민", "안녕하세요 저는 박동민입니다.\n 테스트 Readme입니다.",
-        "pdm001125",120, 200, R.drawable.logo
+        "pdm001125", 120, 200, R.drawable.logo
     )
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -49,14 +46,7 @@ fun MyScreen(navController: NavHostController) {
             .fillMaxWidth()
             .padding(10.dp)) {
             // 프로필 사진
-            Image(
-                painter = painterResource(id = USER.profilePicture),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, Color.LightGray, CircleShape)
-            )
+            ProfileImage(80)
 
             // 유저 정보
             Column(modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)) {
@@ -107,18 +97,11 @@ fun MyScreen(navController: NavHostController) {
             if (true) {
                 // 프로필 수정 버튼
                 Box(modifier = Modifier.fillMaxWidth(), Alignment.BottomEnd) {
-                    Button(onClick = { profileEditScreen = "EditScreenOpen" }) {
+                    Button(onClick = {
+                        profileEditScreenState = "프로필"
+                    }) {
                         Text(text = "프로필 수정")
                     }
-                }
-                if (profileEditScreen == "EditScreenOpen") {
-                    ProfileEditScreen(
-                        sheetState = rememberModalBottomSheetState(
-                            initialValue = ModalBottomSheetValue.Hidden,
-                            confirmStateChange = { false } // 드래그 방지
-                        ),
-                        navController = navController
-                    )
                 }
             } else {
                 // Follow & Unfollow Button
@@ -151,6 +134,57 @@ fun MyScreen(navController: NavHostController) {
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)
+    }
+
+    when (profileEditScreenState) {
+        "프로필" -> {
+            ProfileEditScreen(
+                sheetState = rememberModalBottomSheetState(
+                    initialValue = ModalBottomSheetValue.Hidden,
+                    confirmStateChange = { false } // 드래그 방지
+                ),
+                navController = navController
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ProfileEditScreen(
+    sheetState: ModalBottomSheetState,
+    navController: NavHostController
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var screen by remember { mutableStateOf(true) }
+
+    if (screen) {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetContent = {
+                coroutineScope.launch {
+                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+                ProfileTextScreen(
+                    navController = navController,
+                    titleText = "프로필 수정",
+                    content = {
+                        ProfileTextContent(buttonText = "프로필 사진 수정")
+                    },
+                    popupTitleText = "변경 사항 저장",
+                    confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
+                    completeDialogText = "프로필 변경 사항이 저장되었습니다."
+                )
+                if (editIsOpen == "on") {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        profileEditScreenState = "default"
+                        editIsOpen = "default"
+                    }
+                }
+            }
+        ) {}
     }
 }
 
@@ -213,79 +247,6 @@ fun ListView(
             items(productList) {item ->
                 productFrame(item, navController, isMine)
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun ProfileEditScreen(sheetState: ModalBottomSheetState, navController: NavHostController) {
-    val coroutineScope = rememberCoroutineScope()
-
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            coroutineScope.launch {
-                sheetState.animateTo(ModalBottomSheetValue.Expanded)
-            }
-            ProfileTextScreen(
-                navController = navController,
-                titleText = "프로필 수정",
-                content = { ProfileEditContent() },
-                popupTitleText = "변경 사항 저장",
-                confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
-                completeDialogText = "프로필 변경 사항이 저장되었습니다."
-            )
-        },
-    ) {}
-}
-
-@Composable
-fun ProfileEditContent() {
-    Column( //페이지 내용
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colors.secondaryVariant, CircleShape)
-            )
-        }
-        Button(
-            onClick = { /* 사진 변경 기능 실행 */ },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 4.dp),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.dp,
-                pressedElevation = 0.dp
-            ),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-        ) {
-            Text(
-                text = "프로필 사진 변경",
-                fontFamily = suite,
-                fontWeight = FontWeight.Normal,
-                fontSize = 15.sp,
-                color = MaterialTheme.colors.primaryVariant
-            )
-        }
-        Column {
-            TextFieldFormat("이름")
-            TextFieldFormat("사용자 아이디") //인스타의 @sample_test
-            TextFieldFormat("소개")
-            TextFieldFormat("링크")
         }
     }
 }

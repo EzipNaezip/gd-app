@@ -18,18 +18,19 @@ import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
 var settingScreen by mutableStateOf("default")
+//뒤로가기 시 초기화를 위한 전역변수
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingScreen(navController: NavHostController) {
-        TopAppBarScreenFormat(
-            titleText = "설정",
-            IsLeftButton = false,
-            IsRightButton = false,
-            content = { SettingScreenContent() },
-            leftButtonClick = {}, rightButtonClick = {}
-        )
+    TopAppBarScreenFormat(
+        titleText = "설정",
+        IsLeftButton = false,
+        IsRightButton = false,
+        content = { SettingScreenContent() },
+        leftButtonClick = {}, rightButtonClick = {}
+    )
     when (settingScreen) {
         "오픈 소스 라이브러리" -> {
             OpenSourceLibraryScreen(

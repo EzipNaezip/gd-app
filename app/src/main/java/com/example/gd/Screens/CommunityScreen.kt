@@ -28,14 +28,16 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
+var selectedButtonIndex by mutableStateOf(0)
+
+val productList = arrayListOf<Product>()
+
 @Composable
 fun ComunityScreen(navController: NavController) {
-    var searchState by remember { mutableStateOf(true) } // 검색 전후 구분
+    var searchState by rememberSaveable { mutableStateOf(true) } // 검색 전후 구분
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
 
-    val productList = rememberSaveable{ arrayListOf<Product>() }// 더미데이터 리스트 -> 전역으로 관리해야함. 커뮤니티를 벗어나면 클리어되게 설정. 그게 아니라면 유지돼야함.
     var buttons by remember { mutableStateOf(listOf("TOP 30", "인기급상승", "모던", "클래식", "내추럴")) }
-    var selectedButtonIndex by rememberSaveable { mutableStateOf(0) }
 
     // pull to refresh
     var refreshing by remember { mutableStateOf(false) }
@@ -67,10 +69,10 @@ fun ComunityScreen(navController: NavController) {
                 item {
                     buttons.forEachIndexed { index, label ->
                         OutlinedButton(
-                            modifier = Modifier.size((label.length*13 + 30).dp, height = 35.dp),
+                            modifier = Modifier.size((label.length * 13 + 30).dp, height = 35.dp),
                             onClick = {
                                 selectedButtonIndex = index
-                                when(label){ // 버튼 클릭시 기능 실행
+                                when (label) { // 버튼 클릭시 기능 실행
                                     "좋아요 순" -> println("좋아요순 버튼 클릭")
                                     "최신순" -> println("최신순 버튼 클릭")
                                     "추천순" -> println("추천순 버튼 클릭")
@@ -93,9 +95,8 @@ fun ComunityScreen(navController: NavController) {
                 }
             }
 
-
             // Api를 호출해서 값을 불러오는 코드를 넣는 자리.
-            addProduct(productList)
+            if (productList.size == 0) addProduct(productList)
 
             LazyVerticalGrid(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
@@ -120,7 +121,7 @@ fun addProduct(productList: ArrayList<Product>) {
             "User Name $it",
             "안녕하세요",
             "2023-04-14 21:45:51",
-            listOf("#1","#2","#3","#4","#5","#6","#7",),
+            listOf("#1", "#2", "#3", "#4", "#5", "#6", "#7"),
             R.drawable.logo,
             listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo),
             false

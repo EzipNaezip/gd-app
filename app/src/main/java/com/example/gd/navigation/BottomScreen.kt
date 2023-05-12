@@ -21,24 +21,24 @@ sealed class BottomScreen(
         BottomScreen("설정", IconPack.SettingOutline, IconPack.SettingSolid, "setting")
 }
 
-sealed class MainNavigationScreens(val screenRoute: String, val route: String) {
-    object Main : MainNavigationScreens("main","main")
-    object Detail : MainNavigationScreens("main", "main_detail_screen")
-    object User : MainNavigationScreens( "main","main_user_screen")
+sealed class MainNavigationScreens(val route: String) {
+    object Main : MainNavigationScreens("main")
+    object Detail : MainNavigationScreens("main_detail_screen")
+    object User : MainNavigationScreens("main_user_screen")
 }
 
-sealed class CommunityNavigationScreens(val screenRoute: String, val route: String) {
-    object Community : CommunityNavigationScreens("community","community")
-    object Detail : CommunityNavigationScreens("community", "community_detail_screen")
-    object User : CommunityNavigationScreens( "community","community_user_screen")
+sealed class CommunityNavigationScreens(val route: String) {
+    object Community : CommunityNavigationScreens("community")
+    object Detail : CommunityNavigationScreens("community_detail_screen")
+    object User : CommunityNavigationScreens("community_user_screen")
 }
 
-sealed class MyNavigationScreens(val screenRoute: String, val route: String = "my") {
-    object My : MyNavigationScreens("my","my")
-    object Detail : MyNavigationScreens("my", "my_detail_screen")
-    object User : MyNavigationScreens( "my","my_user_screen")
+sealed class MyNavigationScreens(val route: String = "my") {
+    object My : MyNavigationScreens("my")
+    object Detail : MyNavigationScreens("my_detail_screen")
+    object User : MyNavigationScreens("my_user_screen")
 }
 
-sealed class SettingNavigationScreens(val screenRoute: String, val route: String) {
-    object Setting : SettingNavigationScreens("setting","setting")
+sealed class SettingNavigationScreens(val route: String) {
+    object Setting : SettingNavigationScreens("setting")
 }

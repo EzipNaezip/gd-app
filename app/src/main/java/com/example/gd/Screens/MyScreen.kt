@@ -1,29 +1,19 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
 import com.example.gd.Effects.*
 import com.example.gd.R
 import com.example.gd.ui.IconPack
@@ -44,9 +34,11 @@ fun MyScreen(navController: NavController) {
     )
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
             // 프로필 사진
             ProfileImage(80)
 
@@ -128,7 +120,7 @@ fun MyScreen(navController: NavController) {
 
         WidthDivide()
 
-        ListView("갤러리", productList, navController, "my",false)
+        ListView("갤러리", productList, navController, "my", false)
 
         WidthDivide()
 
@@ -156,7 +148,7 @@ fun MyScreen(navController: NavController) {
 @Composable
 fun ProfileEditScreen(
     sheetState: ModalBottomSheetState,
-    navController: NavHostController
+    navController: NavController
 ) {
     val coroutineScope = rememberCoroutineScope()
     var screen by remember { mutableStateOf(true) }
@@ -197,7 +189,7 @@ class Info(
 )
 
 @Composable
-fun WidthDivide(){
+fun WidthDivide() {
     Spacer(modifier = Modifier.padding(vertical = 5.dp))
     Divider(
         color = MaterialTheme.colors.secondaryVariant,
@@ -212,11 +204,12 @@ fun WidthDivide(){
 fun ListView(
     name: String, productList: ArrayList<Product>,
     navController: NavController, route: String, isMine: Boolean = true
-){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .height(250.dp)
-        .padding(horizontal = 10.dp)
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .padding(horizontal = 10.dp)
     ) {
         Row {
             Text(
@@ -246,82 +239,9 @@ fun ListView(
         addProduct(productList)
 
         LazyRow {
-            items(productList) {item ->
+            items(productList) { item ->
                 productFrame(item, navController, route, isMine)// 수정필요
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun ProfileEditScreen(sheetState: ModalBottomSheetState, navController: NavController) {
-    val coroutineScope = rememberCoroutineScope()
-
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            coroutineScope.launch {
-                sheetState.animateTo(ModalBottomSheetValue.Expanded)
-            }
-            ProfileTextScreen(
-                navController = navController,
-                titleText = "프로필 수정",
-                content = { ProfileEditContent() },
-                popupTitleText = "변경 사항 저장",
-                confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
-                completeDialogText = "프로필 변경 사항이 저장되었습니다."
-            )
-        },
-    ) {}
-}
-
-@Composable
-fun ProfileEditContent() {
-    Column( //페이지 내용
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colors.secondaryVariant, CircleShape)
-            )
-        }
-        Button(
-            onClick = { /* 사진 변경 기능 실행 */ },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 4.dp),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.dp,
-                pressedElevation = 0.dp
-            ),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-        ) {
-            Text(
-                text = "프로필 사진 변경",
-                fontFamily = suite,
-                fontWeight = FontWeight.Normal,
-                fontSize = 15.sp,
-                color = MaterialTheme.colors.primaryVariant
-            )
-        }
-        Column {
-            TextFieldFormat("이름")
-            TextFieldFormat("사용자 아이디") //인스타의 @sample_test
-            TextFieldFormat("소개")
-            TextFieldFormat("링크")
         }
     }
 }

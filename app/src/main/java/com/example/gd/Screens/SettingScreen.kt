@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.gd.Effects.ConfirmDismissPopupFormat
 import com.example.gd.Effects.TopAppBarScreenFormat
 import com.example.gd.ui.theme.suite
@@ -26,13 +25,13 @@ var settingScreen by mutableStateOf("default")
 @Composable
 
 fun SettingScreen(navController: NavController) {
-        TopAppBarScreenFormat(
-            titleText = "설정",
-            IsLeftButton = false,
-            IsRightButton = false,
-            content = { SettingScreenContent() },
-            leftButtonClick = {}, rightButtonClick = {}
-        )
+    TopAppBarScreenFormat(
+        titleText = "설정",
+        IsLeftButton = false,
+        IsRightButton = false,
+        content = { SettingScreenContent() },
+        leftButtonClick = {}, rightButtonClick = {}
+    )
     when (settingScreen) {
         "오픈 소스 라이브러리" -> {
             OpenSourceLibraryScreen(
@@ -76,7 +75,7 @@ fun SettingScreen(navController: NavController) {
 fun SettingScreenContent(
     names: List<String> =
         listOf("오픈 소스 라이브러리", "이용약관", "개인정보 처리방침", "회원 탈퇴", "로그아웃"),
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,11 +89,21 @@ fun SettingScreenContent(
                     Button(
                         onClick = {
                             when (names[i]) {
-                                "오픈 소스 라이브러리" -> { settingScreen = "오픈 소스 라이브러리" }
-                                "이용약관" -> { settingScreen = "이용약관" }
-                                "개인정보 처리방침" -> { settingScreen = "개인정보 처리방침" }
-                                "회원 탈퇴" -> { settingScreen = "회원 탈퇴" }
-                                "로그아웃" -> { settingScreen = "로그아웃" }
+                                "오픈 소스 라이브러리" -> {
+                                    settingScreen = "오픈 소스 라이브러리"
+                                }
+                                "이용약관" -> {
+                                    settingScreen = "이용약관"
+                                }
+                                "개인정보 처리방침" -> {
+                                    settingScreen = "개인정보 처리방침"
+                                }
+                                "회원 탈퇴" -> {
+                                    settingScreen = "회원 탈퇴"
+                                }
+                                "로그아웃" -> {
+                                    settingScreen = "로그아웃"
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()

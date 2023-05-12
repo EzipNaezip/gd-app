@@ -21,22 +21,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             GdTheme {
                 val navController = rememberNavController()
-                //MainScreenView()
                 SetupNavGraph(navController = navController)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    GdTheme {
-        Greeting("Android")
     }
 }

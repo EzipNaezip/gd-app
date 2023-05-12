@@ -35,7 +35,7 @@ fun SetupNavGraph(navController: NavHostController) {
             EnterMemberInfoScreen(navController = navController)
         }
         composable(route = Screen.Once.route) {
-            OnceScreen(navController = navController)
+            OnceScreen()
         }
     }
 }
@@ -80,8 +80,8 @@ fun BottomNavigation(navController: NavHostController) {
                                 restoreState = true
                             }
                         }
-                    } catch (e: java.lang.Exception){
-                    navController.navigate(item.screenRoute)
+                    } catch (e: java.lang.Exception) {
+                        navController.navigate(item.screenRoute)
                     }
                 }
             )

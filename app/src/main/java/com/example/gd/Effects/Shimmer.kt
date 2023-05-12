@@ -50,7 +50,7 @@ fun LoadingShimmerEffect() {
 
 @Composable
 fun ShimmerGridItem(brush: Brush) { // 메인 검색 결과
-    val testImage: List<Int> = listOf(1,2,3,4)
+    val testImage: List<Int> = listOf(1, 2, 3, 4)
 
     LazyVerticalGrid(
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
@@ -59,10 +59,11 @@ fun ShimmerGridItem(brush: Brush) { // 메인 검색 결과
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(testImage) {
-            Spacer(modifier = Modifier
-                .size(120.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(brush)
+            Spacer(
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(brush)
             )
         }
     }

@@ -166,7 +166,7 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
             fontWeight = FontWeight.SemiBold,
             fontSize = 15.sp
         )
-        
+
         TagList(tags = PRODUCT.tags)
 
     }

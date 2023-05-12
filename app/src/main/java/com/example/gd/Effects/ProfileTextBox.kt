@@ -6,32 +6,24 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
-import com.example.gd.R
 import com.example.gd.navigation.Screen
 import com.example.gd.ui.theme.suite
 
 var profileEditScreenState by mutableStateOf("default")
+
 //뒤로가기 시 초기화를 위한 전역변수
 var editIsOpen by mutableStateOf("default")
+
 //코루틴과 sheetState 전달을 위한 전역변수
 var profileImageUri by mutableStateOf<Uri?>(null)
 
@@ -102,7 +94,11 @@ fun ProfileTextScreen(
 fun ProfileTextContent(buttonText: String) {
     val activityResultLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) { uri -> if (uri != null) { profileImageUri = uri } }
+    ) { uri ->
+        if (uri != null) {
+            profileImageUri = uri
+        }
+    }
 
     Column( //페이지 내용
         modifier = Modifier
@@ -118,8 +114,10 @@ fun ProfileTextContent(buttonText: String) {
         }
         Button(
             onClick = {
-                val intent = Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val intent = Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
                 intent.type = "image/*"
                 val mimeTypes = arrayOf("image/jpeg", "image/png")
                 activityResultLauncher.launch(mimeTypes)

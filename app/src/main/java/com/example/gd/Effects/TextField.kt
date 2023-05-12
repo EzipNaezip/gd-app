@@ -43,7 +43,7 @@ fun TextFieldFormat(fieldTitle: String) {
                 keyboardType = KeyboardType.Text
             ),
             keyboardActions = KeyboardActions(
-                onDone = {keyboardController?.hide()}
+                onDone = { keyboardController?.hide() }
             ),
             modifier = Modifier
                 .fillMaxWidth()

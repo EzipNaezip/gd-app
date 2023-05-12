@@ -12,8 +12,8 @@ private val DarkColorPalette = darkColors(
     primary = Black, // 배경색
     primaryVariant = Point, // 포인트색
     secondary = Gray, // 선택안된 BotomScreen icon & 검색창 돋보기와 X 아이콘
-    onSecondary = CustomGray, // // 검색창 색
-    secondaryVariant = LightGray // 검색창 글씨
+    onSecondary = SearchBarBG, // // 검색창 색
+    secondaryVariant = SearchBarTT // 검색창 글씨
 // black 테마는 수정 필요
 )
 

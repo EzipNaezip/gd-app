@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.gd.ui.theme.SearchBarBD
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -45,7 +46,7 @@ fun CommunitySearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier
                 .padding(horizontal = 15.dp, vertical = 5.dp)
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colors.onPrimary,
+                    color = SearchBarBD,
                     shape = RoundedCornerShape(8.dp)
                 ),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),

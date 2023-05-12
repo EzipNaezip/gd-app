@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.gd.Effects.ConfirmDismissPopupFormat
 import com.example.gd.Effects.TopAppBarScreenFormat
@@ -23,14 +24,15 @@ var settingScreen by mutableStateOf("default")
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingScreen(navController: NavHostController) {
-    TopAppBarScreenFormat(
-        titleText = "설정",
-        IsLeftButton = false,
-        IsRightButton = false,
-        content = { SettingScreenContent() },
-        leftButtonClick = {}, rightButtonClick = {}
-    )
+
+fun SettingScreen(navController: NavController) {
+        TopAppBarScreenFormat(
+            titleText = "설정",
+            IsLeftButton = false,
+            IsRightButton = false,
+            content = { SettingScreenContent() },
+            leftButtonClick = {}, rightButtonClick = {}
+        )
     when (settingScreen) {
         "오픈 소스 라이브러리" -> {
             OpenSourceLibraryScreen(

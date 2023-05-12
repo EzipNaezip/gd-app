@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.gd.R
@@ -37,7 +38,7 @@ var profileImageUri by mutableStateOf<Uri?>(null)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ProfileTextScreen(
-    navController: NavHostController,
+    navController: NavController,
     titleText: String,
     content: @Composable () -> Unit,
     popupTitleText: String,

@@ -13,14 +13,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.gd.Effects.CommunitySearchBar
-import com.example.gd.Effects.SearchBar
 import com.example.gd.Effects.productFrame
 import com.example.gd.R
 import com.example.gd.ui.theme.suite
@@ -29,13 +29,13 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
 @Composable
-fun ComunityScreen(navController: NavHostController) {
+fun ComunityScreen(navController: NavController) {
     var searchState by remember { mutableStateOf(true) } // 검색 전후 구분
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
 
-    val productList = arrayListOf<Product>() // 더미데이터 리스트 -> 전역으로 관리해야함. 커뮤니티를 벗어나면 클리어되게 설정. 그게 아니라면 유지돼야함.
+    val productList = rememberSaveable{ arrayListOf<Product>() }// 더미데이터 리스트 -> 전역으로 관리해야함. 커뮤니티를 벗어나면 클리어되게 설정. 그게 아니라면 유지돼야함.
     var buttons by remember { mutableStateOf(listOf("TOP 30", "인기급상승", "모던", "클래식", "내추럴")) }
-    var selectedButtonIndex by remember { mutableStateOf(0) }
+    var selectedButtonIndex by rememberSaveable { mutableStateOf(0) }
 
     // pull to refresh
     var refreshing by remember { mutableStateOf(false) }
@@ -63,7 +63,6 @@ fun ComunityScreen(navController: NavHostController) {
             LazyRow(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp),
                 horizontalArrangement = Arrangement.Start,
-                //verticalAlignment = Alignment.CenterVertically
             ) {
                 item {
                     buttons.forEachIndexed { index, label ->
@@ -101,12 +100,10 @@ fun ComunityScreen(navController: NavHostController) {
             LazyVerticalGrid(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
                 columns = GridCells.Fixed(2),
-                //verticalArrangement = Arrangement.spacedBy(8.dp),
-                //horizontalArrangement = Arrangement.spacedBy(8.dp),
                 state = scrollState
             ) {
                 items(productList) { product ->
-                    productFrame(product, navController)
+                    productFrame(product, navController, "community")
                 }
 
                 if (scrollState.isScrollInProgress && (scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == productList.size - 1))

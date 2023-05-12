@@ -1,6 +1,7 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.gd.Effects.*
@@ -32,7 +34,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MyScreen(navController: NavHostController) {
+fun MyScreen(navController: NavController) {
     val USER: Info
     val productList = arrayListOf<Product>()
 
@@ -126,11 +128,11 @@ fun MyScreen(navController: NavHostController) {
 
         WidthDivide()
 
-        ListView("갤러리", productList, navController, false)
+        ListView("갤러리", productList, navController, "my",false)
 
         WidthDivide()
 
-        ListView("북마크", productList, navController)
+        ListView("북마크", productList, navController, "my")
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)
@@ -209,7 +211,7 @@ fun WidthDivide(){
 @Composable
 fun ListView(
     name: String, productList: ArrayList<Product>,
-    navController: NavHostController, isMine: Boolean = true
+    navController: NavController, route: String, isMine: Boolean = true
 ){
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -245,8 +247,81 @@ fun ListView(
 
         LazyRow {
             items(productList) {item ->
-                productFrame(item, navController, isMine)
+                productFrame(item, navController, route, isMine)// 수정필요
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ProfileEditScreen(sheetState: ModalBottomSheetState, navController: NavController) {
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetContent = {
+            coroutineScope.launch {
+                sheetState.animateTo(ModalBottomSheetValue.Expanded)
+            }
+            ProfileTextScreen(
+                navController = navController,
+                titleText = "프로필 수정",
+                content = { ProfileEditContent() },
+                popupTitleText = "변경 사항 저장",
+                confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
+                completeDialogText = "프로필 변경 사항이 저장되었습니다."
+            )
+        },
+    ) {}
+}
+
+@Composable
+fun ProfileEditContent() {
+    Column( //페이지 내용
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp)
+            .padding(horizontal = 16.dp)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, MaterialTheme.colors.secondaryVariant, CircleShape)
+            )
+        }
+        Button(
+            onClick = { /* 사진 변경 기능 실행 */ },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = 4.dp),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp
+            ),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+        ) {
+            Text(
+                text = "프로필 사진 변경",
+                fontFamily = suite,
+                fontWeight = FontWeight.Normal,
+                fontSize = 15.sp,
+                color = MaterialTheme.colors.primaryVariant
+            )
+        }
+        Column {
+            TextFieldFormat("이름")
+            TextFieldFormat("사용자 아이디") //인스타의 @sample_test
+            TextFieldFormat("소개")
+            TextFieldFormat("링크")
         }
     }
 }

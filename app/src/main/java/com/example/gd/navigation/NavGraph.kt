@@ -19,7 +19,6 @@ import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
     NavHost(
@@ -42,33 +41,6 @@ fun SetupNavGraph(navController: NavHostController) {
 }
 
 @Composable
-fun BottomNavGraph(navController: NavHostController, startDestination: String) {
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(route = BottomScreen.Main.screenRoute) {
-            MainScreen(navController = navController)
-        }
-        composable(route = BottomScreen.Community.screenRoute) {
-            ComunityScreen(navController = navController)
-        }
-        composable(route = BottomScreen.My.screenRoute) {
-            MyScreen(navController = navController)
-        }
-        composable(route = BottomScreen.Setting.screenRoute) {
-            SettingScreen(navController = navController)
-        }
-        composable(route = BottomScreen.Detail.screenRoute) {
-            DetailScreen(navController = navController)
-        }
-        composable(route = BottomScreen.User.screenRoute) {
-            UserScreen(navController = navController)
-        }
-    }
-}
-
-@Composable
 fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomScreen.Main,
@@ -77,7 +49,7 @@ fun BottomNavigation(navController: NavHostController) {
         BottomScreen.Setting
     )
 
-    BottomNavigation{
+    BottomNavigation {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -85,7 +57,7 @@ fun BottomNavigation(navController: NavHostController) {
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = if (currentRoute == item.screenRoute) item.iconSolid else item.iconOutline,
+                        imageVector = if (currentRoute?.startsWith(item.screenRoute) == true) item.iconSolid else item.iconOutline,
                         contentDescription = item.title,
                         modifier = Modifier
                             .width(26.dp)
@@ -95,15 +67,21 @@ fun BottomNavigation(navController: NavHostController) {
                 label = { Text(item.title, fontSize = 11.sp) },
                 selectedContentColor = MaterialTheme.colors.primaryVariant,
                 unselectedContentColor = MaterialTheme.colors.secondary,
-                selected = currentRoute == item.screenRoute,
+                selected = currentRoute?.startsWith(item.screenRoute) == true,
                 alwaysShowLabel = false,
                 onClick = {
-                    navController.navigate(item.screenRoute) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
+                    try {
+                        navController.navigate(item.screenRoute) {
+                            if (currentRoute?.startsWith(item.screenRoute) != true) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    } catch (e: java.lang.Exception){
+                    navController.navigate(item.screenRoute)
                     }
                 }
             )
@@ -115,10 +93,63 @@ fun BottomNavigation(navController: NavHostController) {
 fun MainScreenView(startDestination: String) {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) }
+        bottomBar = {
+            BottomNavigation(navController = navController)
+        }
     ) {
         Box(Modifier.padding(it)) {
-            BottomNavGraph(navController = navController, startDestination)
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+            ) {
+                composable(MainNavigationScreens.Main.route) { MainScreen(navController = navController) }
+                composable(MainNavigationScreens.Detail.route) {
+                    DetailScreen(
+                        navController = navController,
+                        BottomScreen.Main.screenRoute
+                    )
+                }
+                composable(MainNavigationScreens.User.route) {
+                    UserScreen(
+                        navController = navController,
+                        BottomScreen.Main.screenRoute
+                    )
+                }
+
+                composable(CommunityNavigationScreens.Community.route) {
+                    ComunityScreen(
+                        navController = navController
+                    )
+                }
+                composable(CommunityNavigationScreens.Detail.route) {
+                    DetailScreen(
+                        navController = navController,
+                        BottomScreen.Community.screenRoute
+                    )
+                }
+                composable(CommunityNavigationScreens.User.route) {
+                    UserScreen(
+                        navController = navController,
+                        BottomScreen.Community.screenRoute
+                    )
+                }
+
+                composable(MyNavigationScreens.My.route) { MyScreen(navController = navController) }
+                composable(MyNavigationScreens.Detail.route) {
+                    DetailScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute
+                    )
+                }
+                composable(MyNavigationScreens.User.route) {
+                    UserScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute
+                    )
+                }
+
+                composable(SettingNavigationScreens.Setting.route) { SettingScreen(navController = navController) }
+            }
         }
     }
 }

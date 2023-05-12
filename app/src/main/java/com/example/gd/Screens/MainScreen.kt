@@ -16,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import com.example.gd.Effects.LoadingShimmerEffect
 import com.example.gd.Effects.SearchBar
 import com.example.gd.Effects.SearchResult
@@ -25,7 +27,7 @@ import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.delay
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavController) {
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
     val productList = arrayListOf<Product>()
     addProduct(productList)
@@ -57,7 +59,7 @@ fun MainScreen(navController: NavHostController) {
             },
             modifier = Modifier.fillMaxWidth()
         )
-
+        
         // api를 통해서 아래에 넣을 값을 가져온 후 아래 코드 실행
         // api를 통해서 가져오는 동안 로딩창 실행
 
@@ -79,7 +81,7 @@ fun MainScreen(navController: NavHostController) {
                 state = scrollState
             ) {
                 items(productList) { product ->
-                    productFrame(product, navController)
+                    productFrame(product, navController, "main")// 수정 필요
                 }
 
                 if (scrollState.isScrollInProgress && (scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == productList.size - 1))

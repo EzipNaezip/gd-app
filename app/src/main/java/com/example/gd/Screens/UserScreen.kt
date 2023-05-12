@@ -1,5 +1,6 @@
 package com.example.gd.Screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.gd.R
 import com.example.gd.ui.IconPack
@@ -22,10 +24,9 @@ import com.example.gd.ui.iconpack.Left
 import com.example.gd.ui.theme.suite
 
 @Composable
-fun UserScreen(navController: NavHostController) {
+fun UserScreen(navController: NavController, route: String) {
     val USER: Info
     val productList = arrayListOf<Product>()
-
 
     USER = Info("박동민", "안녕하세요 저는 박동민입니다.\n 테스트 Readme입니다.", "pdm001125",120, 200, R.drawable.logo)
 
@@ -124,11 +125,11 @@ fun UserScreen(navController: NavHostController) {
 
         WidthDivide()
 
-        ListView("갤러리", productList, navController, false)
+        ListView("갤러리", productList, navController, route, false)
 
         WidthDivide()
 
-        ListView("북마크", productList, navController)
+        ListView("북마크", productList, navController, route)
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)

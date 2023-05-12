@@ -1,6 +1,7 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.gd.Effects.ProfileTextScreen
 import com.example.gd.Effects.TextFieldFormat
@@ -35,7 +37,7 @@ var profileEditScreen by mutableStateOf("default")
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MyScreen(navController: NavHostController) {
+fun MyScreen(navController: NavController) {
     val USER: Info
     val productList = arrayListOf<Product>()
 
@@ -143,11 +145,11 @@ fun MyScreen(navController: NavHostController) {
 
         WidthDivide()
 
-        ListView("갤러리", productList, navController, false)
+        ListView("갤러리", productList, navController, "my",false)
 
         WidthDivide()
 
-        ListView("북마크", productList, navController)
+        ListView("북마크", productList, navController, "my")
 
         // 버튼(좋아요모음        >)
         // LazyRow(컨텐츠 표시)
@@ -175,7 +177,7 @@ fun WidthDivide(){
 @Composable
 fun ListView(
     name: String, productList: ArrayList<Product>,
-    navController: NavHostController, isMine: Boolean = true
+    navController: NavController, route: String, isMine: Boolean = true
 ){
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -211,7 +213,7 @@ fun ListView(
 
         LazyRow {
             items(productList) {item ->
-                productFrame(item, navController, isMine)
+                productFrame(item, navController, route, isMine)// 수정필요
             }
         }
     }
@@ -220,7 +222,7 @@ fun ListView(
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ProfileEditScreen(sheetState: ModalBottomSheetState, navController: NavHostController) {
+fun ProfileEditScreen(sheetState: ModalBottomSheetState, navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     ModalBottomSheetLayout(

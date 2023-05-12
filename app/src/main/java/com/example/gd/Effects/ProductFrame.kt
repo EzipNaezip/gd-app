@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.gd.Screens.PRODUCT
 import com.example.gd.Screens.Product
@@ -22,14 +23,14 @@ import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.BookmarkOutline
 
 @Composable
-fun productFrame(product: Product, navController: NavHostController, isMine: Boolean = true) {
+fun productFrame(product: Product, navController: NavController, route: String, isMine: Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .border(0.dp, Color.Transparent)
             .clickable {
                 PRODUCT = product
-                navController.navigate(BottomScreen.Detail.screenRoute)
+                navController.navigate(route+"_detail_screen")
             }.padding(horizontal = 2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top

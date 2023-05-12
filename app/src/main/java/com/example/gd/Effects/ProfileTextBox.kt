@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.gd.Screens.profileEditScreen
 import com.example.gd.Screens.settingScreen
@@ -16,7 +17,7 @@ import com.example.gd.navigation.Screen
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ProfileTextScreen(
-    navController: NavHostController,
+    navController: NavController,
     titleText: String,
     content: @Composable () -> Unit,
     popupTitleText: String,

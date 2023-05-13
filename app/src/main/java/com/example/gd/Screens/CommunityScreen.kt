@@ -60,37 +60,41 @@ fun ComunityScreen(navController: NavController) {
             verticalArrangement = Arrangement.Top
         ) {
             CommunitySearchBar(onSearch = { searchState = false })
-            // 디자인 다듬기
-            // 버튼들을 배열을 사용해서 나타냄. 버튼에 넣는 값들을 배열에 있는 것으로 클래스로 구분해서 사용. ex) Main Screen에서 결과값 사진 or Navgraph
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp),
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                item {
-                    buttons.forEachIndexed { index, label ->
-                        OutlinedButton(
-                            modifier = Modifier.size((label.length * 13 + 30).dp, height = 35.dp),
-                            onClick = {
-                                selectedButtonIndex = index
-                                when (label) { // 버튼 클릭시 기능 실행
-                                    "좋아요 순" -> println("좋아요순 버튼 클릭")
-                                    "최신순" -> println("최신순 버튼 클릭")
-                                    "추천순" -> println("추천순 버튼 클릭")
+
+            if (searchState) {
+                LazyRow(
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp),
+                    horizontalArrangement = Arrangement.Start,
+                ) {
+                    item {
+                        buttons.forEachIndexed { index, label ->
+                            OutlinedButton(
+                                modifier = Modifier.size(
+                                    (label.length * 13 + 30).dp,
+                                    height = 35.dp
+                                ),
+                                onClick = {
+                                    selectedButtonIndex = index
+                                    when (label) { // 버튼 클릭시 기능 실행
+                                        "좋아요 순" -> println("좋아요순 버튼 클릭")
+                                        "최신순" -> println("최신순 버튼 클릭")
+                                        "추천순" -> println("추천순 버튼 클릭")
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = if (selectedButtonIndex == index) MaterialTheme.colors.primaryVariant else Color.White),
+                                shape = RoundedCornerShape(30),
+                                content = {
+                                    Text(
+                                        text = label,
+                                        fontFamily = suite,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 12.sp,
+                                        color = if (selectedButtonIndex == index) Color.White else Color.Black
+                                    )
                                 }
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = if (selectedButtonIndex == index) MaterialTheme.colors.primaryVariant else Color.White),
-                            shape = RoundedCornerShape(30),
-                            content = {
-                                Text(
-                                    text = label,
-                                    fontFamily = suite,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 12.sp,
-                                    color = if (selectedButtonIndex == index) Color.White else Color.Black
-                                )
-                            }
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
                     }
                 }
             }

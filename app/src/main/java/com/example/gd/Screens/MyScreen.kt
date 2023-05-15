@@ -168,7 +168,8 @@ fun ProfileEditScreen(
                     },
                     popupTitleText = "변경 사항 저장",
                     confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
-                    completeDialogText = "프로필 변경 사항이 저장되었습니다."
+                    completeDialogText = "프로필 변경 사항이 저장되었습니다.",
+                    isLeftButton = true
                 )
                 if (editIsOpen == "on") {
                     coroutineScope.launch {

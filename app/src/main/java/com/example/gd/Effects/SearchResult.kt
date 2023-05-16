@@ -38,6 +38,7 @@ fun SearchResult(images: List<Int>, gridUI: Boolean = true) {
         IconPack.SquareSolid,
         IconPack.SquareSolid
     )
+
     var nowImageIndex = rememberPagerState(0)
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -201,7 +202,7 @@ fun ImageScreen(@DrawableRes imageId: Int) {
 @Composable
 fun TagList(tags: List<String>) {
     var expanded by remember { mutableStateOf(false) }
-    Row {
+    Row (modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)){
         for (i in tags.indices) {
             if (!expanded && i == 5) {
                 Row(Modifier.clickable { expanded = true }) {
@@ -211,13 +212,6 @@ fun TagList(tags: List<String>) {
             }
             Row {
                 Text(tags[i])
-            }
-        }
-        if (expanded) {
-            for (i in 5 until tags.size) {
-                Row {
-                    Text(tags[i])
-                }
             }
         }
     }

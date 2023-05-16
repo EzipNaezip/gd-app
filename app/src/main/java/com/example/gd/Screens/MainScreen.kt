@@ -12,10 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.gd.Effects.LoadingShimmerEffect
-import com.example.gd.Effects.SearchBar
-import com.example.gd.Effects.SearchResult
-import com.example.gd.Effects.productFrame
+import com.example.gd.Effects.*
 import com.example.gd.R
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.delay

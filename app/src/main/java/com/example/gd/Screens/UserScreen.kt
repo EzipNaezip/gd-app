@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gd.Button.FollowButton
 import com.example.gd.R
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.Left
@@ -105,9 +106,7 @@ fun UserScreen(navController: NavController, route: String) {
 
             // Follow & Unfollow Button
             Box(modifier = Modifier.fillMaxWidth(), Alignment.BottomEnd) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Follow")
-                }
+                FollowButton()
             }
 
         }

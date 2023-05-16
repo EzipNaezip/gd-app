@@ -24,16 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.gd.Button.BackButton
-import com.example.gd.Button.BookmarkButton
-import com.example.gd.Button.FavoriteButton
-import com.example.gd.Button.FollowButton
+import com.example.gd.Button.*
 import com.example.gd.Effects.*
 import com.example.gd.ui.theme.SearchBarBD
 import com.example.gd.ui.theme.suite
 
 @Composable
 fun DetailScreen(navController: NavController, route: String) {
+    val is_me = true // api를 통해서 받을 예정.
+
     LazyColumn() {
         item {
             // 사진 Pager로 표시 및 현재 페이지 표시
@@ -50,7 +49,7 @@ fun DetailScreen(navController: NavController, route: String) {
                         .fillMaxWidth()
                         .padding(10.dp), contentAlignment = Alignment.BottomEnd
                 ) {
-                    FollowButton()
+                    if (is_me) FollowButton()
                 }
             }
 
@@ -66,7 +65,7 @@ fun DetailScreen(navController: NavController, route: String) {
                     FavoriteCount()
                     Row {
                         FavoriteButton()
-                        BookmarkButton()
+                        if(is_me) BookmarkButton()
                     }
                 }
                 Box(
@@ -263,15 +262,9 @@ fun CommentInputBar(onSearch: (String) -> Unit){
             trailingIcon = {
                 Row {
                     if (searchText != "") {
-                        Icon(
-                            Icons.Default.Clear,
-                            contentDescription = "clear text",
-                            modifier = Modifier
-                                .clickable {
-                                    searchText = ""
-                                }
-                                .padding(vertical = 15.dp)
-                        )
+                        ClearTextButton {
+                            searchText = ""
+                        }
                     }
 
                     Divider(

@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.gd.Button.ClearTextButton
 import com.example.gd.ui.theme.SearchBarBD
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -65,15 +66,9 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
             trailingIcon = {
                 Row {
                     if (searchText != "") {
-                        Icon(
-                            Icons.Default.Clear,
-                            contentDescription = "clear text",
-                            modifier = Modifier
-                                .clickable {
-                                    searchText = ""
-                                }
-                                .padding(vertical = 15.dp)
-                        )
+                        ClearTextButton {
+                            searchText = ""
+                        }
                     }
                     Divider(
                         color = SearchBarBD,

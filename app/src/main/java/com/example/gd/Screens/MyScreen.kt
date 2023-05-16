@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gd.Button.FollowButton
 import com.example.gd.Effects.*
 import com.example.gd.R
 import com.example.gd.ui.IconPack
@@ -100,9 +101,7 @@ fun MyScreen(navController: NavController) {
             } else {
                 // Follow & Unfollow Button
                 Box(modifier = Modifier.fillMaxWidth(), Alignment.BottomEnd) {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = "Follow")
-                    }
+                    FollowButton()
                 }
             }
         }
@@ -126,8 +125,6 @@ fun MyScreen(navController: NavController) {
 
         ListView("북마크", productList, navController, "my")
 
-        // 버튼(좋아요모음        >)
-        // LazyRow(컨텐츠 표시)
     }
 
     when (profileEditScreenState) {
@@ -204,7 +201,7 @@ fun WidthDivide() {
 @Composable
 fun ListView(
     name: String, productList: ArrayList<Product>,
-    navController: NavController, route: String, isMine: Boolean = true
+    navController: NavController, route: String, is_me: Boolean = true
 ) {
     Column(
         modifier = Modifier
@@ -241,7 +238,7 @@ fun ListView(
 
         LazyRow {
             items(productList) { item ->
-                productFrame(item, navController, route, isMine)// 수정필요
+                productFrame(item, navController, route, is_me)// 수정필요
             }
         }
     }

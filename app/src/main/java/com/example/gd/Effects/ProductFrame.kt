@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.gd.Button.BookmarkButton
 import com.example.gd.Screens.PRODUCT
 import com.example.gd.Screens.Product
 import com.example.gd.ui.IconPack
@@ -25,7 +26,7 @@ fun productFrame(
     product: Product,
     navController: NavController,
     route: String,
-    isMine: Boolean = true
+    is_me: Boolean = true
 ) {
     Column(
         modifier = Modifier
@@ -39,7 +40,7 @@ fun productFrame(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Box() {
+        Box (contentAlignment = Alignment.BottomEnd){
             Image(
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = product.imageId[0]),
@@ -48,19 +49,8 @@ fun productFrame(
                     .size(180.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
-            if (isMine) {
-                Icon(
-                    imageVector = IconPack.BookmarkOutline,
-                    contentDescription = "Bookmark",
-                    modifier = Modifier
-                        .clickable {
-                            // Favorite 추가 기능
-                            // Bottom Sheet or SnackBar를 사용해서 추가됐다는 것 표시
-                        }
-                        .width(30.dp)
-                        .height(30.dp)
-                        .align(Alignment.BottomEnd)
-                )
+            if (is_me) {
+                BookmarkButton()
             }
         }
     }

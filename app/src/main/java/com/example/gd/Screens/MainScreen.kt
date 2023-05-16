@@ -21,7 +21,8 @@ import kotlinx.coroutines.delay
 fun MainScreen(navController: NavController) {
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
     val productList = arrayListOf<Product>()
-    addProduct(productList)
+
+    addProduct(productList) // api로 수정해야함
 
     var state by rememberSaveable { mutableStateOf(0) }
     var searchState by rememberSaveable { mutableStateOf(true) }
@@ -30,7 +31,6 @@ fun MainScreen(navController: NavController) {
     // 테스트용 이미지. 추후 변경 예정. listOf()로 만들고, Api 호출전에 다시 초기화 하고, 값을 하나씩 넣는 방법 사용
     val testImage: List<Int> =
         listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo)
-
 
     Column(
         modifier = Modifier.fillMaxSize(),

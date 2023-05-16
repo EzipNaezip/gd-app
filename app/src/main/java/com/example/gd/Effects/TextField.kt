@@ -1,5 +1,6 @@
 package com.example.gd.Effects
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,8 +10,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,8 +32,14 @@ import com.example.gd.ui.theme.suite
 fun TextFieldFormat(fieldTitle: String) {
     var userValue by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val focusRequester by remember { mutableStateOf(FocusRequester()) }
+    var isTextFieldFocused = false
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .addFocusCleaner(focusManager)
+    ) {
         Text(
             text = fieldTitle,
             fontFamily = suite,
@@ -47,10 +59,9 @@ fun TextFieldFormat(fieldTitle: String) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
+                .focusRequester(focusRequester = focusRequester)
                 .onFocusChanged {
-                    if (!it.isFocused) {
-                        keyboardController?.hide()
-                    }
+                    isTextFieldFocused = it.isFocused
                 },
             textStyle = TextStyle(
                 fontFamily = suite,
@@ -71,5 +82,13 @@ fun TextFieldFormat(fieldTitle: String) {
             thickness = 1.dp,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
+    return this.pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            doOnClear()
+            focusManager.clearFocus()
+        })
     }
 }

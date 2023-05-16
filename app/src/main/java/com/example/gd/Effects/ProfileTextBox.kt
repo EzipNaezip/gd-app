@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,18 +37,20 @@ fun ProfileTextScreen(
     popupTitleText: String,
     confirmDialogText: String,
     completeDialogText: String,
+    isLeftButton: Boolean
 ) {
-    var popup by remember { mutableStateOf(false) }
+    var leftPopup by remember { mutableStateOf(false) }
+    var rightPopup by remember { mutableStateOf(false) }
 
     TopAppBarScreenFormat(
         titleText = titleText,
-        IsLeftButton = false,
+        IsLeftButton = isLeftButton,
         IsRightButton = true,
         content = content,
-        leftButtonClick = { },
-        rightButtonClick = { popup = true }
+        leftButtonClick = { leftPopup = true },
+        rightButtonClick = { rightPopup = true }
     )
-    if (popup) {
+    if (rightPopup) {
         var profileEditConfirmPopup by remember { mutableStateOf(true) }
         var profileEditCompletePopup by remember { mutableStateOf(false) }
 
@@ -63,7 +66,7 @@ fun ProfileTextScreen(
                 },
                 dismissButtonClick = { //취소
                     profileEditConfirmPopup = false
-                    popup = false
+                    rightPopup = false
                 },
                 ifDoubleButton = true
             )
@@ -87,6 +90,27 @@ fun ProfileTextScreen(
             )
         }
     }
+    if (leftPopup) {
+        var profileEditCompletePopup by remember { mutableStateOf(true) }
+
+        if (profileEditCompletePopup) {
+            ConfirmDismissPopupFormat(
+                titleText = popupTitleText,
+                dialogText = "변경 사항을 저장하지 않고 나가시겠습니까?",
+                buttonText = "확인",
+                buttonColor = MaterialTheme.colors.primaryVariant,
+                runButtonClick = { //저장하지 않고 나감
+                    profileEditCompletePopup = false
+                    editIsOpen = "on"
+                },
+                dismissButtonClick = {
+                    profileEditCompletePopup = false
+                    leftPopup = false
+                },
+                ifDoubleButton = true
+            )
+        }
+    }
 }
 
 @SuppressLint("IntentReset")
@@ -99,12 +123,14 @@ fun ProfileTextContent(buttonText: String) {
             profileImageUri = uri
         }
     }
+    val focusManager = LocalFocusManager.current
 
     Column( //페이지 내용
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 16.dp)
             .padding(horizontal = 16.dp)
+            .addFocusCleaner(focusManager)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -139,11 +165,10 @@ fun ProfileTextContent(buttonText: String) {
                 color = MaterialTheme.colors.primaryVariant
             )
         }
-        Column {
+        Column(modifier = Modifier.fillMaxSize()) {
             TextFieldFormat("이름")
             TextFieldFormat("사용자 아이디") //인스타의 @sample_test
             TextFieldFormat("소개")
-            TextFieldFormat("링크")
         }
     }
 }

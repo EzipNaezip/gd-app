@@ -30,7 +30,8 @@ fun EnterMemberInfoScreen(navController: NavHostController) {
             },
             popupTitleText = "사용자 프로필 저장",
             confirmDialogText = "프로필을 설정하시겠습니까?\n추후 수정이 가능합니다.",
-            completeDialogText = "프로필 설정이 완료되었습니다."
+            completeDialogText = "프로필 설정이 완료되었습니다.",
+            isLeftButton = false
         )
     }
 }

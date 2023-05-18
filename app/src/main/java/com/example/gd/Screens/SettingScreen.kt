@@ -1,6 +1,7 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -14,6 +15,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.gd.Effects.ConfirmDismissPopupFormat
 import com.example.gd.Effects.TopAppBarScreenFormat
+import com.example.gd.MainActivity
+import com.example.gd.navigation.Screen
+import com.example.gd.navigation.SetupNavGraph
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
@@ -356,7 +360,7 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                         runButtonClick = {
                             withdrawalConfirmPopup = false
                             withdrawalCompletePopup = true
-                            // *** 탈퇴 후 메인 화면으로 이동 코드 작성 ***
+                            revoke()
                         },
                         dismissButtonClick = {
                             withdrawalConfirmPopup = false
@@ -374,6 +378,7 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                         runButtonClick = {
                             withdrawalCompletePopup = false
                             settingScreen = "default"
+                            restartApp()
                         },
                         dismissButtonClick = {},
                         ifDoubleButton = false
@@ -398,7 +403,7 @@ fun LogoutPopupScreen() { //로그아웃 팝업창
             runButtonClick = {
                 logoutConfirmPopup = false
                 logoutCompletePopup = true
-                // *** 로그아웃 후 메인 화면으로 이동 코드 작성 ***
+                onLogout()
             },
             dismissButtonClick = {
                 logoutConfirmPopup = false
@@ -416,9 +421,33 @@ fun LogoutPopupScreen() { //로그아웃 팝업창
             runButtonClick = {
                 logoutCompletePopup = false
                 settingScreen = "default"
+                restartApp()
             },
             dismissButtonClick = {},
             ifDoubleButton = false
         )
     }
+}
+
+fun onLogout() {
+    OAuthData.mGoogleSignInClient!!.signOut().addOnCompleteListener {  }
+    Log.d("LogOut", "로그아웃하셨습니다.")
+}
+
+fun restartApp(){
+    OAuthData.nav!!.navigate(Screen.Splash.route)
+    OAuthData.account = null
+}
+
+fun revoke(){
+    OAuthData.mGoogleSignInClient!!.revokeAccess()
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // 구글 인증 해제 성공
+                // 사용자 데이터를 삭제하는 로직 -> BE에서 api 사용
+            } else {
+                // 구글 인증 해제 실패
+                // 실패 처리를 진행할 수 있습니다.
+            }
+        }
 }

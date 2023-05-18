@@ -1,5 +1,8 @@
 package com.example.gd
 
+import android.content.Intent
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,11 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gd.Screens.OAuthData
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.GoogleLogin
 import com.example.gd.ui.iconpack.KakaoLogin
 import com.example.gd.ui.theme.suite
 import com.example.gd.navigation.Screen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -54,7 +63,7 @@ fun LoginScreen(navController: NavHostController) {
                 contentDescription = "Google Login",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(Screen.EnterMember.route)
+                        googleLogin()
                         // 구글 OAuth 사용 코드로 변경 예정
                     }
                     .size(50.dp)
@@ -73,4 +82,47 @@ fun LoginScreen(navController: NavHostController) {
             )
         }
     }
+}
+
+fun firebaseAuthWithGoogle(accountt : GoogleSignInAccount?){
+    Log.e("Firebase", "진입 성공")
+    var credntial = GoogleAuthProvider.getCredential(accountt?.idToken, null)
+    OAuthData.auth?.signInWithCredential(credntial)
+        ?.addOnCompleteListener {task ->
+            if (task.isSuccessful) Log.e("Firebase Success", "네 성공했습니다.")
+            else Log.e("Firebase ERROR", "먼가 먼가 잘못됨")
+        }
+}
+
+fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+    try {
+        val account = completedTask.getResult(ApiException::class.java)
+        val email = account?.email.toString()
+        val name = account?.displayName.toString()
+        val profileImg = account?.photoUrl
+        var userId = account?.id.toString()
+
+        //var googletoken = account?.idToken.toString()
+        //var googletokenAuth = account?.serverAuthCode.toString()
+
+        firebaseAuthWithGoogle(account)
+
+        Log.e("Google account email", email)
+        Log.e("Google account firstName", name)
+        Log.e("Google account profileImg", "$profileImg")
+        Log.e("Google account userId", userId)
+        // 위에 정보 4개 BE로 넘기면 됨. 구글 로그인 버튼 누를때 마다 넘기기
+        // 일단은 로그인 성공하면 "정보입력Screen"으로 보냈음.
+        OAuthData.nav!!.navigate(Screen.EnterMember.route)
+        // 위 정보들 BE로 보냈을때 이미 있는 정보면 "정보입력Screen"이 아니라 메인으로 보내야함
+        //OAuthData.nav!!.navigate(Screen.Once.route)
+
+    } catch (e: ApiException) {
+        Log.e("Google account", "signInResult:failed Code = " + e.statusCode)
+    }
+}
+
+fun googleLogin(){
+    var signIntent: Intent = OAuthData.mGoogleSignInClient!!.getSignInIntent()
+    OAuthData.GoogleSignResultLauncher.launch(signIntent)
 }

@@ -64,7 +64,6 @@ fun LoginScreen(navController: NavHostController) {
                 modifier = Modifier
                     .clickable {
                         googleLogin()
-                        // 구글 OAuth 사용 코드로 변경 예정
                     }
                     .size(50.dp)
                     .border(1.dp, Color.LightGray)
@@ -75,7 +74,7 @@ fun LoginScreen(navController: NavHostController) {
                 contentDescription = "Kakao Login",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(Screen.EnterMember.route)
+                        navController.navigate(Screen.Once.route)
                         // 구글 OAuth 사용 코드로 변경 예정
                     }
                     .size(50.dp)

@@ -27,7 +27,7 @@ fun UserScreen(navController: NavController, route: String) {
     val USER: Info
     val productList = arrayListOf<Product>()
 
-    USER = Info("박동민", "안녕하세요 저는 박동민입니다.\n 테스트 Readme입니다.", "pdm001125", 120, 200, R.drawable.logo)
+    USER = Info("박동민", "안녕하세요 저는 박동민입니다.\n 테스트 Readme입니다.", 120, 200)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -69,13 +69,6 @@ fun UserScreen(navController: NavController, route: String) {
                 )
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
                 // user name
-                Text(
-                    text = "@${USER.ID}",
-                    fontFamily = suite,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 10.sp,
-                    color = MaterialTheme.colors.onPrimary,
-                )
 
                 // 팔로워, 팔로잉 수
                 Row(modifier = Modifier.padding(vertical = 8.dp)) {

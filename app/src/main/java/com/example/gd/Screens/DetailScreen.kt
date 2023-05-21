@@ -1,9 +1,15 @@
 package com.example.gd.Screens
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import android.util.Log
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollScope
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -29,11 +36,18 @@ import com.example.gd.Effects.*
 import com.example.gd.ui.theme.SearchBarBD
 import com.example.gd.ui.theme.suite
 
+val commentList = arrayListOf<String>()
+
 @Composable
 fun DetailScreen(navController: NavController, route: String) {
     val is_me = true // api를 통해서 받을 예정.
 
-    LazyColumn() {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val commentScrollState = rememberLazyListState() // 무한 스크롤 구현용
+
+    addComment()
+
+    LazyColumn(state = commentScrollState) {
         item {
             // 사진 Pager로 표시 및 현재 페이지 표시
             Box(contentAlignment = Alignment.TopStart) {
@@ -63,15 +77,16 @@ fun DetailScreen(navController: NavController, route: String) {
             Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)) {
                 Column {
                     FavoriteCount()
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     Row {
                         FavoriteButton()
-                        if(is_me) BookmarkButton()
+                        if (is_me) BookmarkButton()
                     }
                 }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 25.dp),
+                        .padding(top = 35.dp),
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     CreationDate()
@@ -90,9 +105,43 @@ fun DetailScreen(navController: NavController, route: String) {
             // 댓글 수
             CommentCount()
 
-            // 댓글 목록
-            CommentsList(navController, route)
+
         }
+
+        // 댓글 입력창
+        item {
+            CommentInputBar(
+                onSearch = {
+                    // 댓글달기 API 호출
+                }
+            )
+        }
+
+        // 댓글 목록
+        items(
+            if (expanded) commentList.size
+            else 5
+        ) {
+
+            Comments(navController = navController, route = route)
+
+            if (!expanded && it == 4) {
+                Row(Modifier.clickable {
+                    expanded = true
+                }) {
+                    Text(
+                        text = "댓글 전체보기",
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
+                        color = Color.Black,
+                        fontFamily = suite,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+        }
+        if (commentScrollState.isScrollInProgress && (commentScrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index!! >= commentList.size - 1))
+            addComment() // 바닥 도착(생성된 모든 값을 탐색했을 경우) -> 새로 값 불러옴.
     }
 }
 
@@ -154,37 +203,6 @@ fun CommentCount() {
     )
 }
 
-@Composable
-fun CommentsList(navController: NavController, route: String) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
-    // 댓글 리스트를 매개변수로 받아서 for문 사용
-    Column() {
-        for (i in 0..8) {
-            if (!expanded && i == 5) {
-                Row(Modifier.clickable { expanded = true }) {
-                    Text(
-                        text = "댓글 전체보기",
-                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-                        color = Color.Black,
-                        fontFamily = suite,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 15.sp
-                    )
-                }
-                break
-            }
-            Comments(navController = navController, route = route)
-        }
-        // 댓글 달기 창
-        CommentInputBar(
-            onSearch = {
-                // 댓글달기 API 호출
-            }
-        )
-    }
-}
-
 @Preview
 @Composable
 fun Comments(navController: NavController, route: String) {
@@ -194,7 +212,8 @@ fun Comments(navController: NavController, route: String) {
                 // 프로필 창으로 이동
                 navController.navigate(route + "_user_screen")
             }
-            .padding(vertical = 8.dp, horizontal = 15.dp),
+            .padding(vertical = 8.dp, horizontal = 15.dp)
+            .fillMaxWidth(),
     ) {
         ProfileImage(ImageSize = 40)
         Spacer(modifier = Modifier.width(5.dp))
@@ -221,7 +240,7 @@ fun Comments(navController: NavController, route: String) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CommentInputBar(onSearch: (String) -> Unit){
+fun CommentInputBar(onSearch: (String) -> Unit) {
     var searchText by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -287,5 +306,11 @@ fun CommentInputBar(onSearch: (String) -> Unit){
                 }
             }
         )
+    }
+}
+
+fun addComment(){
+    repeat(5){
+        commentList.add("it")
     }
 }

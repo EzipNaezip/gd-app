@@ -96,6 +96,7 @@ fun firebaseAuthWithGoogle(accountt : GoogleSignInAccount?){
 fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
     try {
         val account = completedTask.getResult(ApiException::class.java)
+        val serviceAccountKey = account.serverAuthCode.toString()
         val email = account?.email.toString()
         val name = account?.displayName.toString()
         val profileImg = account?.photoUrl
@@ -107,9 +108,12 @@ fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         firebaseAuthWithGoogle(account)
 
         Log.e("Google account email", email)
-        Log.e("Google account firstName", name)
+        Log.e("Google account name", name)
         Log.e("Google account profileImg", "$profileImg")
         Log.e("Google account userId", userId)
+        Log.e("Google account serviceAccountKey", serviceAccountKey)
+
+        Log.e("uid", OAuthData.auth?.uid.toString()) // BE가 보내달라함
         // 위에 정보 4개 BE로 넘기면 됨. 구글 로그인 버튼 누를때 마다 넘기기
         // 일단은 로그인 성공하면 "정보입력Screen"으로 보냈음.
         OAuthData.nav!!.navigate(Screen.EnterMember.route)

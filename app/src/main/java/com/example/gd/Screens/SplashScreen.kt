@@ -56,10 +56,10 @@ fun SplashScreen(navController: NavHostController) {
         // 현재는 Delay를 주고 특정 시간 뒤 이동하는 방식.
         // 추후에는 로그인 되었는지 확인하고, 확인되면 이동하는 방식으로 변경 예정
         Handler(Looper.getMainLooper()).postDelayed({
-            if (OAuthData.account == null){
+            if (OAuthData.account == null) {
                 // 로그인 안돼있음
                 navController.navigate(Screen.Login.route)
-            }else {
+            } else {
                 // 로그인 돼있음
                 navController.navigate(Screen.Once.route)
             }
@@ -79,9 +79,4 @@ fun SplashScreen(navController: NavHostController) {
 
          */
     }
-}
-
-fun LoginSetting(){
-    OAuthData.auth = FirebaseAuth.getInstance()
-
 }

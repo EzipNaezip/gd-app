@@ -1,5 +1,6 @@
 package com.example.gd.Screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import java.util.Properties
 
 @Composable
 fun MainScreen(navController: NavController) {
+    var showDialog by rememberSaveable{ mutableStateOf(true) }
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
     val productList = arrayListOf<Product>()
 
@@ -67,19 +69,20 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // api를 통해서 아래에 넣을 값을 가져온 후 아래 코드 실행
-        // api를 통해서 가져오는 동안 로딩창 실행
-
-        // searchState가 false가 되면 로딩창 실행.
-        // 로딩창 하는동안 api를 통해 값 가져옴
-        // 값을 받으면 실행
-
         // modalFrame이 클릭되면 아래와 같이 실행
-//        var showDialog by rememberSaveable{ mutableStateOf(true) }
 //        showDialog = true
-//        PopUpModal(showDialog, onDismiss = {
-//            showDialog = false
-//        })
+        PopUpModal(showDialog, onDismiss = {
+            showDialog = false
+        })
+
+/*
+        when(state){
+            1 -> Log.d("1state", "ㅎㅇ") // 검색창이 나오고 아래에 ModalFrame
+            2 -> Log.d("2state", "ㅎㅇ") // 검색창이 로딩바로 바뀌고 아래에 ModalFrame
+            3 -> Log.d("3state", "ㅎㅇ") // 로딩창이 검색창으로 바뀌고 아래에 결과물
+        }
+
+ */
 
 
         if (searchState) {
@@ -109,6 +112,7 @@ fun MainScreen(navController: NavController) {
                 SearchResult(testImage)
             }
         }
+
     }
 }
 
@@ -155,10 +159,7 @@ fun ModalFrame(onClick: () -> Unit) {
 
 @Composable
 fun PopUpModal(showDialog: Boolean, onDismiss: () -> Unit) {
-    // 매개변수로 해당 사진과 text를 받아야 함.
-    // 클릭됐을때 띄워질 모달.
-    // 사진과 글씨가 있어야함. 가로는 사진에 맞추고, 세로는 추가로 좀 더 해서 텍스트. 끝은 라운드로 깎여있어야함.
-    // 자체 패딩을 없애야함.
+    // 매개변수로 텍스트, 사진을 받아야함
     if (showDialog) {
         Dialog(
             onDismissRequest = { onDismiss() }
@@ -168,59 +169,21 @@ fun PopUpModal(showDialog: Boolean, onDismiss: () -> Unit) {
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 shape = RoundedCornerShape(12.dp)
-
-            ){
-                Column {
-                    Box(modifier = Modifier.fillMaxWidth()){
+            ) {
+                Button(onClick = { onDismiss() }) {
+                    Column {
                         Image(
                             contentScale = ContentScale.Fit,
                             painter = painterResource(R.drawable.logo),
                             contentDescription = "Image",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(12.dp))
                         )
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Back",
-                            modifier = Modifier
-                                .clickable {
-                                    onDismiss()
-                                }
-                                .width(30.dp)
-                                .height(30.dp)
-                        )
+                        PostContent()
                     }
-                    PostContent()
                 }
             }
         }
-        /*
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            title = {
-                Image(
-                    contentScale = ContentScale.Fit,
-                    painter = painterResource(R.drawable.logo),
-                    contentDescription = "Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                ) },
-            text = { Text(text = "모달 내용") },
-            confirmButton = {
-            },
-            dismissButton = {
-                Button(
-                    onClick = { onDismiss() }
-                ) {
-                    Text(text = "닫기")
-                }
-            },
-            modifier = Modifier.padding(0.dp)
-        )
-
-         */
     }
-
 }

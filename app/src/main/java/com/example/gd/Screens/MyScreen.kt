@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun MyScreen(navController: NavController) {
-    val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 120, 200, true)
+    val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 1200000, 2000, true)
     UserMyContent(navController, "my", userInfo)
 }
 

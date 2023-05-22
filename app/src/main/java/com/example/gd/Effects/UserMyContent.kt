@@ -60,9 +60,9 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
                         .padding(start = 25.dp, end = 25.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    TextFormat("2", "Gallery")
-                    ButtonFormat(userInfo.following.toString(), "Following", navController, route)
-                    ButtonFormat(userInfo.follower.toString(), "Follower", navController, route)
+                    TextFormat(NumberContraction(2), "Gallery")
+                    ButtonFormat(NumberContraction(userInfo.following), "Following", navController, route)
+                    ButtonFormat(NumberContraction(userInfo.follower), "Follower", navController, route)
                 }
 
                 // 프로필 수정 버튼 or Follow 버튼

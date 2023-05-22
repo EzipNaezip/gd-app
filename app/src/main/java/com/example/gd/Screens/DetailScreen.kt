@@ -104,8 +104,6 @@ fun DetailScreen(navController: NavController, route: String) {
 
             // 댓글 수
             CommentCount()
-
-
         }
 
         // 댓글 입력창
@@ -183,7 +181,7 @@ fun CreationDate() {
 @Composable
 fun FavoriteCount() {
     Text(
-        text = "좋아요 7개",
+        text = "좋아요 ${NumberContraction(7)}개",
         color = MaterialTheme.colors.onPrimary,
         fontFamily = suite,
         fontWeight = FontWeight.SemiBold,
@@ -194,7 +192,7 @@ fun FavoriteCount() {
 @Composable
 fun CommentCount() {
     Text(
-        text = "댓글 7개",
+        text = "댓글 ${NumberContraction(7)}개",
         color = MaterialTheme.colors.onPrimary,
         fontFamily = suite,
         fontWeight = FontWeight.SemiBold,

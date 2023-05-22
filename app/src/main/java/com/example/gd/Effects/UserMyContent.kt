@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +21,11 @@ import com.example.gd.Button.ProfileEditButton
 import com.example.gd.Screens.*
 import com.example.gd.ui.theme.suite
 
-var myScreenButtonIndex by mutableStateOf(0)
-
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun UserMyContent(navController: NavController, route: String, userInfo: Info){
+    var myScreenButtonIndex by rememberSaveable{ mutableStateOf(0) }
     val bookmarkList = arrayListOf<Product>()
     val galleryList = arrayListOf<Product>()
 
@@ -136,7 +136,7 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
         }
     }
 
-    if (userInfo.isMe && route == "my") {
+    if (userInfo.isMe) {
         if (profileEditScreenState == "프로필") {
             ProfileEditScreen(
                 sheetState = rememberModalBottomSheetState(

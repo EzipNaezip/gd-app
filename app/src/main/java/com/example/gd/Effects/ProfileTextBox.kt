@@ -128,7 +128,7 @@ fun ProfileTextContent(buttonText: String) {
     Column( //페이지 내용
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp)
+            .padding(top = 24.dp)
             .padding(horizontal = 16.dp)
             .addFocusCleaner(focusManager)
     ) {

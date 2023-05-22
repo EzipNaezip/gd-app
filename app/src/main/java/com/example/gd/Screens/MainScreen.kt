@@ -71,9 +71,9 @@ fun MainScreen(navController: NavController) {
 
         // modalFrame이 클릭되면 아래와 같이 실행
 //        showDialog = true
-        PopUpModal(showDialog, onDismiss = {
-            showDialog = false
-        })
+//        PopUpModal(showDialog, onDismiss = {
+//            showDialog = false
+//        })
 
 /*
         when(state){

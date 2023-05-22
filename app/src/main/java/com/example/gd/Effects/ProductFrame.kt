@@ -26,7 +26,7 @@ fun productFrame(
     product: Product,
     navController: NavController,
     route: String,
-    is_me: Boolean = true
+    is_me: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun productFrame(
                     .size(180.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
-            if (is_me) {
+            if (!is_me) {
                 BookmarkButton()
             }
         }

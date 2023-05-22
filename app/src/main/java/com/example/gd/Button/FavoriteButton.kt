@@ -10,17 +10,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.gd.ui.IconPack
-import com.example.gd.ui.iconpack.FavoriteOutline
-import com.example.gd.ui.iconpack.FavoriteSolid
+import com.example.gd.R
 
 @Composable
 fun FavoriteButton(){
     var isFavorite by rememberSaveable { mutableStateOf(false) }
 
     Icon(
-        imageVector = if (isFavorite) IconPack.FavoriteSolid else IconPack.FavoriteOutline,
+        painter = if (isFavorite) painterResource(id = R.drawable.favorite_red) else painterResource(id = R.drawable.favorite_outline),
         contentDescription = "Favorite",
         modifier = Modifier
             .width(26.dp)
@@ -29,6 +29,7 @@ fun FavoriteButton(){
                 isFavorite = !isFavorite
                 // favorite 추가 Api 호출
                 // 클릭하면 imageVector 변경
-            }
+            },
+        tint = Color.Unspecified
     )
 }

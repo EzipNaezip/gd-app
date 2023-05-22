@@ -125,7 +125,7 @@ fun addProduct(productList: ArrayList<Product>) {
             "User Name $it",
             "안녕하세요",
             "2023-04-14 21:45:51",
-            listOf("#1", "#2", "#3", "#4", "#5", "#6", "#7"),
+            listOf("모던", "엘레강스", "고딕"),
             R.drawable.logo,
             listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo),
             false

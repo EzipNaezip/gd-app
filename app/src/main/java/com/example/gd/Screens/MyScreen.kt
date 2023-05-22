@@ -23,12 +23,10 @@ import com.example.gd.ui.iconpack.Right
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
 
-//var myScreenButtonIndex by mutableStateOf(0)
-
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun MyScreen(navController: NavController) {
-    val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 1200000, 2000, true)
+    val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 12345678, 234567, true)
     UserMyContent(navController, "my", userInfo)
 }
 
@@ -134,7 +132,7 @@ fun ButtonFormat(text1: String, text2: String, navController: NavController, rou
 }
 
 class Info(
-    val name: String, var readme: String, var follower: Int, var following: Int, var isMe: Boolean
+    val name: String, var readme: String, var following: Int, var follower: Int, var isMe: Boolean
 )
 
 @Composable

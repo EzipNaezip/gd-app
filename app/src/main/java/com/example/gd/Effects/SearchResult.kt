@@ -117,17 +117,17 @@ fun ImageScreen(@DrawableRes imageId: Int) {
 
 @Composable
 fun TagList(tags: List<String>) {
-    var expanded by remember { mutableStateOf(false) }
     Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)) {
         for (i in tags.indices) {
-            if (!expanded && i == 5) {
-                Row(Modifier.clickable { expanded = true }) {
-                    Text("더보기")
-                }
-                break
-            }
             Row {
-                Text(tags[i])
+                Text(
+                    text = "#${tags[i]}",
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp),
+                    color = Color.Black,
+                    fontFamily = suite,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp
+                )
             }
         }
     }

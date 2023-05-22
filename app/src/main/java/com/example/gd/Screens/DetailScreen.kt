@@ -1,28 +1,19 @@
 package com.example.gd.Screens
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollScope
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -36,16 +27,14 @@ import com.example.gd.Effects.*
 import com.example.gd.ui.theme.SearchBarBD
 import com.example.gd.ui.theme.suite
 
-val commentList = arrayListOf<String>()
-
 @Composable
 fun DetailScreen(navController: NavController, route: String) {
     val is_me = true // api를 통해서 받을 예정.
-
+    val commentList = arrayListOf<String>()
     var expanded by rememberSaveable { mutableStateOf(false) }
     val commentScrollState = rememberLazyListState() // 무한 스크롤 구현용
 
-    addComment()
+    addComment(commentList)
 
     LazyColumn(state = commentScrollState) {
         item {
@@ -139,7 +128,7 @@ fun DetailScreen(navController: NavController, route: String) {
             }
         }
         if (commentScrollState.isScrollInProgress && (commentScrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index!! >= commentList.size - 1))
-            addComment() // 바닥 도착(생성된 모든 값을 탐색했을 경우) -> 새로 값 불러옴.
+            addComment(commentList) // 바닥 도착(생성된 모든 값을 탐색했을 경우) -> 새로 값 불러옴.
     }
 }
 
@@ -307,7 +296,7 @@ fun CommentInputBar(onSearch: (String) -> Unit) {
     }
 }
 
-fun addComment(){
+fun addComment(commentList: ArrayList<String>){
     repeat(5){
         commentList.add("it")
     }

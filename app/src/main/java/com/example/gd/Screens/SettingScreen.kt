@@ -1,6 +1,9 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -12,14 +15,17 @@ import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.gd.Effects.ConfirmDismissPopupFormat
 import com.example.gd.Effects.TopAppBarScreenFormat
+import com.example.gd.Effects.profileEditScreenState
 import com.example.gd.MainActivity
-import com.example.gd.navigation.Screen
-import com.example.gd.navigation.SetupNavGraph
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.launch
+
 
 var settingScreen by mutableStateOf("default")
 //뒤로가기 시 초기화를 위한 전역변수
@@ -220,6 +226,7 @@ fun PrivacyPolicyScreen(sheetState: ModalBottomSheetState) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
+    var viewModel : MyViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     var popup by remember { mutableStateOf(false) }
 
@@ -321,7 +328,7 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                         runButtonClick = {
                             withdrawalCompletePopup = false
                             settingScreen = "default"
-                            restartApp()
+                            restartApp(viewModel)
                         },
                         dismissButtonClick = {},
                         ifDoubleButton = false
@@ -334,6 +341,7 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
 
 @Composable
 fun LogoutPopupScreen() { //로그아웃 팝업창
+    var viewModel : MyViewModel = viewModel()
     var logoutConfirmPopup by remember { mutableStateOf(true) }
     var logoutCompletePopup by remember { mutableStateOf(false) }
 
@@ -364,7 +372,7 @@ fun LogoutPopupScreen() { //로그아웃 팝업창
             runButtonClick = {
                 logoutCompletePopup = false
                 settingScreen = "default"
-                restartApp()
+                restartApp(viewModel)
             },
             dismissButtonClick = {},
             ifDoubleButton = false
@@ -377,9 +385,13 @@ fun onLogout() {
     Log.d("LogOut", "로그아웃하셨습니다.")
 }
 
-fun restartApp(){
-    OAuthData.nav!!.navigate(Screen.Splash.route)
-    OAuthData.account = null
+fun restartApp(viewModel: MyViewModel) {
+    val context = viewModel.appContext
+    viewModel.resetVariables()
+    val packageManager = context.packageManager
+    val launchIntent = packageManager.getLaunchIntentForPackage(context.packageName)
+    launchIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    context.startActivity(launchIntent)
 }
 
 fun revoke(){
@@ -393,4 +405,12 @@ fun revoke(){
                 // 실패 처리를 진행할 수 있습니다.
             }
         }
+}
+
+class MyViewModel(application: Application) : AndroidViewModel(application) {
+    val appContext: Context = getApplication()
+
+    fun resetVariables() {
+        profileEditScreenState = "default"
+    }
 }

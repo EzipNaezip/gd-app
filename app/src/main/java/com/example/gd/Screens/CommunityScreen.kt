@@ -28,12 +28,12 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
-var selectedButtonIndex by mutableStateOf(0)
-
 val productList = arrayListOf<Product>()
 
 @Composable
 fun ComunityScreen(navController: NavController) {
+    var selectedButtonIndex by rememberSaveable { mutableStateOf(0) }
+
     var searchState by rememberSaveable { mutableStateOf(true) } // 검색 전후 구분
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
 

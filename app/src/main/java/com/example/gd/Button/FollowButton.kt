@@ -1,5 +1,6 @@
 package com.example.gd.Button
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.gd.ui.theme.suite
 
 @Composable
-fun FollowButton() {
+fun FollowButton(isUserPage: Boolean = false) {
     var isFollowing by remember { mutableStateOf(true) }
 
     val buttonColors = if (isFollowing) {
@@ -31,7 +32,13 @@ fun FollowButton() {
     OutlinedButton(
         onClick = { isFollowing = !isFollowing },
         colors = buttonColors,
-        modifier = Modifier.size(80.dp, 40.dp),
+        modifier = if (isUserPage){
+            Modifier
+                .padding(start = 30.dp, end = 30.dp)
+                .fillMaxWidth()
+        } else{
+            Modifier.size(80.dp, 40.dp)
+              },
         shape = RoundedCornerShape(30)
     ) {
         Text(

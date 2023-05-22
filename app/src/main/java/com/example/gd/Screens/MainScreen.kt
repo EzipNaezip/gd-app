@@ -1,21 +1,39 @@
 package com.example.gd.Screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import com.example.gd.Button.BookmarkButton
 import com.example.gd.Effects.*
 import com.example.gd.R
+import com.example.gd.ui.IconPack
+import com.example.gd.ui.iconpack.Left
 import com.example.gd.ui.theme.suite
 import kotlinx.coroutines.delay
+import java.util.Properties
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -55,6 +73,12 @@ fun MainScreen(navController: NavController) {
         // searchState가 false가 되면 로딩창 실행.
         // 로딩창 하는동안 api를 통해 값 가져옴
         // 값을 받으면 실행
+
+        // modalFrame이 클릭되면 아래와 같이 실행
+        var showDialog by rememberSaveable{ mutableStateOf(true) }
+        PopUpModal(showDialog, onDismiss = {
+            showDialog = false
+        })
 
         if (searchState) {
             LazyVerticalGrid(
@@ -99,4 +123,102 @@ fun TextMessage(num: Int) {
         color = MaterialTheme.colors.onPrimary,
         modifier = Modifier.padding(10.dp)
     )
+}
+
+@Composable
+fun ModalFrame(onClick: () -> Unit) {
+    // 매개변수로 해당 사진을 받아야함.
+    // 사진을 띄우고 클릭하면 모달을 띄움
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .border(0.dp, Color.Transparent)
+            .clickable {
+                onClick()
+            }
+            .padding(horizontal = 2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Image(
+            contentScale = ContentScale.Fit,
+            painter = painterResource(R.drawable.logo),
+            contentDescription = "Image",
+            modifier = Modifier
+                .size(180.dp)
+                .clip(RoundedCornerShape(8.dp))
+        )
+    }
+}
+
+@Composable
+fun PopUpModal(showDialog: Boolean, onDismiss: () -> Unit) {
+    // 매개변수로 해당 사진과 text를 받아야 함.
+    // 클릭됐을때 띄워질 모달.
+    // 사진과 글씨가 있어야함. 가로는 사진에 맞추고, 세로는 추가로 좀 더 해서 텍스트. 끝은 라운드로 깎여있어야함.
+    // 자체 패딩을 없애야함.
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = { onDismiss() }
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(12.dp)
+
+            ){
+                Column {
+                    Box(modifier = Modifier.fillMaxWidth()){
+                        Image(
+                            contentScale = ContentScale.Fit,
+                            painter = painterResource(R.drawable.logo),
+                            contentDescription = "Image",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp))
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .clickable {
+                                    onDismiss()
+                                }
+                                .width(30.dp)
+                                .height(30.dp)
+                        )
+                    }
+                    PostContent()
+                }
+            }
+        }
+        /*
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = {
+                Image(
+                    contentScale = ContentScale.Fit,
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                ) },
+            text = { Text(text = "모달 내용") },
+            confirmButton = {
+            },
+            dismissButton = {
+                Button(
+                    onClick = { onDismiss() }
+                ) {
+                    Text(text = "닫기")
+                }
+            },
+            modifier = Modifier.padding(0.dp)
+        )
+
+         */
+    }
+
 }

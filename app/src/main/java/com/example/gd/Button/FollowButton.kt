@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.sp
 import com.example.gd.ui.theme.suite
 
 @Composable
-fun FollowButton(){
-    var isFollowed by rememberSaveable { mutableStateOf(false) }
+fun FollowButton(isFollow: Boolean = false){
+    var isFollowed by rememberSaveable { mutableStateOf(isFollow) }
 
     Button(
         onClick = {
@@ -25,7 +25,7 @@ fun FollowButton(){
         }
     ) {
         Text(
-            text = if (isFollowed) "팔로우" else "팔로우 해제",
+            text = if (isFollowed) "팔로우 해제" else "팔로우",
             fontFamily = suite,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 15.sp,

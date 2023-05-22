@@ -9,7 +9,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
+    var test by remember { mutableStateOf(true) } // 함수가 두번 호출돼서 화면 깜빡이는 것 방지
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,28 +57,17 @@ fun SplashScreen(navController: NavHostController) {
 
         // 현재는 Delay를 주고 특정 시간 뒤 이동하는 방식.
         // 추후에는 로그인 되었는지 확인하고, 확인되면 이동하는 방식으로 변경 예정
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (OAuthData.account == null) {
-                // 로그인 안돼있음
-                navController.navigate(Screen.Login.route)
-            } else {
-                // 로그인 돼있음
-                navController.navigate(Screen.Once.route)
-            }
-        }, 1000)
-
-        /* // Lottie 사용시 해당 코드 사용
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.logo))
-        val logoAnimationState =
-            animateLottieCompositionAsState(composition = composition)
-        LottieAnimation(
-            composition = composition,
-            progress = { logoAnimationState.progress }
-        )
-        if (logoAnimationState.isAtEnd && logoAnimationState.isPlaying) {
-            navController.navigate(Screen.Home.route)
+        if (test) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                test = false
+                if (OAuthData.account == null) {
+                    // 로그인 안돼있음
+                    navController.navigate(Screen.Login.route)
+                } else {
+                    // 로그인 돼있음
+                    navController.navigate(Screen.Once.route)
+                }
+            }, 1000)
         }
-
-         */
     }
 }

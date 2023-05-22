@@ -134,7 +134,9 @@ fun MainScreenView(startDestination: String) {
                     )
                 }
 
-                composable(MyNavigationScreens.My.route) { MyScreen(navController = navController) }
+                composable(MyNavigationScreens.My.route) {
+                    MyScreen(navController = navController)
+                }
                 composable(MyNavigationScreens.Detail.route) {
                     DetailScreen(
                         navController = navController,
@@ -148,7 +150,9 @@ fun MainScreenView(startDestination: String) {
                     )
                 }
 
-                composable(SettingNavigationScreens.Setting.route) { SettingScreen(navController = navController) }
+                composable(SettingNavigationScreens.Setting.route) {
+                    SettingScreen(navController = navController)
+                }
             }
         }
     }

@@ -1,40 +1,30 @@
 package com.example.gd.Screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.elevation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.translationMatrix
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.gd.Effects.*
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.Right
 import com.example.gd.ui.theme.suite
+import kotlinx.coroutines.launch
 
 var myScreenButtonIndex by mutableStateOf(0)
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun MyScreen(navController: NavController) {
@@ -55,7 +45,7 @@ fun MyScreen(navController: NavController) {
             ) {
                 Box(
                     modifier = Modifier
-                        .padding(vertical = 20.dp)
+                        .padding(vertical = 8.dp)
                 ) {
                     ProfileImage(100)
                 }
@@ -65,7 +55,7 @@ fun MyScreen(navController: NavController) {
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
                     color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.padding(vertical = 5.dp)
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Text(
                     text = "${userInfo.readme}",
@@ -74,7 +64,7 @@ fun MyScreen(navController: NavController) {
                     fontSize = 15.sp,
                     color = MaterialTheme.colors.secondary,
                     modifier = Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 5.dp)
                         .padding(start = 30.dp, end = 30.dp)
                 )
                 Row(
@@ -91,13 +81,20 @@ fun MyScreen(navController: NavController) {
                 }
 
                 // 프로필 수정 버튼
-                Button(
+                OutlinedButton(
                     modifier = Modifier
                         .padding(start = 30.dp, end = 30.dp)
                         .fillMaxWidth(),
-                    onClick = { /*TODO*/ }
+                    onClick = { profileEditScreenState = "프로필" },
+                    border = BorderStroke(1.dp, MaterialTheme.colors.secondaryVariant)
                 ) {
-                    Text(text = "프로필 수정")
+                    Text(
+                        text = "프로필 수정",
+                        fontFamily = suite,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colors.onPrimary
+                    )
                 }
 
                 // 가로선
@@ -108,7 +105,7 @@ fun MyScreen(navController: NavController) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp),
+                    .padding(start = 30.dp, end = 30.dp, bottom = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 item {
@@ -122,14 +119,15 @@ fun MyScreen(navController: NavController) {
                                     buttons[1] -> println("${buttons[1]}")
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = if (myScreenButtonIndex == index) MaterialTheme.colors.primaryVariant else Color.White),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = if (myScreenButtonIndex == index)
+                                MaterialTheme.colors.primaryVariant else Color.White),
                             shape = RoundedCornerShape(30),
                             content = {
                                 Text(
                                     text = label,
                                     fontFamily = suite,
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = 12.sp,
+                                    fontSize = 14.sp,
                                     color = if (myScreenButtonIndex == index) Color.White else Color.Black
                                 )
                             }
@@ -141,7 +139,6 @@ fun MyScreen(navController: NavController) {
         }
 
         addProduct(productList)
-
         val rows = productList.chunked(2)
 
         items(rows) { rowItems ->
@@ -154,12 +151,66 @@ fun MyScreen(navController: NavController) {
             }
         }
     }
+    if (profileEditScreenState == "프로필") {
+        ProfileEditScreen(
+            sheetState = rememberModalBottomSheetState(
+                initialValue = ModalBottomSheetValue.Hidden,
+                confirmStateChange = { false } // 드래그 방지
+            ),
+            navController = navController
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ProfileEditScreen(
+    sheetState: ModalBottomSheetState,
+    navController: NavController
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var screen by remember { mutableStateOf(true) }
+
+    if (screen) {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetContent = {
+                coroutineScope.launch {
+                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                }
+                ProfileTextScreen(
+                    navController = navController,
+                    titleText = "프로필 수정",
+                    content = {
+                        ProfileTextContent(buttonText = "프로필 사진 수정")
+                    },
+                    popupTitleText = "변경 사항 저장",
+                    confirmDialogText = "프로필 변경 사항을 저장하시겠습니까?",
+                    completeDialogText = "프로필 변경 사항이 저장되었습니다.",
+                    isLeftButton = true
+                )
+                if (editIsOpen == "on") {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        profileEditScreenState = "default"
+                        editIsOpen = "default"
+                    }
+                }
+            }
+        ) {}
+    }
 }
 
 @Composable
 fun TextFormat(text1: String, text2: String) {
     Box(
-        modifier = Modifier.width(90.dp),
+        modifier = Modifier
+            .width(90.dp)
+            .clickable {
+                // Handle the click event here
+            }
+        ,
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

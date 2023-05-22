@@ -15,10 +15,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.gd.R
 
 @Composable
-fun ProfileImage(ImageSize: Int) {
+fun ProfileImage(ImageSize: Int, Image: Int = R.drawable.logo) {
     if (profileImageUri == null) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = Image),
             contentScale = ContentScale.Fit,
             contentDescription = "Default Profile Picture",
             modifier = Modifier

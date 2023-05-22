@@ -45,15 +45,7 @@ fun SettingScreen(navController: NavController) {
                 )
             )
         }
-        "이용약관" -> {
-            TermsConditionsScreen(
-                sheetState = rememberModalBottomSheetState(
-                    initialValue = ModalBottomSheetValue.Hidden,
-                    confirmStateChange = { false } // 드래그 방지
-                )
-            )
-        }
-        "개인정보 처리방침" -> {
+        "개인정보 처리방침 및 이용약관" -> {
             PrivacyPolicyScreen(
                 sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
@@ -78,7 +70,7 @@ fun SettingScreen(navController: NavController) {
 @Composable
 fun SettingScreenContent(
     names: List<String> =
-        listOf("오픈 소스 라이브러리", "이용약관", "개인정보 처리방침", "회원 탈퇴", "로그아웃"),
+        listOf("오픈 소스 라이브러리", "개인정보 처리방침 및 이용약관", "회원 탈퇴", "로그아웃"),
 ) {
     Column(
         modifier = Modifier
@@ -96,11 +88,8 @@ fun SettingScreenContent(
                                 "오픈 소스 라이브러리" -> {
                                     settingScreen = "오픈 소스 라이브러리"
                                 }
-                                "이용약관" -> {
-                                    settingScreen = "이용약관"
-                                }
-                                "개인정보 처리방침" -> {
-                                    settingScreen = "개인정보 처리방침"
+                                "개인정보 처리방침 및 이용약관" -> {
+                                    settingScreen = "개인정보 처리방침 및 이용약관"
                                 }
                                 "회원 탈퇴" -> {
                                     settingScreen = "회원 탈퇴"
@@ -184,52 +173,6 @@ fun OpenSourceLibraryScreen(sheetState: ModalBottomSheetState) {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TermsConditionsScreen(sheetState: ModalBottomSheetState) {
-    var termsConditionsScreen by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
-
-    if (termsConditionsScreen) {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetContent = {
-                coroutineScope.launch {
-                    sheetState.animateTo(ModalBottomSheetValue.Expanded)
-                }
-                TopAppBarScreenFormat(
-                    titleText = "이용약관",
-                    IsLeftButton = true,
-                    IsRightButton = false,
-                    content = {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .padding(24.dp),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Text(
-                                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut mauris quis nisi blandit varius eu in neque. Nam vel ex et dolor vehicula bibendum sed eu urna. Sed condimentum augue nec orci blandit, eu egestas quam gravida. Nullam bibendum orci id ligula bibendum dictum. Suspendisse ac tellus neque. Pellentesque feugiat magna vitae hendrerit feugiat. Fusce vehicula elit ut elit egestas, sit amet dapibus sapien maximus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean id orci ut purus rutrum pretium eu ut lacus. Praesent bibendum quam quis blandit luctus. Donec id risus sit amet dolor lobortis laoreet.",
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                        }
-                    },
-                    leftButtonClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                            settingScreen = "default"
-                        }
-                    },
-                    rightButtonClick = { }
-                )
-            }
-        ) {}
-    }
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
 fun PrivacyPolicyScreen(sheetState: ModalBottomSheetState) {
     var privacyPolicyScreen by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -242,7 +185,7 @@ fun PrivacyPolicyScreen(sheetState: ModalBottomSheetState) {
                     sheetState.animateTo(ModalBottomSheetValue.Expanded)
                 }
                 TopAppBarScreenFormat(
-                    titleText = "개인정보 처리방침",
+                    titleText = "개인정보 처리방침 및 이용약관",
                     IsLeftButton = true,
                     IsRightButton = false,
                     content = {

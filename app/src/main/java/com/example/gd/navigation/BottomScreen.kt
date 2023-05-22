@@ -31,12 +31,14 @@ sealed class CommunityNavigationScreens(val route: String) {
     object Community : CommunityNavigationScreens("community")
     object Detail : CommunityNavigationScreens("community_detail_screen")
     object User : CommunityNavigationScreens("community_user_screen")
+    object Follow : CommunityNavigationScreens("community_follow_screen")
 }
 
 sealed class MyNavigationScreens(val route: String = "my") {
     object My : MyNavigationScreens("my")
     object Detail : MyNavigationScreens("my_detail_screen")
     object User : MyNavigationScreens("my_user_screen")
+    object Follow : MyNavigationScreens("my_follow_screen")
 }
 
 sealed class SettingNavigationScreens(val route: String) {

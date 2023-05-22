@@ -75,9 +75,9 @@ fun MyScreen(navController: NavController) {
                         .padding(start = 25.dp, end = 25.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    TextFormat("2", "Gallery")
-                    TextFormat(userInfo.following.toString(), "Following")
-                    TextFormat(userInfo.follower.toString(), "Follower")
+                    TextFormat("2", "Gallery", navController, "my")
+                    TextFormat(userInfo.following.toString(), "Following", navController, "my")
+                    TextFormat(userInfo.follower.toString(), "Follower", navController, "my")
                 }
 
                 // 프로필 수정 버튼
@@ -203,14 +203,16 @@ fun ProfileEditScreen(
 }
 
 @Composable
-fun TextFormat(text1: String, text2: String) {
+fun TextFormat(text1: String, text2: String, navController: NavController, route: String) {
     Box(
         modifier = Modifier
             .width(90.dp)
             .clickable {
-                // Handle the click event here
-            }
-        ,
+                when(text2){
+                    "Following" -> navController.navigate("${route}_follow_screen/FOLLOWING")
+                    "Follower" -> navController.navigate("${route}_follow_screen/FOLLOWER")
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

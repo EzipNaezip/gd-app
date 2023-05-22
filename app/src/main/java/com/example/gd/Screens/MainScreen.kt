@@ -75,10 +75,12 @@ fun MainScreen(navController: NavController) {
         // 값을 받으면 실행
 
         // modalFrame이 클릭되면 아래와 같이 실행
-        var showDialog by rememberSaveable{ mutableStateOf(true) }
-        PopUpModal(showDialog, onDismiss = {
-            showDialog = false
-        })
+//        var showDialog by rememberSaveable{ mutableStateOf(true) }
+//        showDialog = true
+//        PopUpModal(showDialog, onDismiss = {
+//            showDialog = false
+//        })
+
 
         if (searchState) {
             LazyVerticalGrid(

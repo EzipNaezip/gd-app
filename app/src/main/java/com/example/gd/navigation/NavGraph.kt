@@ -11,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
@@ -102,7 +104,9 @@ fun MainScreenView(startDestination: String) {
                 navController = navController,
                 startDestination = startDestination,
             ) {
+                // Main
                 composable(MainNavigationScreens.Main.route) { MainScreen(navController = navController) }
+                // 아래는 사라질 예정
                 composable(MainNavigationScreens.Detail.route) {
                     DetailScreen(
                         navController = navController,
@@ -116,6 +120,7 @@ fun MainScreenView(startDestination: String) {
                     )
                 }
 
+                // Community
                 composable(CommunityNavigationScreens.Community.route) {
                     ComunityScreen(
                         navController = navController
@@ -133,7 +138,20 @@ fun MainScreenView(startDestination: String) {
                         BottomScreen.Community.screenRoute
                     )
                 }
+                composable(
+                    route = "${CommunityNavigationScreens.Follow.route}/{variable}",
+                    arguments = listOf(navArgument("variable") { type = NavType.StringType })
+                ) { entry ->
+                    val variable = entry.arguments?.getString("variable")
+                    FollowScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute,
+                        currentPage = variable!!
+                    )
+                }
 
+
+                // My
                 composable(MyNavigationScreens.My.route) {
                     MyScreen(navController = navController)
                 }
@@ -149,7 +167,19 @@ fun MainScreenView(startDestination: String) {
                         BottomScreen.My.screenRoute
                     )
                 }
+                composable(
+                    route = "${MyNavigationScreens.Follow.route}/{variable}",
+                    arguments = listOf(navArgument("variable") { type = NavType.StringType })
+                ) { entry ->
+                    val variable = entry.arguments?.getString("variable")
+                    FollowScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute,
+                        currentPage = variable!!
+                    )
+                }
 
+                // Setting
                 composable(SettingNavigationScreens.Setting.route) {
                     SettingScreen(navController = navController)
                 }

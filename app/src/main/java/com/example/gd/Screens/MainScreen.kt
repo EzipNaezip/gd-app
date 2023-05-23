@@ -66,7 +66,6 @@ fun MainScreen(navController: NavController) {
                 state = 1
                 // 검색어로 검색한 결과 나타내는 코드 예정 => Api 호출
             },
-            modifier = Modifier.fillMaxWidth()
         )
 
         // modalFrame이 클릭되면 아래와 같이 실행

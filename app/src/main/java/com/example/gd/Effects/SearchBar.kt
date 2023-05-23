@@ -25,72 +25,70 @@ import com.example.gd.ui.theme.SearchBarBD
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
+fun SearchBar(onSearch: (String) -> Unit) {
     var searchText by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column() {
-        TextField(
-            value = searchText,
-            onValueChange = { searchText = it },
-            placeholder = {
-                Text(
-                    color = MaterialTheme.colors.secondaryVariant,
-                    text = "원하시는 스타일을 입력해주세요"
-                )
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(62.dp)
-                .padding(horizontal = 15.dp, vertical = 5.dp)
-                .border(
-                    width = 1.dp,
-                    color = SearchBarBD,
-                    shape = RoundedCornerShape(8.dp)
-                ),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    search(searchText, onSearch, focusManager, keyboardController)
-                }),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.Black,
-                disabledTextColor = Color.Black,
-                backgroundColor = MaterialTheme.colors.onSecondary,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
+    TextField(
+        value = searchText,
+        onValueChange = { searchText = it },
+        placeholder = {
+            Text(
+                color = MaterialTheme.colors.secondaryVariant,
+                text = "원하시는 스타일을 입력해주세요"
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(62.dp)
+            .padding(horizontal = 15.dp, vertical = 5.dp)
+            .border(
+                width = 1.dp,
+                color = SearchBarBD,
+                shape = RoundedCornerShape(8.dp)
             ),
-            trailingIcon = {
-                Row {
-                    if (searchText != "") {
-                        ClearTextButton {
-                            searchText = ""
-                        }
-                    }
-                    Divider(
-                        color = SearchBarBD,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(1.dp)
-                    )
-
-                    TextButton(
-                        onClick = {
-                            search(searchText, onSearch, focusManager, keyboardController)
-                        },
-                    ) {
-                        Text(
-                            text = "생성",
-                            color = MaterialTheme.colors.onPrimary
-                        )
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                search(searchText, onSearch, focusManager, keyboardController)
+            }),
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.Black,
+            disabledTextColor = Color.Black,
+            backgroundColor = MaterialTheme.colors.onSecondary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        trailingIcon = {
+            Row {
+                if (searchText != "") {
+                    ClearTextButton {
+                        searchText = ""
                     }
                 }
+                Divider(
+                    color = SearchBarBD,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp)
+                )
+
+                TextButton(
+                    onClick = {
+                        search(searchText, onSearch, focusManager, keyboardController)
+                    },
+                ) {
+                    Text(
+                        text = "생성",
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                }
             }
-        )
-    }
+        }
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

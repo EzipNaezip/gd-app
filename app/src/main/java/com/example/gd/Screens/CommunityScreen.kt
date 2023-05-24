@@ -1,5 +1,6 @@
 package com.example.gd.Screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,6 +33,7 @@ val productList = arrayListOf<Product>()
 
 @Composable
 fun ComunityScreen(navController: NavController) {
+    BackHandler(enabled = true, onBack = {})
     var selectedButtonIndex by rememberSaveable { mutableStateOf(0) }
 
     var searchState by rememberSaveable { mutableStateOf(true) } // 검색 전후 구분

@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
+   //navController.enableOnBackPressed(false)
     var test by remember { mutableStateOf(true) } // 함수가 두번 호출돼서 화면 깜빡이는 것 방지
 
     Box(

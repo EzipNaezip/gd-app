@@ -43,16 +43,6 @@ import java.util.Properties
 
 @Composable
 fun MainScreen(navController: NavController) {
-    var waitTime = 0L
-    BackHandler(enabled = true, onBack = {
-//        if(System.currentTimeMillis() - waitTime >=1500 ) {
-//            waitTime = System.currentTimeMillis()
-//            Toast.makeText(navController.context,"한번 더 누르면 종료됩니다",Toast.LENGTH_SHORT).show()
-//        } else {
-//            System.exit(0)
-//        }
-    })
-
     var showDialog by rememberSaveable{ mutableStateOf(true) }
     val scrollState = rememberLazyGridState() // 무한 스크롤 구현용
     val productList = arrayListOf<Product>()

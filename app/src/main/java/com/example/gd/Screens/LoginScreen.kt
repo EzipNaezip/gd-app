@@ -31,7 +31,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
-    //navController.enableOnBackPressed(false)
+    navController.enableOnBackPressed(false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +41,7 @@ fun LoginScreen(navController: NavHostController) {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         Text(
-            text = "내일의 집에서\n원하는 집을 마음껏 상상해봐",
+            text = "이집내집에서\n원하는 집을 마음껏 상상해봐",
             fontFamily = suite,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 30.sp,

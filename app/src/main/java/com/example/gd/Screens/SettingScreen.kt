@@ -34,10 +34,7 @@ var settingScreen by mutableStateOf("default")
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-
 fun SettingScreen(navController: NavController) {
-    BackHandler(enabled = true, onBack = {})
-
     TopAppBarScreenFormat(
         titleText = "설정",
         IsLeftButton = false,

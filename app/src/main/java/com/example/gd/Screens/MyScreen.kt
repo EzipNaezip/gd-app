@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun MyScreen(navController: NavController) {
-    BackHandler(enabled = true, onBack = {})
     val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 12345678, 234567, true)
     UserMyContent(navController, "my", userInfo)
 }

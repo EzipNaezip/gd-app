@@ -42,8 +42,8 @@ fun SearchBar(onSearch: (String) -> Unit) {
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(62.dp)
-            .padding(horizontal = 15.dp, vertical = 5.dp)
+            .height(70.dp)
+            .padding(horizontal = 15.dp, vertical = 7.dp)
             .border(
                 width = 1.dp,
                 color = SearchBarBD,

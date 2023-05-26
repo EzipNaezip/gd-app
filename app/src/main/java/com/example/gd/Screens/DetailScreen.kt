@@ -63,13 +63,13 @@ fun DetailScreen(navController: NavController, route: String) {
             TagList(tags = PRODUCT.tags)
 
             // 버튼과 생성일자
-            Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)) {
+            Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
                 Column {
                     FavoriteCount()
-                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     Row {
                         FavoriteButton()
                         if (is_me) BookmarkButton()
+                        else SaveButton()
                     }
                 }
                 Box(

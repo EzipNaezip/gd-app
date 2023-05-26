@@ -9,7 +9,10 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.gd.R
 import com.example.gd.ui.IconPack
 import com.example.gd.ui.iconpack.BookmarkOutline
 import com.example.gd.ui.iconpack.BookmarkSolid
@@ -19,15 +22,15 @@ fun BookmarkButton(){
     var isBookmark by rememberSaveable {mutableStateOf(false)}
 
     Icon(
-        imageVector = if (isBookmark) IconPack.BookmarkSolid else IconPack.BookmarkOutline,
+        painter = if (isBookmark) painterResource(id = R.drawable.bookmark_color) else painterResource(id = R.drawable.bookmark_outline),
         contentDescription = "Bookmark",
         modifier = Modifier
-            .padding(8.dp)
             .size(26.dp)
             .clickable {
                 isBookmark = !isBookmark
                 // 북마크 추가 Api 호출
                 // 클릭하면 imageVector 변경
-            }
+            },
+        tint = Color.Unspecified
     )
 }

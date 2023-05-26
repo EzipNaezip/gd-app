@@ -41,6 +41,10 @@ fun productFrame(
         contentAlignment = Alignment.BottomEnd
     ) {
         ImageFormat(image = product.imageId[0])
-        if (is_me) { BookmarkButton() }
+        if (is_me) {
+            Box(modifier = Modifier.padding(8.dp)) {
+                BookmarkButton()
+            }
+        }
     }
 }

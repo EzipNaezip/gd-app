@@ -132,7 +132,7 @@ fun MainScreenView(startDestination: String) {
                     val variable = entry.arguments?.getString("variable")
                     FollowScreen(
                         navController = navController,
-                        BottomScreen.My.screenRoute,
+                        BottomScreen.Community.screenRoute,
                         currentPage = variable!!
                     )
                 }

@@ -38,14 +38,14 @@ fun FollowScreen(
         titleText = name,
         IsLeftButton = true,
         IsRightButton = false,
-        content = { FollowScreenContent(currentPage) },
+        content = { FollowScreenContent(navController, route, currentPage) },
         leftButtonClick = { navController.popBackStack() },
         rightButtonClick = {}
     )
 }
 
 @Composable
-fun FollowScreenContent(currentPage: String) {
+fun FollowScreenContent(navController: NavController, route: String, currentPage: String) {
     var currentPageTemp by rememberSaveable { mutableStateOf(currentPage) }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -124,8 +124,8 @@ fun FollowScreenContent(currentPage: String) {
         ) {
             item {
                 when (currentPageTemp) {
-                    FOLLOWING -> AddFollowing()
-                    FOLLOWER -> AddFollower()
+                    FOLLOWING -> AddFollowing(navController, route)
+                    FOLLOWER -> AddFollower(navController, route)
                 }
             }
         }
@@ -133,19 +133,19 @@ fun FollowScreenContent(currentPage: String) {
 }
 
 @Composable
-fun AddFollowing() {
+fun AddFollowing(navController: NavController, route: String) {
     followingList.forEach { name ->
-        FollowingPage(name)
+        FollowingPage(navController, route, name)
     }
 }
 
 @Composable
-fun FollowingPage(name: String) {
+fun FollowingPage(navController: NavController, route: String, name: String) {
     Column(verticalArrangement = Arrangement.Center) {
         Row(
             modifier = Modifier
                 .clickable {
-                    // 프로필 창으로 이동
+                    navController.navigate(route + "_user_screen")
                 }
         ) {
             ProfileImage(ImageSize = 60)
@@ -169,12 +169,12 @@ fun FollowingPage(name: String) {
 }
 
 @Composable
-fun FollowerPage(name: String) {
+fun FollowerPage(navController: NavController, route: String, name: String) {
     Column {
         Row(
             modifier = Modifier
                 .clickable {
-                    // 프로필 창으로 이동
+                    navController.navigate(route + "_user_screen")
                 }
         ) {
             ProfileImage(ImageSize = 70)
@@ -192,9 +192,9 @@ fun FollowerPage(name: String) {
     }
 }
 @Composable
-fun AddFollower() {
+fun AddFollower(navController: NavController, route: String) {
     followerList.forEach { name ->
-        FollowerPage(name)
+        FollowerPage(navController, route, name)
     }
 }
 

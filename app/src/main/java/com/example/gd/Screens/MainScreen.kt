@@ -124,7 +124,7 @@ fun TextMessage(num: Int) {
         fontWeight = FontWeight.ExtraBold,
         fontSize = 18.sp,
         color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(20.dp).padding(top = 5.dp)
     )
 }
 

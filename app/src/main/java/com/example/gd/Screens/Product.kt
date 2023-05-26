@@ -11,4 +11,12 @@ class Product(
     var is_me: Boolean
 )
 
-var PRODUCT = Product("", "", "", listOf(), R.drawable.logo, listOf(), true)
+var PRODUCT = Product(
+    "User Name",
+    "안녕하세요",
+    "2023-04-14 21:45:51",
+    listOf("모던", "엘레강스", "고딕"),
+    R.drawable.logo,
+    listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo),
+    true
+)

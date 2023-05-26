@@ -13,6 +13,7 @@ import com.example.gd.ui.IconPack
 import com.example.gd.ui.theme.suite
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -22,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.window.Dialog
+import com.example.gd.Button.SaveButton
 import com.example.gd.R
 import com.example.gd.Screens.PRODUCT
 import com.example.gd.ui.iconpack.*
@@ -33,62 +35,35 @@ import com.google.accompanist.pager.rememberPagerState
 fun SearchResult() {
     val images: List<Int> =
         listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo)
-    Column(modifier = Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(images) { photo ->
-                ImageScreen(photo)
-            }
+
+    LazyVerticalGrid(
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(images) { photo ->
+            ImageScreen(photo)
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 16.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        SaveButton()
+    }
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item {
+            PostContent()
         }
 
-        //
-        Box(
-            modifier = Modifier
-                .padding(top = 5.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Row() {
-
-                    Icon(
-                        imageVector = IconPack.Share, // save버튼으로 수정 필요
-                        contentDescription = "Save",
-                        modifier = Modifier
-                            .width(26.dp)
-                            .height(26.dp)
-                            .clickable {
-                                // 북마크 추가 기능
-                            }
-                    )
-
-                }
-            }
+        item {
+            TagList(tags = PRODUCT.tags)
         }
-
-        // 검색결과가 너무 길어질 경우 Surface로 구분할수도
-        Text(
-            text = "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 \n\n" +
-                    "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 \n" +
-                    "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 ",
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
-            color = Color.Black,
-            fontFamily = suite,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp
-        )
-
-        TagList(tags = PRODUCT.tags)
-
     }
 }
 

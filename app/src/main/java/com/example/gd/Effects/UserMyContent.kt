@@ -129,8 +129,8 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
             Row(Modifier.fillMaxWidth()) {
                 rowItems.forEach { product ->
                     Column(Modifier.weight(1f)) {
-                        if (myScreenButtonIndex == 0) productFrame(product, navController,  route, true)
-                        else productFrame(product, navController, route, false)
+                        if (myScreenButtonIndex == 0) productFrame(product, navController,  route, false)
+                        else productFrame(product, navController, route, true)
                     }
                 }
             }

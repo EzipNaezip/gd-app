@@ -1,11 +1,12 @@
 package com.example.gd.Screens
 
 import android.graphics.ImageFormat
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.ui.Alignment
@@ -27,36 +28,44 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreen() {
     var state by rememberSaveable { mutableStateOf(0) } // 검색 상태 state
+    var scrollState = rememberLazyGridState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        TextMessage(state)
-
         when(state){
             0 -> { // 검색 전
+                MainSpacer(scrollState = scrollState)
+                TextMessage(state)
                 SearchBar( // 검색창
                     onSearch = {
                         state = 1
                         // 검색어로 검색한 결과 나타내는 코드 예정 => Api 호출
                     }
                 )
-                ExampleItems()
+                MainSpacer(scrollState = scrollState)
+
+                ExampleItems(scrollState)
             }
             1 ->{ // 검색 중
+                MainSpacer(scrollState = scrollState)
+                TextMessage(state)
                 SearchBarShimmer(onClick = {
                     // stop generate api 호출
                     state = 0
                 })
-                ExampleItems()
+                MainSpacer(scrollState = scrollState)
+
+                ExampleItems(scrollState)
                 LaunchedEffect(true) {
                     delay(1500)
                     state = 2
                 }
-            } // 검색창이 로딩바로 바뀌고 아래에 ModalFrame
-            2 -> { // 검색 완료
+            }
+            2 -> { // 검색 후
+                TextMessage(state)
                 SearchBar( // 검색창
                     onSearch = {
                         state = 1
@@ -64,21 +73,32 @@ fun MainScreen() {
                     }
                 )
                 SearchResult()
-            } // 로딩창이 검색창으로 바뀌고 아래에 결과물
+                MainSpacer(scrollState = scrollState)
+            }
         }
     }
 }
 
 @Composable
-fun ExampleItems(){
+fun MainSpacer(scrollState: LazyGridState){
+    if (scrollState.firstVisibleItemIndex == 0) {
+        if (70.dp > scrollState.firstVisibleItemScrollOffset.dp/4)
+            Spacer(modifier = Modifier.padding(80.dp - scrollState.firstVisibleItemScrollOffset.dp/4))
+    }
+}
+
+@Composable
+fun ExampleItems(scrollState: LazyGridState){
     // itemList를 받아와야함.
     var showDialog by rememberSaveable{ mutableStateOf(false) }
+
 
     LazyVerticalGrid(
         modifier = Modifier
             .padding(horizontal = 15.dp)
             .padding(top = 8.dp),
-        columns = GridCells.Fixed(2)
+        columns = GridCells.Fixed(2),
+        state = scrollState
     ) {
         items(20) {
             ModalFrame(EXITEM, onClick = {

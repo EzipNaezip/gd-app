@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +27,9 @@ fun productFrame(
     product: Product,
     navController: NavController,
     route: String,
-    is_me: Boolean = false
+    is_me: Boolean = true
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .border(0.dp, Color.Transparent)
@@ -36,22 +37,10 @@ fun productFrame(
                 PRODUCT = product
                 navController.navigate(route + "_detail_screen")
             }
-            .padding(horizontal = 2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .padding(2.dp),
+        contentAlignment = Alignment.BottomEnd
     ) {
-        Box (contentAlignment = Alignment.BottomEnd){
-            Image(
-                contentScale = ContentScale.Crop,
-                painter = painterResource(id = product.imageId[0]),
-                contentDescription = "Image",
-                modifier = Modifier
-                    .size(180.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            if (!is_me) {
-                BookmarkButton()
-            }
-        }
+        ImageFormat(image = product.imageId[0])
+        if (is_me) { BookmarkButton() }
     }
 }

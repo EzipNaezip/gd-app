@@ -34,7 +34,8 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp)
     ) {
         item {
             Column(

@@ -105,20 +105,7 @@ fun MainScreenView(startDestination: String) {
                 startDestination = startDestination,
             ) {
                 // Main
-                composable(MainNavigationScreens.Main.route) { MainScreen(navController = navController) }
-                // 아래는 사라질 예정
-                composable(MainNavigationScreens.Detail.route) {
-                    DetailScreen(
-                        navController = navController,
-                        BottomScreen.Main.screenRoute
-                    )
-                }
-                composable(MainNavigationScreens.User.route) {
-                    UserScreen(
-                        navController = navController,
-                        BottomScreen.Main.screenRoute
-                    )
-                }
+                composable(MainNavigationScreens.Main.route) { MainScreen() }
 
                 // Community
                 composable(CommunityNavigationScreens.Community.route) {

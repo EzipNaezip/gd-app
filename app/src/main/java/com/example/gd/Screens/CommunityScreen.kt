@@ -104,7 +104,7 @@ fun ComunityScreen(navController: NavController) {
             if (productList.size == 0) addProduct(productList)
 
             LazyVerticalGrid(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
+                modifier = Modifier.padding(horizontal = 15.dp).padding(top = 5.dp),
                 columns = GridCells.Fixed(2),
                 state = scrollState
             ) {

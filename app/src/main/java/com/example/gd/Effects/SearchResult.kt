@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.window.Dialog
+import com.example.gd.R
 import com.example.gd.Screens.PRODUCT
 import com.example.gd.ui.iconpack.*
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,7 +30,9 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
 @Composable
-fun SearchResult(images: List<Int>) {
+fun SearchResult() {
+    val images: List<Int> =
+        listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo)
     Column(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),

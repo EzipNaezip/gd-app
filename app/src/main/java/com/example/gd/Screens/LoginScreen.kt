@@ -8,11 +8,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +48,11 @@ fun LoginScreen(navController: NavHostController) {
             fontWeight = FontWeight.ExtraBold,
             fontSize = 30.sp,
             color = Color.Black,
-            modifier = Modifier.padding(vertical = 100.dp)
+            modifier = Modifier
+                .padding(vertical = 100.dp)
+                .clickable {
+                    navController.navigate(Screen.Once.route)
+                }
         )
         Spacer(modifier = Modifier.height(300.dp))
         Text(
@@ -56,39 +62,26 @@ fun LoginScreen(navController: NavHostController) {
             color = Color.Black,
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row {
-            Image(
-                imageVector = IconPack.GoogleLogin,
-                contentDescription = "Google Login",
-                modifier = Modifier
-                    .clickable {
-                        googleLogin()
-                    }
-                    .size(50.dp)
-                    .border(1.dp, Color.LightGray)
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Image(
-                imageVector = IconPack.KakaoLogin,
-                contentDescription = "Kakao Login",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate(Screen.Once.route)
-                        // 구글 OAuth 사용 코드로 변경 예정
-                    }
-                    .size(50.dp)
-            )
-        }
+        Icon(
+            painter = painterResource(id = R.drawable.google_kor),
+            contentDescription = "Google Login",
+            modifier = Modifier
+                .clickable {
+                    googleLogin()
+                }
+                .padding(10.dp)
+                .width(200.dp)
+                .border(1.dp, Color.LightGray),
+            tint = Color.Unspecified
+        )
     }
 }
 
-fun firebaseAuthWithGoogle(accountt : GoogleSignInAccount?){
+fun firebaseAuthWithGoogle(accountt: GoogleSignInAccount?) {
     Log.e("Firebase", "진입 성공")
     var credntial = GoogleAuthProvider.getCredential(accountt?.idToken, null)
     OAuthData.auth?.signInWithCredential(credntial)
-        ?.addOnCompleteListener {task ->
+        ?.addOnCompleteListener { task ->
             if (task.isSuccessful) Log.e("Firebase Success", "네 성공했습니다.")
             else Log.e("Firebase ERROR", "먼가 먼가 잘못됨")
         }
@@ -126,7 +119,7 @@ fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
     }
 }
 
-fun googleLogin(){
+fun googleLogin() {
     var signIntent: Intent = OAuthData.mGoogleSignInClient!!.getSignInIntent()
     OAuthData.GoogleSignResultLauncher.launch(signIntent)
 }

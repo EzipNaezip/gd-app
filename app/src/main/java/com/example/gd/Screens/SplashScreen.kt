@@ -49,7 +49,7 @@ fun SplashScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Text(
-                    text = "GD Service",
+                    text = "이집내집",
                     color = Color.Black,
                     fontSize = 15.sp
                 )

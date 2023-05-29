@@ -81,9 +81,10 @@ fun MainScreen() {
 
 @Composable
 fun MainSpacer(scrollState: LazyGridState){
+    var scrollOffset = scrollState.firstVisibleItemScrollOffset.dp/6
     if (scrollState.firstVisibleItemIndex == 0) {
-        if (70.dp > scrollState.firstVisibleItemScrollOffset.dp/4)
-            Spacer(modifier = Modifier.padding(80.dp - scrollState.firstVisibleItemScrollOffset.dp/4))
+        if (80.dp > scrollOffset)
+            Spacer(modifier = Modifier.padding(80.dp - scrollOffset))
     }
 }
 

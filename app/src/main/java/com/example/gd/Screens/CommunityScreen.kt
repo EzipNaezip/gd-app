@@ -71,7 +71,7 @@ fun ComunityScreen(navController: NavController) {
                         buttons.forEachIndexed { index, label ->
                             OutlinedButton(
                                 modifier = Modifier.size(
-                                    (label.length * 13 + 30).dp,
+                                    (label.length * 13 + 50).dp,
                                     height = 35.dp
                                 ),
                                 onClick = {

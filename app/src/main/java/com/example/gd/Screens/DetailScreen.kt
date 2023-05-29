@@ -283,6 +283,7 @@ fun CommentInputBar(onSearch: (String) -> Unit) {
                     TextButton(
                         onClick = {
                             search(searchText, onSearch, focusManager, keyboardController)
+                            searchText = ""
                         },
                     ) {
                         Text(

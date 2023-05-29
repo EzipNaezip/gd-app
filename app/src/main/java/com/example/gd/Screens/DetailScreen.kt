@@ -36,7 +36,12 @@ fun DetailScreen(navController: NavController, route: String) {
 
     addComment(commentList)
 
-    LazyColumn(state = commentScrollState) {
+    LazyColumn(
+        state = commentScrollState,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
+    ) {
         item {
             // 사진 Pager로 표시 및 현재 페이지 표시
             Box(contentAlignment = Alignment.TopStart) {
@@ -45,17 +50,18 @@ fun DetailScreen(navController: NavController, route: String) {
             }
 
             // 프로필 내용
-            Row() {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 UserProfileName(navController = navController, route = route)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp), contentAlignment = Alignment.BottomEnd
+                        .padding(10.dp),
+                    contentAlignment = Alignment.BottomEnd
                 ) {
                     if (is_me) FollowButton()
                 }
             }
-
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
             // 내용
             PostContent()
 
@@ -63,9 +69,10 @@ fun DetailScreen(navController: NavController, route: String) {
             TagList(tags = PRODUCT.tags)
 
             // 버튼과 생성일자
-            Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
+            Row(modifier = Modifier.padding(vertical = 8.dp)) {
                 Column {
                     FavoriteCount()
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     Row {
                         FavoriteButton()
                         if (is_me) BookmarkButton()
@@ -83,13 +90,14 @@ fun DetailScreen(navController: NavController, route: String) {
             }
 
             // 댓글 구분선
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
             Divider(
                 color = MaterialTheme.colors.secondaryVariant,
                 modifier = Modifier
                     .height(1.dp)
-                    .padding(horizontal = 15.dp)
                     .fillMaxWidth()
             )
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
             // 댓글 수
             CommentCount()
@@ -109,7 +117,6 @@ fun DetailScreen(navController: NavController, route: String) {
             if (expanded) commentList.size
             else 5
         ) {
-
             Comments(navController = navController, route = route)
 
             if (!expanded && it == 4) {
@@ -118,7 +125,7 @@ fun DetailScreen(navController: NavController, route: String) {
                 }) {
                     Text(
                         text = "댓글 전체보기",
-                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
+                        modifier = Modifier.padding(vertical = 8.dp),
                         color = Color.Black,
                         fontFamily = suite,
                         fontWeight = FontWeight.SemiBold,
@@ -141,13 +148,13 @@ fun UserProfileName(navController: NavController, route: String) {
                 // 프로필 창으로 이동
                 navController.navigate(route + "_user_screen")
             }
-            .padding(vertical = 8.dp, horizontal = 15.dp),
+            .padding(vertical = 8.dp),
     ) {
         ProfileImage(ImageSize = 50)
-        Spacer(modifier = Modifier.width(5.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = "${PRODUCT.name}",
-            modifier = Modifier.padding(vertical = 13.dp),
+            modifier = Modifier.padding(vertical = 12.dp),
             color = Color.Black,
             fontFamily = suite,
             fontWeight = FontWeight.SemiBold,
@@ -199,12 +206,12 @@ fun Comments(navController: NavController, route: String) {
                 // 프로필 창으로 이동
                 navController.navigate(route + "_user_screen")
             }
-            .padding(vertical = 8.dp, horizontal = 15.dp)
-            .fillMaxWidth(),
+            .padding(vertical = 10.dp)
+            .fillMaxWidth()
     ) {
         ProfileImage(ImageSize = 40)
-        Spacer(modifier = Modifier.width(5.dp))
-        Column() {
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(verticalArrangement = Arrangement.Center) {
             Text(
                 text = "${PRODUCT.name}",
                 modifier = Modifier.padding(vertical = 1.dp),
@@ -246,7 +253,7 @@ fun CommentInputBar(onSearch: (String) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(62.dp)
-                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .padding(vertical = 8.dp)
                 .border(
                     width = 1.dp,
                     color = SearchBarBD,

@@ -132,7 +132,7 @@ fun PostContent(string: String =  "이런 내용 저런 내용 요런 내용 조
         "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 "){
     Text(
         text = string,
-        modifier = Modifier.padding(vertical = 8.dp, horizontal = 5.dp),
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
         color = Color.Black,
         fontFamily = suite,
         fontWeight = FontWeight.SemiBold,

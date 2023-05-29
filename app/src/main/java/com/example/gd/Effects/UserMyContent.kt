@@ -24,8 +24,8 @@ import com.example.gd.ui.theme.suite
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun UserMyContent(navController: NavController, route: String, userInfo: Info){
-    var myScreenButtonIndex by rememberSaveable{ mutableStateOf(0) }
+fun UserMyContent(navController: NavController, route: String, userInfo: Info) {
+    var myScreenButtonIndex by rememberSaveable { mutableStateOf(0) }
     val bookmarkList = arrayListOf<Product>()
     val galleryList = arrayListOf<Product>()
 
@@ -62,16 +62,26 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     TextFormat(NumberContraction(2), "Gallery")
-                    ButtonFormat(NumberContraction(userInfo.following), "Following", navController, route)
-                    ButtonFormat(NumberContraction(userInfo.follower), "Follower", navController, route)
+                    ButtonFormat(
+                        NumberContraction(userInfo.following),
+                        "Following",
+                        navController,
+                        route
+                    )
+                    ButtonFormat(
+                        NumberContraction(userInfo.follower),
+                        "Follower",
+                        navController,
+                        route
+                    )
                 }
 
                 // 프로필 수정 버튼 or Follow 버튼
-                if(userInfo.isMe){
+                if (userInfo.isMe) {
                     ProfileEditButton {
                         profileEditScreenState = "프로필"
                     }
-                }else{
+                } else {
                     FollowButton(true)
                 }
 
@@ -81,39 +91,15 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
             }
 
             //ALL, 갤러리, 북마크 버튼
-            LazyRow(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 0.dp, end = 0.dp, bottom = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                item {
-                    buttons.forEachIndexed { index, label ->
-                        OutlinedButton(
-                            modifier = Modifier.size(175.dp, 35.dp),
-                            onClick = {
-                                myScreenButtonIndex = index
-                                when (label) { // 버튼 클릭시 기능 실행
-                                    buttons[0] -> println("${buttons[0]}")
-                                    buttons[1] -> println("${buttons[1]}")
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = if (myScreenButtonIndex == index)
-                                MaterialTheme.colors.primaryVariant else Color.White),
-                            shape = RoundedCornerShape(30),
-                            content = {
-                                Text(
-                                    text = label,
-                                    fontFamily = suite,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 14.sp,
-                                    color = if (myScreenButtonIndex == index) Color.White else Color.Black
-                                )
-                            }
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                }
+                ProductButton(onClick = {myScreenButtonIndex = 0}, myScreenButtonIndex, 0, "갤러리")
+                Spacer(modifier = Modifier.width(10.dp))
+                ProductButton(onClick = {myScreenButtonIndex = 1}, myScreenButtonIndex, 1, "북마크")
             }
         }
 
@@ -129,7 +115,12 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
             Row(Modifier.fillMaxWidth()) {
                 rowItems.forEach { product ->
                     Column(Modifier.weight(1f)) {
-                        if (myScreenButtonIndex == 0) productFrame(product, navController,  route, false)
+                        if (myScreenButtonIndex == 0) productFrame(
+                            product,
+                            navController,
+                            route,
+                            false
+                        )
                         else productFrame(product, navController, route, true)
                     }
                 }
@@ -151,7 +142,31 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
 }
 
 @Composable
-fun userName(name: String){
+fun ProductButton(onClick: () -> Unit, myScreenButtonIndex: Int, index: Int, label: String){
+    OutlinedButton(
+        modifier = if(index == 0) Modifier.fillMaxWidth(0.5f) else Modifier.fillMaxWidth(),
+        onClick = {
+            onClick()
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (myScreenButtonIndex == index)
+                MaterialTheme.colors.primaryVariant else Color.White
+        ),
+        shape = RoundedCornerShape(30),
+        content = {
+            Text(
+                text = label,
+                fontFamily = suite,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                color = if (myScreenButtonIndex == index) Color.White else Color.Black
+            )
+        }
+    )
+}
+
+@Composable
+fun userName(name: String) {
     Text(
         text = name,
         fontFamily = suite,
@@ -163,7 +178,7 @@ fun userName(name: String){
 }
 
 @Composable
-fun userReadme(readme: String){
+fun userReadme(readme: String) {
     Text(
         text = readme,
         fontFamily = suite,

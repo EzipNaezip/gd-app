@@ -110,7 +110,7 @@ fun ImageScreen(@DrawableRes imageId: Int) {
 
 @Composable
 fun TagList(tags: List<String>) {
-    Row(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Row() {
         for (i in tags.indices) {
             Row {
                 Text(

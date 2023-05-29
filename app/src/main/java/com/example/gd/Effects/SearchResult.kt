@@ -37,7 +37,7 @@ fun SearchResult() {
         listOf(R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo)
 
     LazyVerticalGrid(
-        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -49,18 +49,20 @@ fun SearchResult() {
 
     Box(
         modifier = Modifier
-            .padding(vertical = 5.dp, horizontal = 16.dp)
+            .padding(horizontal = 16.dp)
             .fillMaxWidth(),
         contentAlignment = Alignment.CenterEnd
     ) {
         SaveButton()
     }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)
+    ) {
         item {
             PostContent()
         }
-
         item {
             TagList(tags = PRODUCT.tags)
         }
@@ -72,22 +74,35 @@ fun SearchResult() {
 fun ImageScreen(@DrawableRes imageId: Int) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Image(
             painter = painterResource(id = imageId),
             contentDescription = "Image",
             modifier = Modifier
                 .fillMaxSize()
                 .clickable { isExpanded = true }
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
         )
         if (isExpanded) {
             Dialog(onDismissRequest = { isExpanded = false }) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = "Expanded Image",
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = imageId),
+                        contentDescription = "Expanded Image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
             }
         }
     }
@@ -95,7 +110,7 @@ fun ImageScreen(@DrawableRes imageId: Int) {
 
 @Composable
 fun TagList(tags: List<String>) {
-    Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp)) {
+    Row(modifier = Modifier.padding(horizontal = 16.dp)) {
         for (i in tags.indices) {
             Row {
                 Text(

@@ -18,7 +18,7 @@ import com.example.gd.ui.theme.suite
 fun ProfileEditButton(onClick: () -> Unit){
     OutlinedButton(
         modifier = Modifier
-            .padding(start = 30.dp, end = 30.dp)
+            .padding(start = 0.dp, end = 0.dp)
             .fillMaxWidth(),
         onClick = { onClick() },
         border = BorderStroke(1.dp, MaterialTheme.colors.secondaryVariant),

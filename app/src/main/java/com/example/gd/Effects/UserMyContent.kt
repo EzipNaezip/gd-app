@@ -58,7 +58,7 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                         .padding(top = 8.dp)
-                        .padding(start = 25.dp, end = 25.dp),
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     TextFormat(NumberContraction(2), "Gallery")
@@ -84,13 +84,13 @@ fun UserMyContent(navController: NavController, route: String, userInfo: Info){
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp, bottom = 5.dp),
+                    .padding(start = 0.dp, end = 0.dp, bottom = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 item {
                     buttons.forEachIndexed { index, label ->
                         OutlinedButton(
-                            modifier = Modifier.size(145.dp, 35.dp),
+                            modifier = Modifier.size(175.dp, 35.dp),
                             onClick = {
                                 myScreenButtonIndex = index
                                 when (label) { // 버튼 클릭시 기능 실행

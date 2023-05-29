@@ -32,7 +32,7 @@ fun FollowButton(isUserPage: Boolean = false) {
         colors = buttonColors,
         modifier = if (isUserPage){
             Modifier
-                .padding(start = 30.dp, end = 30.dp)
+                .padding(start = 0.dp, end = 0.dp)
                 .fillMaxWidth()
         } else{
             Modifier.size(80.dp, 40.dp)

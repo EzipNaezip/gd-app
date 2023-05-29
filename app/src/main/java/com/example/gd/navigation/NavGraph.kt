@@ -8,19 +8,18 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.gd.LoginScreen
 import com.example.gd.Screens.*
 import com.example.gd.SplashScreen
-import com.example.gd.ui.theme.Gray
-import com.example.splashscreen.navigation.Screen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -34,29 +33,11 @@ fun SetupNavGraph(navController: NavHostController) {
         composable(route = Screen.Login.route) {
             LoginScreen(navController = navController)
         }
+        composable(route = Screen.EnterMember.route) {
+            EnterMemberInfoScreen(navController = navController)
+        }
         composable(route = Screen.Once.route) {
-            OnceScreen(navController = navController)
-        }
-    }
-}
-
-@Composable
-fun BottomNavGraph(navController: NavHostController, startDestination: String) {
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(route = BottomScreen.Main.screenRoute) {
-            MainScreen(navController = navController)
-        }
-        composable(route = BottomScreen.My.screenRoute) {
-            MyScreen(navController = navController)
-        }
-        composable(route = BottomScreen.Setting.screenRoute) {
-            SettingScreen(navController = navController)
-        }
-        composable(route = BottomScreen.Community.screenRoute) {
-            ComunityScreen(navController = navController)
+            OnceScreen()
         }
     }
 }
@@ -70,10 +51,7 @@ fun BottomNavigation(navController: NavHostController) {
         BottomScreen.Setting
     )
 
-    BottomNavigation(
-        backgroundColor = Color.White,
-        contentColor = Color(0xFF3F414E)
-    ) {
+    BottomNavigation {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -81,25 +59,31 @@ fun BottomNavigation(navController: NavHostController) {
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        imageVector = if (currentRoute?.startsWith(item.screenRoute) == true) item.iconSolid else item.iconOutline,
                         contentDescription = item.title,
                         modifier = Modifier
                             .width(26.dp)
                             .height(26.dp)
                     )
                 },
-                label = { Text(item.title, fontSize = 9.sp) },
-                selectedContentColor = MaterialTheme.colors.onPrimary,
-                unselectedContentColor = Gray,
-                selected = currentRoute == item.screenRoute,
+                label = { Text(item.title, fontSize = 11.sp) },
+                selectedContentColor = MaterialTheme.colors.primaryVariant,
+                unselectedContentColor = MaterialTheme.colors.secondary,
+                selected = currentRoute?.startsWith(item.screenRoute) == true,
                 alwaysShowLabel = false,
                 onClick = {
-                    navController.navigate(item.screenRoute) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
+                    try {
+                        navController.navigate(item.screenRoute) {
+                            if (currentRoute?.startsWith(item.screenRoute) != true) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    } catch (e: java.lang.Exception) {
+                        navController.navigate(item.screenRoute)
                     }
                 }
             )
@@ -111,10 +95,82 @@ fun BottomNavigation(navController: NavHostController) {
 fun MainScreenView(startDestination: String) {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) }
+        bottomBar = {
+            BottomNavigation(navController = navController)
+        }
     ) {
         Box(Modifier.padding(it)) {
-            BottomNavGraph(navController = navController, startDestination)
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+            ) {
+                // Main
+                composable(MainNavigationScreens.Main.route) { MainScreen() }
+
+                // Community
+                composable(CommunityNavigationScreens.Community.route) {
+                    ComunityScreen(
+                        navController = navController
+                    )
+                }
+                composable(CommunityNavigationScreens.Detail.route) {
+                    DetailScreen(
+                        navController = navController,
+                        BottomScreen.Community.screenRoute
+                    )
+                }
+                composable(CommunityNavigationScreens.User.route) {
+                    UserScreen(
+                        navController = navController,
+                        BottomScreen.Community.screenRoute
+                    )
+                }
+                composable(
+                    route = "${CommunityNavigationScreens.Follow.route}/{variable}",
+                    arguments = listOf(navArgument("variable") { type = NavType.StringType })
+                ) { entry ->
+                    val variable = entry.arguments?.getString("variable")
+                    FollowScreen(
+                        navController = navController,
+                        BottomScreen.Community.screenRoute,
+                        currentPage = variable!!
+                    )
+                }
+
+
+                // My
+                composable(MyNavigationScreens.My.route) {
+                    MyScreen(navController = navController)
+                }
+                composable(MyNavigationScreens.Detail.route) {
+                    DetailScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute
+                    )
+                }
+                composable(MyNavigationScreens.User.route) {
+                    UserScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute
+                    )
+                }
+                composable(
+                    route = "${MyNavigationScreens.Follow.route}/{variable}",
+                    arguments = listOf(navArgument("variable") { type = NavType.StringType })
+                ) { entry ->
+                    val variable = entry.arguments?.getString("variable")
+                    FollowScreen(
+                        navController = navController,
+                        BottomScreen.My.screenRoute,
+                        currentPage = variable!!
+                    )
+                }
+
+                // Setting
+                composable(SettingNavigationScreens.Setting.route) {
+                    SettingScreen(navController = navController)
+                }
+            }
         }
     }
 }

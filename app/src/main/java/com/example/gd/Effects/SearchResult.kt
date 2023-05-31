@@ -75,8 +75,7 @@ fun ImageScreen(@DrawableRes imageId: Int) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+        modifier = Modifier.fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = imageId),
@@ -87,21 +86,27 @@ fun ImageScreen(@DrawableRes imageId: Int) {
                 .clip(RoundedCornerShape(12.dp))
         )
         if (isExpanded) {
-            Dialog(onDismissRequest = { isExpanded = false }) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 16.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = imageId),
-                        contentDescription = "Expanded Image",
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Dialog(onDismissRequest = { isExpanded = false }) {
+                    Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                    )
+                            .wrapContentHeight()
+                            .padding(vertical = 16.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageId),
+                            contentDescription = "Expanded Image",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                        )
+                    }
                 }
             }
         }

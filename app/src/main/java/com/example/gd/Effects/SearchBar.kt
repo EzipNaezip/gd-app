@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -80,6 +81,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
                     onClick = {
                         search(searchText, onSearch, focusManager, keyboardController)
                     },
+                    //modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
                         text = "생성",

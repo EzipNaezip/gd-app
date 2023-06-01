@@ -35,9 +35,8 @@ fun PostView(images: List<Int>, gridUI: Boolean = true) {
         PostUi(images = images)
 
         // 프로필 내용
-        Row() {
+        Row {
             ProfileImage(50)
-
         }
 
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -52,9 +51,7 @@ fun PostView(images: List<Int>, gridUI: Boolean = true) {
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.BottomStart
-                ) {
-
-                }
+                ) { }
 
                 Box(
                     modifier = Modifier
@@ -69,13 +66,9 @@ fun PostView(images: List<Int>, gridUI: Boolean = true) {
                 }
             }
         }
-
-
         PostContent()
 
-
         TagList(tags = PRODUCT.tags)
-
     }
 }
 
@@ -83,7 +76,6 @@ fun PostView(images: List<Int>, gridUI: Boolean = true) {
 @Composable
 fun PostUi(images: List<Int>) {
     var nowImageIndex = rememberPagerState(0)
-
     val indexIcons: List<ImageVector> = listOf(
         IconPack.SquareSolid,
         IconPack.SquareSolid,
@@ -103,22 +95,20 @@ fun PostUi(images: List<Int>) {
         ) { page ->
             ImageScreen(images[page])
         }
-        Row() {
+        Row {
             indexIcons.forEachIndexed { index, icon ->
                 Icon(
                     modifier = Modifier.size(15.dp),
                     imageVector = icon,
                     contentDescription = "Index Icon",
-                    tint = if (index == nowImageIndex.currentPage) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.secondary
-
+                    tint = if (index == nowImageIndex.currentPage) MaterialTheme.colors.primaryVariant
+                        else MaterialTheme.colors.secondary
                 )
             }
         }
 
     }
 }
-
-
 
 @Composable
 fun PostContent(string: String =  "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 \n\n" +
@@ -132,7 +122,6 @@ fun PostContent(string: String =  "이런 내용 저런 내용 요런 내용 조
         "이런 내용 저런 내용 요런 내용 조런 내용 이런 내용 저런 내용 요런 내용 조런 내용 "){
     Text(
         text = string,
-        modifier = Modifier.padding(vertical = 8.dp, horizontal = 15.dp),
         color = Color.Black,
         fontFamily = suite,
         fontWeight = FontWeight.SemiBold,

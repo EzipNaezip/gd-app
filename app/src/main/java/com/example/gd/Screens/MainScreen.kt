@@ -1,23 +1,24 @@
 package com.example.gd.Screens
 
-import android.graphics.ImageFormat
-import android.util.Log
-import androidx.compose.foundation.*
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -49,7 +50,7 @@ fun MainScreen() {
 
                 ExampleItems(scrollState)
             }
-            1 ->{ // 검색 중
+            1 -> { // 검색 중
                 MainSpacer(scrollState = scrollState)
                 TextMessage(state)
                 SearchBarShimmer(onClick = {
@@ -90,9 +91,8 @@ fun MainSpacer(scrollState: LazyGridState){
 
 @Composable
 fun ExampleItems(scrollState: LazyGridState){
-    // itemList를 받아와야함.
+    // itemList를 받아와야 함.
     var showDialog by rememberSaveable{ mutableStateOf(false) }
-
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -109,9 +109,13 @@ fun ExampleItems(scrollState: LazyGridState){
     }
 
     if (showDialog){
-        PopUpModal(EXITEM, showDialog, onDismiss = {
-            showDialog = false
-        })
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            PopUpModal(EXITEM, showDialog, onDismiss = { showDialog = false })
+        }
     }
 }
 
@@ -125,7 +129,9 @@ fun TextMessage(num: Int) {
         fontWeight = FontWeight.ExtraBold,
         fontSize = 18.sp,
         color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(20.dp).padding(top = 5.dp)
+        modifier = Modifier
+            .padding(20.dp)
+            .padding(top = 5.dp)
     )
 }
 
@@ -137,19 +143,22 @@ fun ModalFrame(exampleItem: MainExampleItem, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .border(0.dp, Color.Transparent)
-            .clickable {
-                onClick()
-            }
+            .clickable { onClick() }
             .padding(2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Center
     ) {
         ImageFormat(image = exampleItem.image)
     }
 }
 
+@Preview
 @Composable
-fun PopUpModal(exampleItem: MainExampleItem, showDialog: Boolean, onDismiss: () -> Unit) {
+fun PopUpModal(
+    exampleItem: MainExampleItem,
+    showDialog: Boolean,
+    onDismiss: () -> Unit
+) {
     // 매개변수로 받은 객체의 이미지와 텍스트 출력
     if (showDialog) {
         Dialog(
@@ -158,12 +167,17 @@ fun PopUpModal(exampleItem: MainExampleItem, showDialog: Boolean, onDismiss: () 
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .padding(vertical = 16.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Button(onClick = { onDismiss() }) {
-                    Column {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                    ) {
                         ImageFormat(exampleItem.image) // 이미지
+                        Spacer(modifier = Modifier.height(20.dp))
                         PostContent(exampleItem.context) // 설명
                     }
                 }

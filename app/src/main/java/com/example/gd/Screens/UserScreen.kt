@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gd.Button.BackButton
 import com.example.gd.Button.FollowButton
 import com.example.gd.Effects.UserMyContent
 import com.example.gd.R
@@ -31,19 +32,13 @@ import com.example.gd.ui.theme.suite
 @Composable
 fun UserScreen(navController: NavController, route: String) {
     val userInfo = Info("박동민", "0123456789012345678901234567890123456789", 120, 200, false)
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Icon(
-            imageVector = IconPack.Left,
-            contentDescription = "Back",
-            modifier = Modifier
-                .clickable {
-                    navController.popBackStack()
-                }
-                .width(30.dp)
-                .height(30.dp)
-        )
+        Box(modifier = Modifier.padding(8.dp)) {
+            BackButton(navController)
+        }
 
         UserMyContent(navController = navController, route = route, userInfo)
     }

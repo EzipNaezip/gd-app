@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gd.Screens.settingScreen
 import com.example.gd.navigation.Screen
 import com.example.gd.ui.theme.suite
 
@@ -68,7 +69,11 @@ fun ProfileTextScreen(
                     profileEditConfirmPopup = false
                     rightPopup = false
                 },
-                ifDoubleButton = true
+                ifDoubleButton = true,
+                onDismiss = {
+                    profileEditCompletePopup = false
+                    editIsOpen = "default"
+                }
             )
         }
         if (profileEditCompletePopup) {
@@ -86,7 +91,11 @@ fun ProfileTextScreen(
                     }
                 },
                 dismissButtonClick = { },
-                ifDoubleButton = false
+                ifDoubleButton = false,
+                onDismiss = {
+                    profileEditCompletePopup = false
+                    editIsOpen = "default"
+                }
             )
         }
     }
@@ -107,7 +116,11 @@ fun ProfileTextScreen(
                     profileEditCompletePopup = false
                     leftPopup = false
                 },
-                ifDoubleButton = true
+                ifDoubleButton = true,
+                onDismiss = {
+                    profileEditCompletePopup = false
+                    editIsOpen = "default"
+                }
             )
         }
     }

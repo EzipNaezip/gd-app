@@ -109,10 +109,12 @@ fun ExampleItems(scrollState: LazyGridState){
     }
 
     if (showDialog){
-        Box(contentAlignment = Alignment.Center) {
-            PopUpModal(EXITEM, showDialog, onDismiss = {
-                showDialog = false
-            })
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            PopUpModal(EXITEM, showDialog, onDismiss = { showDialog = false })
         }
     }
 }
@@ -144,7 +146,7 @@ fun ModalFrame(exampleItem: MainExampleItem, onClick: () -> Unit) {
             .clickable { onClick() }
             .padding(2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Center
     ) {
         ImageFormat(image = exampleItem.image)
     }
@@ -152,7 +154,11 @@ fun ModalFrame(exampleItem: MainExampleItem, onClick: () -> Unit) {
 
 @Preview
 @Composable
-fun PopUpModal(exampleItem: MainExampleItem, showDialog: Boolean, onDismiss: () -> Unit) {
+fun PopUpModal(
+    exampleItem: MainExampleItem,
+    showDialog: Boolean,
+    onDismiss: () -> Unit
+) {
     // 매개변수로 받은 객체의 이미지와 텍스트 출력
     if (showDialog) {
         Dialog(

@@ -68,7 +68,13 @@ fun SettingScreen(navController: NavController) {
             )
         }
         "로그아웃" -> {
-            LogoutPopupScreen()
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LogoutPopupScreen()
+            }
         }
     }
 }
@@ -302,37 +308,57 @@ fun WithdrawalScreen(sheetState: ModalBottomSheetState) {
                 var withdrawalCompletePopup by remember { mutableStateOf(false) }
 
                 if (withdrawalConfirmPopup) {
-                    ConfirmDismissPopupFormat(
-                        titleText = "회원탈퇴",
-                        dialogText = "사용자의 모든 정보가 삭제됩니다.\n정말 탈퇴하시겠습니까?",
-                        buttonText = "회원탈퇴",
-                        buttonColor = Red,
-                        runButtonClick = {
-                            withdrawalConfirmPopup = false
-                            withdrawalCompletePopup = true
-                            revoke()
-                        },
-                        dismissButtonClick = {
-                            withdrawalConfirmPopup = false
-                            settingScreen = "default"
-                        },
-                        ifDoubleButton = true
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        ConfirmDismissPopupFormat(
+                            titleText = "회원탈퇴",
+                            dialogText = "사용자의 모든 정보가 삭제됩니다.\n정말 탈퇴하시겠습니까?",
+                            buttonText = "회원탈퇴",
+                            buttonColor = Red,
+                            runButtonClick = {
+                                withdrawalConfirmPopup = false
+                                withdrawalCompletePopup = true
+                                revoke()
+                            },
+                            dismissButtonClick = {
+                                withdrawalConfirmPopup = false
+                                settingScreen = "default"
+                            },
+                            ifDoubleButton = true,
+                            onDismiss = {
+                                withdrawalConfirmPopup = false
+                                settingScreen = "default"
+                            }
+                        )
+                    }
                 }
                 if (withdrawalCompletePopup) {
-                    ConfirmDismissPopupFormat(
-                        titleText = "회원탈퇴",
-                        dialogText = "회원탈퇴가 완료되었습니다.",
-                        buttonText = "확인",
-                        buttonColor = colors.onPrimary,
-                        runButtonClick = {
-                            withdrawalCompletePopup = false
-                            settingScreen = "default"
-                            restartApp(viewModel)
-                        },
-                        dismissButtonClick = {},
-                        ifDoubleButton = false
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        ConfirmDismissPopupFormat(
+                            titleText = "회원탈퇴",
+                            dialogText = "회원탈퇴가 완료되었습니다.",
+                            buttonText = "확인",
+                            buttonColor = colors.onPrimary,
+                            runButtonClick = {
+                                withdrawalCompletePopup = false
+                                settingScreen = "default"
+                                restartApp(viewModel)
+                            },
+                            dismissButtonClick = {},
+                            ifDoubleButton = false,
+                            onDismiss = {
+                                withdrawalCompletePopup = false
+                                settingScreen = "default"
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -346,37 +372,57 @@ fun LogoutPopupScreen() { //로그아웃 팝업창
     var logoutCompletePopup by remember { mutableStateOf(false) }
 
     if (logoutConfirmPopup) {
-        ConfirmDismissPopupFormat(
-            titleText = "로그아웃",
-            dialogText = "해당 계정으로 다시 로그인할 수 있습니다.\n로그아웃하시겠습니까?",
-            buttonText = "로그아웃",
-            buttonColor = Red,
-            runButtonClick = {
-                logoutConfirmPopup = false
-                logoutCompletePopup = true
-                onLogout()
-            },
-            dismissButtonClick = {
-                logoutConfirmPopup = false
-                settingScreen = "default"
-            },
-            ifDoubleButton = true
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ConfirmDismissPopupFormat(
+                titleText = "로그아웃",
+                dialogText = "해당 계정으로 다시 로그인할 수 있습니다.\n로그아웃하시겠습니까?",
+                buttonText = "로그아웃",
+                buttonColor = Red,
+                runButtonClick = {
+                    logoutConfirmPopup = false
+                    logoutCompletePopup = true
+                    onLogout()
+                },
+                dismissButtonClick = {
+                    logoutConfirmPopup = false
+                    settingScreen = "default"
+                },
+                ifDoubleButton = true,
+                onDismiss = {
+                    logoutConfirmPopup = false
+                    settingScreen = "default"
+                }
+            )
+        }
     }
     if (logoutCompletePopup) {
-        ConfirmDismissPopupFormat(
-            titleText = "로그아웃 완료",
-            dialogText = "로그아웃이 완료되었습니다.",
-            buttonText = "확인",
-            buttonColor = colors.onPrimary,
-            runButtonClick = {
-                logoutCompletePopup = false
-                settingScreen = "default"
-                restartApp(viewModel)
-            },
-            dismissButtonClick = {},
-            ifDoubleButton = false
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ConfirmDismissPopupFormat(
+                titleText = "로그아웃 완료",
+                dialogText = "로그아웃이 완료되었습니다.",
+                buttonText = "확인",
+                buttonColor = colors.onPrimary,
+                runButtonClick = {
+                    logoutCompletePopup = false
+                    settingScreen = "default"
+                    restartApp(viewModel)
+                },
+                dismissButtonClick = {},
+                ifDoubleButton = false,
+                onDismiss = {
+                    logoutCompletePopup = false
+                    settingScreen = "default"
+                }
+            )
+        }
     }
 }
 

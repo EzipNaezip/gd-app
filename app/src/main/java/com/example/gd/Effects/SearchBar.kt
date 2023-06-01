@@ -81,7 +81,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
                     onClick = {
                         search(searchText, onSearch, focusManager, keyboardController)
                     },
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    //modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
                         text = "생성",

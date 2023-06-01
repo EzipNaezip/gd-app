@@ -105,6 +105,7 @@ fun ImageScreen(@DrawableRes imageId: Int) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(12.dp))
+                                .clickable { isExpanded = false }
                         )
                     }
                 }

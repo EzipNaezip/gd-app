@@ -39,7 +39,6 @@ fun DetailScreen(navController: NavController, route: String) {
     LazyColumn(
         state = commentScrollState,
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
     ) {
         item {
@@ -49,69 +48,68 @@ fun DetailScreen(navController: NavController, route: String) {
                 BackButton(navController = navController)
             }
 
-            // 프로필 내용
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                UserProfileName(navController = navController, route = route)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    if (is_me) FollowButton()
-                }
-            }
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            // 내용
-            PostContent()
-
-            // 태그
-            TagList(tags = PRODUCT.tags)
-
-            // 버튼과 생성일자
-            Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                Column {
-                    FavoriteCount()
-                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                    Row {
-                        FavoriteButton()
-                        if (is_me) BookmarkButton()
-                        else SaveButton()
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                // 프로필 내용
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    UserProfileName(navController = navController, route = route)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        if (is_me) FollowButton()
                     }
                 }
-                Box(
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                // 내용
+                PostContent()
+
+                // 태그
+                TagList(tags = PRODUCT.tags)
+
+                // 버튼과 생성일자
+                Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                    Column {
+                        FavoriteCount()
+                        Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                        Row {
+                            FavoriteButton()
+                            if (is_me) BookmarkButton()
+                            else SaveButton()
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 35.dp),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        CreationDate()
+                    }
+                }
+
+                // 댓글 구분선
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                Divider(
+                    color = MaterialTheme.colors.secondaryVariant,
                     modifier = Modifier
+                        .height(1.dp)
                         .fillMaxWidth()
-                        .padding(top = 35.dp),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    CreationDate()
-                }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+                // 댓글 수
+                CommentCount()
+
+                // 댓글 입력창
+                CommentInputBar(
+                    onSearch = {
+                        // 댓글달기 API 호출
+                    }
+                )
             }
-
-            // 댓글 구분선
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
-            Divider(
-                color = MaterialTheme.colors.secondaryVariant,
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
-
-            // 댓글 수
-            CommentCount()
         }
-
-        // 댓글 입력창
-        item {
-            CommentInputBar(
-                onSearch = {
-                    // 댓글달기 API 호출
-                }
-            )
-        }
-
         // 댓글 목록
         items(
             if (expanded) commentList.size
@@ -120,7 +118,9 @@ fun DetailScreen(navController: NavController, route: String) {
             Comments(navController = navController, route = route)
 
             if (!expanded && it == 4) {
-                Row(Modifier.clickable {
+                Row(Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable {
                     expanded = true
                 }) {
                     Text(
@@ -206,7 +206,7 @@ fun Comments(navController: NavController, route: String) {
                 // 프로필 창으로 이동
                 navController.navigate(route + "_user_screen")
             }
-            .padding(vertical = 10.dp)
+            .padding(vertical = 10.dp).padding(horizontal = 16.dp)
             .fillMaxWidth()
     ) {
         ProfileImage(ImageSize = 40)
@@ -263,6 +263,7 @@ fun CommentInputBar(onSearch: (String) -> Unit) {
             keyboardActions = KeyboardActions(
                 onSearch = {
                     search(searchText, onSearch, focusManager, keyboardController)
+                    searchText = ""
                 }),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.Black,
@@ -292,6 +293,7 @@ fun CommentInputBar(onSearch: (String) -> Unit) {
                             search(searchText, onSearch, focusManager, keyboardController)
                             searchText = ""
                         },
+                        //modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
                         Text(
                             text = "등록",

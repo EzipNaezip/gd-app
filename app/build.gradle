@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace 'com.example.gd'
+    namespace 'com.dongminpark.projectgd'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.gd"
+        applicationId "com.dongminpark.projectgd"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,13 +49,11 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.13-rc'
     implementation "com.google.accompanist:accompanist-pager:0.20.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.20.1"
-    implementation 'com.airbnb.android:lottie-compose:5.2.0'
     implementation 'androidx.navigation:navigation-compose:2.5.0'
     implementation 'androidx.compose.material:material:1.3.1'
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation "androidx.core:core-splashscreen:1.0.0"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.3.1'
@@ -67,10 +65,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.navigation:navigation-compose:2.4.1"
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
@@ -82,4 +80,23 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation "androidx.multidex:multidex:2.0.1"
+
+    // 이미지 띄우기 Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    // Retrofit 라이브러리
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:${retrofit_version}"
+
+    // Gson
+    implementation "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+
+    // Scalars 변환기 라이브러리
+    implementation "com.squareup.retrofit2:converter-scalars:${retrofit_version}"
+
+    // 레트로핏 로깅 인터셉터
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    implementation "com.squareup.retrofit2:adapter-rxjava:${retrofit_version}"
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.gd",
+  "applicationId": "com.dongminpark.projectgd",
   "variantName": "release",
   "elements": [
     {

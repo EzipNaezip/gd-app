@@ -13,3 +13,10 @@
 |:---------:|:---------:|
 |[박동민](https://github.com/chattymin)|[정진서](https://github.com/Aram-su)|
 | `PM` `Android` | `Android` |
+
+# Cooperation
+Notion과 Github Issues 기능 활용  
+<div>
+    <img align="left" src = "https://github.com/EzipNaezip/gd-app/assets/52882799/b348d315-44c1-4bf2-8345-814c0665d47d" width="45%" />  
+    <img align="right" src="https://github.com/EzipNaezip/gd-app/assets/52882799/8e17f4fb-76df-40d8-982d-b3214b5a9757" width="45%"/>
+</div> 

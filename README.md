@@ -4,8 +4,8 @@
 
 # Skills
 <div>
-    <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"> <img src="https://img.shields.io/badge/JetpackCompose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white"> <img src="https://img.shields.io/badge/Material Design 2-757575?style=for-the-badge&logo=materialdesign&logoColor=white"> <img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"> <img src="https://img.shields.io/badge/Retrofit-3E4348?style=for-the-badge&logo=square&logoColor=white"> <img src="https://img.shields.io/badge/coil-000000?style=for-the-badge&logo=square&logoColor=white"> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">     
-    <img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/Intellij-000000?style=for-the-badge&logo=intellijidea&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> 
+    <img src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=Android&logoColor=white"> <img src="https://img.shields.io/badge/JetpackCompose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white"> <img src="https://img.shields.io/badge/Material Design 2-757575?style=flat-square&logo=materialdesign&logoColor=white"> <img src="https://img.shields.io/badge/Retrofit-3E4348?style=flat-square&logo=square&logoColor=white"> <img src="https://img.shields.io/badge/coil-000000?style=flat-square&logo=square&logoColor=white"> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=white">     
+    <img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=flat-square&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/Intellij-000000?style=flat-square&logo=intellijidea&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=white"> 
 </div>  
   
 # Members

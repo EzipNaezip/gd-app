@@ -38,6 +38,7 @@
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Core          | ![Kotlin](https://img.shields.io/badge/kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=Android&logoColor=white)                                           |
 | Data Fetching | ![Retrofit](https://img.shields.io/badge/Retrofit-3E4348?style=flat-square&logo=square&logoColor=white)                                                                                                                                              |
+| Image Loader  | ![Coil](https://img.shields.io/badge/coil-000000?style=flat-square&logo=square&logoColor=white)                                                                                                                                                      |
 | Styling       | ![JetpackCompose](https://img.shields.io/badge/JetpackCompose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white) ![Material](https://img.shields.io/badge/Material_Design_2-757575?style=flat-square&logo=materialdesign&logoColor=white) |
 
 ## Commit Message Convention
